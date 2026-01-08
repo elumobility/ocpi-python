@@ -19,8 +19,8 @@ exclude = [
 ]
 
 [tool.black]
-line-length = 80
-target-version = ["py311"]
+line-length = 88
+target-version = ["py311", "py312"]
 include = '\.pyi?$'
 exclude = '''
 (
@@ -49,34 +49,49 @@ readme = "README.md"
 license = {text = "MIT"}
 dynamic = ["version"]
 dependencies = [
-    "pydantic==1.10.12",
-    "fastapi==0.101.1",
-    "httpx==0.24.1",
+    "pydantic>=1.10.0,<3.0.0",
+    "fastapi>=0.100.0",
+    "httpx>=0.24.0",
 ]
 
 [[project.authors]]
 name = "Oleksandr Bozbei"
 email = "oleksandr.bozbei@extrawest.com"
 
+[[project.authors]]
+name = "ELU Mobility"
+email = "dev@elu-energy.it"
+
 [project.urls]
-Homepage = "https://github.com/extrawest/extrawest_ocpi"
-Repository = "https://github.com/extrawest/extrawest_ocpi"
+Homepage = "https://github.com/elumobility/extrawest_ocpi"
+Repository = "https://github.com/elumobility/extrawest_ocpi"
 
 [tool.hatch.version]
 path = "py_ocpi/__init__.py"
 
-[tool.flake8]
-max-line-length = 88
-per-file-ignores = [
-    '__init__.py:F401',
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "UP", # pyupgrade
 ]
-count = true
-exclude = "tests/*"
+ignore = [
+    "E501",  # line too long (handled by formatter)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
 
 [tool.mypy]
-python_version = "3.10"
-ignore_missing_imports = "True"
-plugins = ["pydantic.mypy", ]
+python_version = "3.11"
+ignore_missing_imports = true
+plugins = ["pydantic.mypy"]
 exclude = ["venv", "tests"]
 
 [tool.pytest.ini_options]
