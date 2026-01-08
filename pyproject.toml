@@ -60,7 +60,8 @@ name = "Oleksandr Bozbei"
 email = "oleksandr.bozbei@extrawest.com"
 
 [[project.maintainers]]
-name = "Community Contributors"
+name = "ELU Mobility"
+email = "dev@elu-energy.it"
 
 [project.urls]
 Homepage = "https://github.com/elumobility/extrawest_ocpi"

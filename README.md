@@ -5,7 +5,7 @@
 [![FastAPI 0.115+](https://img.shields.io/badge/fastapi-0.115+-green.svg)](https://fastapi.tiangolo.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-> **Community fork of [extrawest/extrawest_ocpi](https://github.com/extrawest/extrawest_ocpi)** with Pydantic v2 and modern FastAPI support.
+> **Fork of [extrawest/extrawest_ocpi](https://github.com/extrawest/extrawest_ocpi)** with Pydantic v2 and modern FastAPI support, maintained by [ELU Mobility](https://github.com/elumobility).
 
 ---
 
@@ -144,4 +144,5 @@ See [CHANGELOG.md](CHANGELOG.md) for details.
 ## Credits
 
 - **Original**: [extrawest/extrawest_ocpi](https://github.com/extrawest/extrawest_ocpi) by [Extrawest](https://www.extrawest.com/)
+- **Fork Maintainer**: [ELU Mobility](https://github.com/elumobility)
 - **Inspiration**: [PY_OCPI](https://github.com/TECHS-Technological-Solutions/ocpi)
