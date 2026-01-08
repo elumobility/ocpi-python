@@ -49,9 +49,10 @@ readme = "README.md"
 license = {text = "MIT"}
 dynamic = ["version"]
 dependencies = [
-    "pydantic>=1.10.0,<3.0.0",
-    "fastapi>=0.100.0",
-    "httpx>=0.24.0",
+    "pydantic>=2.0.0,<3.0.0",
+    "pydantic-settings>=2.0.0",
+    "fastapi>=0.115.0,<1.0.0",
+    "httpx>=0.27.0",
 ]
 
 [[project.authors]]
