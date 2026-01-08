@@ -1,11 +1,11 @@
-# Extrawest OCPI (ELU Mobility Fork)
+# Extrawest OCPI (Pydantic v2 Fork)
 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![Pydantic v2](https://img.shields.io/badge/pydantic-v2-blue.svg)](https://docs.pydantic.dev/)
 [![FastAPI 0.115+](https://img.shields.io/badge/fastapi-0.115+-green.svg)](https://fastapi.tiangolo.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-> **This is a fork of [extrawest/extrawest_ocpi](https://github.com/extrawest/extrawest_ocpi)** maintained by [ELU Mobility](https://github.com/elumobility) with Pydantic v2 and modern FastAPI support.
+> **Community fork of [extrawest/extrawest_ocpi](https://github.com/extrawest/extrawest_ocpi)** with Pydantic v2 and modern FastAPI support.
 
 ---
 
@@ -17,18 +17,24 @@ Python implementation of Open Charge Point Interface (OCPI) protocol based on Fa
 
 ---
 
+## Why This Fork?
+
+The upstream `extrawest_ocpi` library uses Pydantic v1. Since **FastAPI 0.112+** dropped Pydantic v1 support, this fork provides:
+
+- Full **Pydantic v2** compatibility
+- Support for **FastAPI 0.115+** (latest versions)
+- Modern Python 3.11+ features
+
+---
+
 ## Fork Changes
 
-This fork adds the following improvements over the upstream repository:
+### Breaking Changes (from upstream)
 
-### Pydantic v2 Support (Breaking Change)
+- **Removed Pydantic v1 support** - Now requires `pydantic>=2.0.0`
+- Minimum FastAPI version is 0.115.0
 
-- **Removed Pydantic v1 support** - Now requires pydantic>=2.0.0
-- Updated all custom validators to use Pydantic v2 syntax
-- Uses pydantic-settings for configuration management
-- Compatible with FastAPI 0.115+ (which dropped Pydantic v1 support)
-
-### Modern Dependencies
+### Dependencies
 
 | Package | Version |
 |---------|---------|
@@ -38,15 +44,17 @@ This fork adds the following improvements over the upstream repository:
 | FastAPI | >=0.115.0, <1.0.0 |
 | httpx | >=0.27.0 |
 
-### Bug Fixes
+### Technical Changes
 
-- Allow extra environment variables without validation errors
+- Custom validators use `__get_pydantic_core_schema__` (Pydantic v2 style)
+- Settings use `pydantic-settings` with `SettingsConfigDict`
+- Extra environment variables are ignored (`extra="ignore"`)
 
 ---
 
 ## Installation
 
-### From GitHub (recommended for this fork)
+### From This Fork (recommended)
 
 ```bash
 # Using pip
@@ -63,10 +71,10 @@ poetry add git+https://github.com/elumobility/extrawest_ocpi.git
 extrawest-ocpi = { git = "https://github.com/elumobility/extrawest_ocpi.git", branch = "main" }
 ```
 
-### From PyPI (original upstream)
+### From PyPI (upstream - Pydantic v1)
 
 ```bash
-# Note: PyPI version may not have Pydantic v2 support
+# Note: PyPI version uses Pydantic v1
 pip install extrawest-ocpi
 ```
 
@@ -85,30 +93,25 @@ app = get_application(
     roles=[RoleEnum.cpo],
 )
 
-# Run with uvicorn
-# uvicorn main:app --reload
+# Run with: uvicorn main:app --reload
 ```
 
-For detailed documentation, see the [upstream docs](https://extrawest-ocpi.readthedocs.io/en/latest/).
+For detailed documentation, see [upstream docs](https://extrawest-ocpi.readthedocs.io/en/latest/).
 
 ---
 
 ## Syncing with Upstream
 
-This fork is kept in sync with the upstream repository. To pull latest changes:
-
 ```bash
 # Add upstream remote (one time)
 git remote add upstream https://github.com/extrawest/extrawest_ocpi.git
 
-# Fetch upstream changes
+# Fetch and merge upstream changes
 git fetch upstream
-
-# Merge upstream main into fork main
 git checkout main
 git merge upstream/main
 
-# Resolve any conflicts, then push
+# Resolve conflicts and push
 git push origin main
 ```
 
@@ -118,32 +121,27 @@ git push origin main
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 2026.1.8 | 2026-01-08 | Pydantic v2 only, FastAPI 0.115+, removed v1 compat |
-| 2025.7.17 | 2025-07-17 | Added Pydantic v1/v2 compatibility layer |
+| 2026.1.8 | 2026-01-08 | Pydantic v2 only, FastAPI 0.115+ |
 | 2025.7.16 | - | Last upstream version before fork |
+
+See [CHANGELOG.md](CHANGELOG.md) for details.
 
 ---
 
 ## Contributing
 
-### To this fork
-
-Please open issues or PRs at [elumobility/extrawest_ocpi](https://github.com/elumobility/extrawest_ocpi).
-
-### To upstream
-
-For changes that benefit the wider community, please contribute to [extrawest/extrawest_ocpi](https://github.com/extrawest/extrawest_ocpi).
+- **Fork issues/PRs**: [This repository](https://github.com/elumobility/extrawest_ocpi/issues)
+- **Upstream improvements**: [extrawest/extrawest_ocpi](https://github.com/extrawest/extrawest_ocpi)
 
 ---
 
 ## License
 
-This project is licensed under the terms of the [MIT](LICENSE) license.
+[MIT License](LICENSE) - Same as upstream.
 
 ---
 
 ## Credits
 
-- **Original Project:** [extrawest/extrawest_ocpi](https://github.com/extrawest/extrawest_ocpi) by [Extrawest](https://www.extrawest.com/)
-- **Fork Maintainer:** [ELU Mobility](https://github.com/elumobility)
-- **Inspiration:** [PY_OCPI](https://github.com/TECHS-Technological-Solutions/ocpi)
+- **Original**: [extrawest/extrawest_ocpi](https://github.com/extrawest/extrawest_ocpi) by [Extrawest](https://www.extrawest.com/)
+- **Inspiration**: [PY_OCPI](https://github.com/TECHS-Technological-Solutions/ocpi)

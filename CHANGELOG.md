@@ -28,25 +28,9 @@ and this project adheres to [Calendar Versioning](https://calver.org/) (YYYY.M.P
 - Pydantic v1 compatibility code
 - `__get_validators__` and `__modify_schema__` methods (Pydantic v1 style)
 
-## [2025.7.17] - 2025-07-17
-
-### Added
-
-- `py_ocpi/core/compat.py` - Pydantic v1/v2 compatibility layer
-- Support for both Pydantic v1 and v2
-
-### Changed
-
-- `py_ocpi/core/config.py` - Conditional Settings class based on Pydantic version
-- `py_ocpi/core/data_types.py` - Dual validator support for v1 and v2
-
-### Fixed
-
-- Allow extra environment variables without validation errors (`extra="ignore"`)
-
 ## [2025.7.16] - Upstream
 
-Last upstream version before forking. See [upstream changelog](https://github.com/extrawest/extrawest_ocpi/releases).
+Last upstream version before forking. See [upstream releases](https://github.com/extrawest/extrawest_ocpi/releases).
 
 ---
 

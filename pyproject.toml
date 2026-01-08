@@ -59,13 +59,13 @@ dependencies = [
 name = "Oleksandr Bozbei"
 email = "oleksandr.bozbei@extrawest.com"
 
-[[project.authors]]
-name = "ELU Mobility"
-email = "dev@elu-energy.it"
+[[project.maintainers]]
+name = "Community Contributors"
 
 [project.urls]
 Homepage = "https://github.com/elumobility/extrawest_ocpi"
 Repository = "https://github.com/elumobility/extrawest_ocpi"
+Upstream = "https://github.com/extrawest/extrawest_ocpi"
 
 [tool.hatch.version]
 path = "py_ocpi/__init__.py"

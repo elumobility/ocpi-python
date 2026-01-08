@@ -1,6 +1,6 @@
 """Python Implementation of OCPI
 
-Forked and maintained by ELU Mobility.
+Fork with Pydantic v2 support.
 Original: https://github.com/extrawest/extrawest_ocpi
 """
 
