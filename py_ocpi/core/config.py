@@ -39,6 +39,7 @@ if PYDANTIC_V2:
         model_config = {
             "case_sensitive": True,
             "env_file": ".env",
+            "extra": "ignore",  # Ignore extra env vars
         }
 
 else:
