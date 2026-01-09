@@ -5,7 +5,6 @@ from fastapi.testclient import TestClient
 
 from ocpi import get_application
 from ocpi.core import enums
-from ocpi.core.exceptions import AuthorizationOCPIError, NotFoundOCPIError
 from ocpi.modules.versions.enums import VersionNumber
 from tests.test_modules.utils import ClientAuthenticator
 
@@ -45,17 +44,18 @@ def test_get_application_basic():
         crud=MockCrud,
         authenticator=ClientAuthenticator,
     )
-    
+
     assert app is not None
     assert app.title is not None
 
 
 def test_get_application_invalid_version():
     """Test get_application with invalid version raises ValueError."""
+
     # Create a fake version that doesn't exist in ROUTERS
     class InvalidVersion:
         value = "9.9.9"
-    
+
     with pytest.raises(ValueError, match="Version isn't supported"):
         get_application(
             version_numbers=[InvalidVersion()],  # type: ignore
@@ -76,10 +76,9 @@ def test_get_application_with_http_push():
         authenticator=ClientAuthenticator,
         http_push=True,
     )
-    
+
     assert app is not None
     # Verify push router is included
-    client = TestClient(app)
     # Push endpoints should be available
     # (exact path depends on settings, but router should be included)
 
@@ -94,20 +93,24 @@ def test_get_application_with_websocket_push():
         authenticator=ClientAuthenticator,
         websocket_push=True,
     )
-    
+
     assert app is not None
 
 
 def test_get_application_multiple_versions():
     """Test get_application with multiple versions."""
     app = get_application(
-        version_numbers=[VersionNumber.v_2_1_1, VersionNumber.v_2_2_1, VersionNumber.v_2_3_0],
+        version_numbers=[
+            VersionNumber.v_2_1_1,
+            VersionNumber.v_2_2_1,
+            VersionNumber.v_2_3_0,
+        ],
         roles=[enums.RoleEnum.cpo],
         modules=[enums.ModuleID.locations],
         crud=MockCrud,
         authenticator=ClientAuthenticator,
     )
-    
+
     assert app is not None
     client = TestClient(app)
     # All versions should be available
@@ -125,7 +128,7 @@ def test_get_application_multiple_roles():
         crud=MockCrud,
         authenticator=ClientAuthenticator,
     )
-    
+
     assert app is not None
     client = TestClient(app)
     # Both CPO and EMSP endpoints should be available
@@ -142,7 +145,7 @@ def test_get_application_ptp_role():
         crud=MockCrud,
         authenticator=ClientAuthenticator,
     )
-    
+
     assert app is not None
 
 
@@ -159,7 +162,7 @@ def test_get_application_multiple_modules():
         crud=MockCrud,
         authenticator=ClientAuthenticator,
     )
-    
+
     assert app is not None
     client = TestClient(app)
     # All module endpoints should be available
@@ -176,7 +179,7 @@ def test_exception_handler_middleware():
         crud=MockCrud,
         authenticator=ClientAuthenticator,
     )
-    
+
     client = TestClient(app)
     # Request without auth should return 403 (AuthorizationOCPIError)
     response = client.get("/ocpi/cpo/2.3.0/locations/")

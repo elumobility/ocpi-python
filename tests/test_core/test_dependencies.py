@@ -1,8 +1,8 @@
 """Tests for ocpi.core.dependencies module."""
 
-import pytest
 from datetime import datetime
-from unittest import mock
+
+import pytest
 
 from ocpi.core.dependencies import (
     get_adapter,
@@ -79,7 +79,7 @@ def test_pagination_filters_defaults():
         offset=0,
         limit=50,
     )
-    
+
     assert filters["date_from"] is None
     assert filters["date_to"] is None
     assert filters["offset"] == 0
@@ -92,14 +92,14 @@ def test_pagination_filters_custom():
     date_to = datetime(2023, 12, 31)
     offset = 10
     limit = 25
-    
+
     filters = pagination_filters(
         date_from=date_from,
         date_to=date_to,
         offset=offset,
         limit=limit,
     )
-    
+
     assert filters["date_from"] == date_from
     assert filters["date_to"] == date_to
     assert filters["offset"] == offset
@@ -109,7 +109,7 @@ def test_pagination_filters_custom():
 def test_pagination_filters_partial():
     """Test pagination_filters with partial values."""
     date_from = datetime(2023, 1, 1)
-    
+
     # pagination_filters uses FastAPI Query which extracts values from request
     # When called directly, Query() returns the default or passed value
     # We test by calling with explicit values
@@ -119,7 +119,7 @@ def test_pagination_filters_partial():
         offset=0,  # Explicit default
         limit=100,
     )
-    
+
     assert filters["date_from"] == date_from
     assert filters["date_to"] is None
     assert filters["offset"] == 0
