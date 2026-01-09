@@ -1,0 +1,122 @@
+# OCPI Python - Cursor IDE Rules
+
+This repository implements the Open Charge Point Interface (OCPI) protocol in Python using FastAPI and Pydantic v2.
+
+## Project Structure
+
+- `ocpi/` - Main package
+  - `ocpi/main.py` - Entry point: `get_application()` creates FastAPI app
+  - `ocpi/core/` - Core functionality (authentication, CRUD, adapters, etc.)
+  - `ocpi/modules/` - OCPI modules (locations, sessions, tokens, etc.)
+  - `ocpi/routers/` - Version-specific routers (v_2_1_1, v_2_2_1, v_2_3_0)
+
+## Key Concepts
+
+1. **OCPI Versions**: Supported versions are 2.3.0, 2.2.1, and 2.1.1
+2. **Roles**: CPO (Charge Point Operator), EMSP (eMobility Service Provider), PTP (Payment Terminal Provider)
+3. **Modules**: Locations, Sessions, CDRs, Tokens, Tariffs, Commands, Charging Profiles, Hub Client Info, Credentials, Payments
+4. **Authentication**: Token-based (Token C for CPO, Token A for EMSP)
+5. **CRUD Pattern**: All modules use async CRUD operations
+6. **Adapters**: Convert between internal data models and OCPI schemas
+
+## Common Patterns
+
+### Creating an OCPI Application
+
+```python
+from ocpi import get_application
+from ocpi.core.enums import RoleEnum, ModuleID
+from ocpi.modules.versions.enums import VersionNumber
+
+app = get_application(
+    version_numbers=[VersionNumber.v_2_3_0],
+    roles=[RoleEnum.cpo],
+    modules=[ModuleID.locations, ModuleID.sessions],
+    authenticator=MyAuthenticator,
+    crud=MyCrud,
+)
+```
+
+### Implementing Authenticator
+
+```python
+from ocpi.core.authentication.authenticator import Authenticator
+
+class MyAuthenticator(Authenticator):
+    @classmethod
+    async def get_valid_token_c(cls) -> list[str]:
+        # Return list of valid CPO tokens
+        return ["token1", "token2"]
+    
+    @classmethod
+    async def get_valid_token_a(cls) -> list[str]:
+        # Return list of valid EMSP tokens
+        return ["token3", "token4"]
+```
+
+### Implementing CRUD
+
+```python
+from ocpi.core import enums
+from ocpi.core.crud import CRUD
+
+class MyCrud(CRUD):
+    @classmethod
+    async def list(cls, module: enums.ModuleID, role: enums.RoleEnum, 
+                   filters: dict, *args, **kwargs) -> tuple[list, int, bool]:
+        # Return (items, total_count, has_more)
+        return [], 0, False
+    
+    @classmethod
+    async def get(cls, module: enums.ModuleID, role: enums.RoleEnum, 
+                  id: str, *args, **kwargs):
+        # Return single item or None
+        return None
+    
+    @classmethod
+    async def create(cls, module: enums.ModuleID, role: enums.RoleEnum, 
+                     data: dict, *args, **kwargs):
+        # Create and return item
+        return data
+    
+    @classmethod
+    async def update(cls, module: enums.ModuleID, role: enums.RoleEnum, 
+                     id: str, data: dict, *args, **kwargs):
+        # Update and return item
+        return data
+    
+    @classmethod
+    async def delete(cls, module: enums.ModuleID, role: enums.RoleEnum, 
+                     id: str, *args, **kwargs):
+        # Delete item
+        return None
+```
+
+## Important Notes
+
+- All CRUD methods are async and must be implemented
+- OCPI 2.2.1 and 2.3.0 require Base64-encoded tokens in Authorization headers
+- Use Pydantic v2 models for all data validation
+- All endpoints return OCPIResponse format: `{"status_code": 1000, "data": {...}}`
+- Check `examples/` directory for complete working examples
+- See `docs/` for detailed tutorials and API reference
+
+## Type Hints
+
+- Always use type hints for function parameters and return types
+- Use `from typing import` for complex types (Optional, Union, List, Dict)
+- Use `ocpi.core.enums` for enums (RoleEnum, ModuleID)
+- Use `ocpi.modules.versions.enums.VersionNumber` for version numbers
+
+## Error Handling
+
+- Raise `AuthorizationOCPIError` for authentication failures
+- Raise `NotFoundOCPIError` for missing resources
+- Use FastAPI's `HTTPException` for HTTP-specific errors
+
+## Testing
+
+- All tests in `tests/` directory
+- Use `pytest` with async support (`pytest-asyncio`)
+- Mock authenticators and CRUD in tests
+- See `tests/test_examples/` for example application tests

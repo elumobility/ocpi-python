@@ -116,9 +116,14 @@ app = get_application(
 📚 **[Full Documentation](https://elumobility.github.io/ocpi-python/)** - Complete API reference, tutorials, and examples
 
 - [Quick Start Guide](https://elumobility.github.io/ocpi-python/quickstart/)
+- [LLM Assistance Guide](https://elumobility.github.io/ocpi-python/llm-assistance/) - Tips for using AI coding assistants
 - [Tutorials](https://elumobility.github.io/ocpi-python/tutorials/)
 - [API Reference](https://elumobility.github.io/ocpi-python/api/)
 - [Examples](https://github.com/elumobility/ocpi-python/tree/main/examples) - Production-ready code examples
+
+### 🤖 Using AI Coding Assistants?
+
+If you're using ChatGPT, Claude, GitHub Copilot, or Cursor, check out our [LLM Assistance Guide](https://elumobility.github.io/ocpi-python/llm-assistance/) for tips on getting the best results. The repository also includes a `.cursorrules` file for Cursor IDE users.
 
 ---
 

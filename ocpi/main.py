@@ -93,23 +93,58 @@ def get_application(
     websocket_push: bool = False,
 ) -> FastAPI:
     """
-    OCPI application initializer.
+    Create and configure an OCPI FastAPI application.
 
-    :param version_numbers: List of version numbers which are supported.
-    :param roles: Roles which are supported.
-    :param crud: Class with crud methods which should contain business logic
-      and db methods.
-    :param modules: OCPI modules which should be supported. [Some modules are
-      related, make sure to check OCPI documentation first.]
-    :param authenticator: Authenticator class, which would check validity of
-      authentication tokens.
-    :param adapter: Model to dict data transformer.
-    :param http_push: If True, add endpoint where the command to send to
-      corresponding client data update could be made.
-    :param websocket_push: If True, add websocket endpoint where data updates
-      will be shared.
+    This is the main entry point for creating an OCPI-compliant API server.
+    The function sets up all necessary routes, middleware, and authentication
+    based on the provided configuration.
 
-    :return: FastApi application.
+    Args:
+        version_numbers: List of OCPI versions to support (e.g., [VersionNumber.v_2_3_0]).
+            Supported versions: 2.3.0, 2.2.1, 2.1.1
+        roles: List of OCPI roles to enable (e.g., [RoleEnum.cpo, RoleEnum.emsp]).
+            Available roles: CPO (Charge Point Operator), EMSP (eMobility Service Provider),
+            PTP (Payment Terminal Provider)
+        crud: CRUD class implementing business logic and data operations.
+            Must implement async methods: list(), get(), create(), update(), delete()
+        modules: List of OCPI modules to enable (e.g., [ModuleID.locations, ModuleID.sessions]).
+            Available modules: locations, sessions, cdrs, tokens, tariffs, commands,
+            chargingprofiles, hubclientinfo, credentials, payments
+        authenticator: Authenticator class for token validation.
+            Must implement: get_valid_token_c() and get_valid_token_a()
+        adapter: Optional adapter class for data transformation (default: BaseAdapter).
+        http_push: If True, enables HTTP push endpoints for sending commands to clients.
+        websocket_push: If True, enables WebSocket endpoints for real-time data updates.
+
+    Returns:
+        FastAPI: Configured FastAPI application instance ready to run with uvicorn.
+
+    Example:
+        ```python
+        from ocpi import get_application
+        from ocpi.core.enums import RoleEnum, ModuleID
+        from ocpi.modules.versions.enums import VersionNumber
+        from myapp.auth import MyAuthenticator
+        from myapp.crud import MyCrud
+
+        # Create OCPI application
+        app = get_application(
+            version_numbers=[VersionNumber.v_2_3_0],
+            roles=[RoleEnum.cpo],
+            modules=[ModuleID.locations, ModuleID.sessions],
+            authenticator=MyAuthenticator,
+            crud=MyCrud,
+        )
+
+        # Run with: uvicorn main:app --reload
+        ```
+
+    Note:
+        - All CRUD methods must be async
+        - Authentication tokens must be validated according to OCPI version
+          (2.2.1 and 2.3.0 require Base64-encoded tokens)
+        - Some modules are related (e.g., sessions require locations)
+        - See examples/ directory for complete working examples
     """
     _app = FastAPI(
         title=settings.PROJECT_NAME,

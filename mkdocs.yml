@@ -78,6 +78,7 @@ nav:
   - Home: index.md
   - Installation: installation.md
   - Quick Start: quickstart.md
+  - LLM Assistance: llm-assistance.md
   - Tutorials:
     - Tutorials Overview: tutorials/index.md
     - Managing Locations: tutorials/locations.md
