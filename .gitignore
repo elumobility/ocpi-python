@@ -147,3 +147,5 @@ cython_debug/
 # Database from docker
 postgres-data/
 mongodb-data/
+
+.internal-docs/

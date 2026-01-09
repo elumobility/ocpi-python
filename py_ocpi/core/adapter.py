@@ -229,6 +229,56 @@ class Adapter(ABC):
         """
         pass
 
+    # New in OCPI 2.3.0 - Payments module adapters
+
+    @abstractmethod
+    def terminal_adapter(
+        cls, data: dict, version: VersionNumber = VersionNumber.latest
+    ):
+        """Adapt the data to OCPI Terminal schema (2.3.0+)
+
+        Args:
+            data (dict): The object details
+            version (VersionNumber, optional):
+            The version number of the caller OCPI module
+
+        Returns:
+            Terminal: The object data in proper OCPI schema
+        """
+        pass
+
+    @abstractmethod
+    def financial_advice_confirmation_adapter(
+        cls, data: dict, version: VersionNumber = VersionNumber.latest
+    ):
+        """Adapt the data to OCPI FinancialAdviceConfirmation schema (2.3.0+)
+
+        Args:
+            data (dict): The object details
+            version (VersionNumber, optional):
+            The version number of the caller OCPI module
+
+        Returns:
+            FinancialAdviceConfirmation: The object data in proper OCPI schema
+        """
+        pass
+
+    @abstractmethod
+    def parking_adapter(
+        cls, data: dict, version: VersionNumber = VersionNumber.latest
+    ):
+        """Adapt the data to OCPI Parking schema (2.3.0+)
+
+        Args:
+            data (dict): The object details
+            version (VersionNumber, optional):
+            The version number of the caller OCPI module
+
+        Returns:
+            Parking: The object data in proper OCPI schema
+        """
+        pass
+
 
 class BaseAdapter(Adapter):
     @classmethod
@@ -382,5 +432,42 @@ class BaseAdapter(Adapter):
         return get_module_model(
             class_name="ClearProfileResult",
             module_name="chargingprofiles",
+            version_name=version.name,
+        )(**data)
+
+    # New in OCPI 2.3.0 - Payments module adapters
+
+    @classmethod
+    def terminal_adapter(
+        cls, data: dict, version: VersionNumber = VersionNumber.latest
+    ):
+        """Adapt the data to OCPI Terminal schema (2.3.0+)"""
+        return get_module_model(
+            class_name="Terminal",
+            module_name="payments",
+            version_name=version.name,
+        )(**data)
+
+    @classmethod
+    def financial_advice_confirmation_adapter(
+        cls, data: dict, version: VersionNumber = VersionNumber.latest
+    ):
+        """Adapt the data to OCPI FinancialAdviceConfirmation schema (2.3.0+)"""
+        return get_module_model(
+            class_name="FinancialAdviceConfirmation",
+            module_name="payments",
+            version_name=version.name,
+        )(**data)
+
+    # New in OCPI 2.3.0 - Parking adapter
+
+    @classmethod
+    def parking_adapter(
+        cls, data: dict, version: VersionNumber = VersionNumber.latest
+    ):
+        """Adapt the data to OCPI Parking schema (2.3.0+)"""
+        return get_module_model(
+            class_name="Parking",
+            module_name="locations",
             version_name=version.name,
         )(**data)

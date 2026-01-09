@@ -3,7 +3,7 @@ from enum import Enum
 
 class RoleEnum(str, Enum):
     """
-    https://github.com/ocpi/ocpi/blob/2.2.1/types.asciidoc#151-role-enum
+    https://github.com/ocpi/ocpi/blob/release-2.3.0-bugfixes/types.asciidoc#role-enum
     """
 
     # Charge Point Operator Role
@@ -22,11 +22,13 @@ class RoleEnum(str, Enum):
     other = "OTHER"
     # Smart Charging Service Provider Role
     scsp = "SCSP"
+    # Payment Terminal Provider Role (new in OCPI 2.3.0)
+    ptp = "PTP"
 
 
 class ModuleID(str, Enum):
     """
-    https://github.com/ocpi/ocpi/blob/2.2.1/version_information_endpoint.asciidoc#124-moduleid-enum
+    https://github.com/ocpi/ocpi/blob/release-2.3.0-bugfixes/version_information_endpoint.asciidoc#moduleid-enum
     """
 
     cdrs = "cdrs"
@@ -39,6 +41,8 @@ class ModuleID(str, Enum):
     sessions = "sessions"
     tariffs = "tariffs"
     tokens = "tokens"
+    # New in OCPI 2.3.0
+    payments = "payments"
 
 
 class Action(str, Enum):
