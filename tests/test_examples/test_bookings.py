@@ -23,10 +23,12 @@ def client():
     """Create test client with isolated storage."""
     # Import here to avoid module-level import issues
     # Use absolute import from bookings directory
-    sys.path.insert(0, str(Path(__file__).parent.parent.parent / "examples" / "bookings"))
+    sys.path.insert(
+        0, str(Path(__file__).parent.parent.parent / "examples" / "bookings")
+    )
     try:
-        import main  # noqa: E402
         import crud  # noqa: E402
+        import main  # noqa: E402
 
         # Clear storage before each test
         crud.bookings_storage.clear()
