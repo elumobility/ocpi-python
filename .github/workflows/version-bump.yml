@@ -1,0 +1,223 @@
+name: Version Bump
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+      - '.github/**'
+      - 'docs/**'
+      - 'examples/**'
+      - 'CHANGELOG.md'
+      - 'LICENSE'
+  workflow_dispatch:
+    inputs:
+      bump_type:
+        description: 'Version bump type'
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  detect-and-bump:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && !github.event.head_commit.message.startswith('chore: bump version')
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install gitpython
+      
+      - name: Detect version bump type
+        id: detect
+        run: |
+          python << 'EOF'
+          import re
+          import subprocess
+          from datetime import datetime
+          
+          # Get commits since last tag
+          try:
+              result = subprocess.run(
+                  ['git', 'describe', '--tags', '--abbrev=0'],
+                  capture_output=True,
+                  text=True,
+                  check=True
+              )
+              last_tag = result.stdout.strip()
+              commits = subprocess.run(
+                  ['git', 'log', f'{last_tag}..HEAD', '--pretty=format:%s'],
+                  capture_output=True,
+                  text=True,
+                  check=True
+              ).stdout
+          except subprocess.CalledProcessError:
+              # No tags yet, get all commits
+              commits = subprocess.run(
+                  ['git', 'log', '--pretty=format:%s'],
+                  capture_output=True,
+                  text=True,
+                  check=True
+              ).stdout
+          
+          bump_type = "patch"  # default
+          
+          # Check for breaking changes
+          if re.search(r'BREAKING CHANGE|!:', commits, re.IGNORECASE | re.MULTILINE):
+              bump_type = "minor"
+          # Check for features
+          elif re.search(r'^feat(\(.+\))?:', commits, re.IGNORECASE | re.MULTILINE):
+              bump_type = "minor"
+          # Fixes default to patch
+          elif re.search(r'^fix(\(.+\))?:', commits, re.IGNORECASE | re.MULTILINE):
+              bump_type = "patch"
+          
+          import os
+          output_file = os.environ.get("GITHUB_OUTPUT")
+          if output_file:
+              with open(output_file, "a") as f:
+                  f.write(f"bump_type={bump_type}\n")
+          print(f"bump_type={bump_type}")
+          EOF
+      
+      - name: Get current version
+        id: current_version
+        run: |
+          python << 'EOF'
+          import re
+          from pathlib import Path
+          
+          init_file = Path("ocpi/__init__.py")
+          content = init_file.read_text()
+          match = re.search(r'__version__\s*=\s*["\']([^"\']+)["\']', content)
+          current_version = match.group(1) if match else "2026.1.0"
+          
+          import os
+          output_file = os.environ.get("GITHUB_OUTPUT")
+          if output_file:
+              with open(output_file, "a") as f:
+                  f.write(f"current_version={current_version}\n")
+          print(f"current_version={current_version}")
+          EOF
+      
+      - name: Bump version
+        id: bump
+        run: |
+          python scripts/bump_version.py ${{ steps.detect.outputs.bump_type }}
+          
+          # Get new version
+          python << 'EOF'
+          import re
+          from pathlib import Path
+          
+          init_file = Path("ocpi/__init__.py")
+          content = init_file.read_text()
+          match = re.search(r'__version__\s*=\s*["\']([^"\']+)["\']', content)
+          new_version = match.group(1) if match else ""
+          
+          import os
+          output_file = os.environ.get("GITHUB_OUTPUT")
+          if output_file:
+              with open(output_file, "a") as f:
+                  f.write(f"new_version={new_version}\n")
+          print(f"new_version={new_version}")
+          EOF
+      
+      - name: Check if version changed
+        id: check
+        run: |
+          if [ "${{ steps.current_version.outputs.current_version }}" != "${{ steps.bump.outputs.new_version }}" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Create Pull Request
+        if: steps.check.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: bump version to ${{ steps.bump.outputs.new_version }}"
+          title: "chore: bump version to ${{ steps.bump.outputs.new_version }}"
+          body: |
+            ## Version Bump
+            
+            This PR automatically bumps the version from `${{ steps.current_version.outputs.current_version }}` to `${{ steps.bump.outputs.new_version }}`.
+            
+            **Bump type:** ${{ steps.detect.outputs.bump_type }}
+            
+            **Triggered by:** Recent commits to main branch
+            
+            - [ ] Review version change
+            - [ ] Merge to create tag and release
+          branch: version-bump-${{ steps.bump.outputs.new_version }}
+          delete-branch: true
+
+  manual-bump:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Bump version
+        id: bump
+        run: |
+          python scripts/bump_version.py ${{ github.event.inputs.bump_type }}
+          
+          # Get new version
+          python << 'EOF'
+          import re
+          from pathlib import Path
+          
+          init_file = Path("ocpi/__init__.py")
+          content = init_file.read_text()
+          match = re.search(r'__version__\s*=\s*["\']([^"\']+)["\']', content)
+          new_version = match.group(1) if match else ""
+          
+          import os
+          output_file = os.environ.get("GITHUB_OUTPUT")
+          if output_file:
+              with open(output_file, "a") as f:
+                  f.write(f"new_version={new_version}\n")
+          print(f"new_version={new_version}")
+          EOF
+      
+      - name: Commit and push
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add ocpi/__init__.py
+          git commit -m "chore: bump version to ${{ steps.bump.outputs.new_version }}"
+          git push
+      
+      - name: Create tag
+        run: |
+          git tag -a "v${{ steps.bump.outputs.new_version }}" -m "Release ${{ steps.bump.outputs.new_version }}"
+          git push origin "v${{ steps.bump.outputs.new_version }}"

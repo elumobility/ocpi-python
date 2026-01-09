@@ -95,6 +95,11 @@ nav:
     - OCPI 2.3.0: api/v_2_3_0.md
     - OCPI 2.2.1: api/v_2_2_1.md
     - OCPI 2.1.1: api/v_2_1_1.md
+  - Standards:
+    - Standards Overview: standards/index.md
+    - Coding Standards: standards/coding-standards.md
+    - Development Workflow: standards/development-workflow.md
+    - OCPI Compliance: standards/ocpi-compliance.md
   - Contributing: contributing.md
   - Changelog: changelog.md
 

@@ -1,0 +1,56 @@
+# CODEOWNERS file
+# This file defines code owners for different parts of the repository.
+# When a pull request is opened, these owners will be automatically requested for review.
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+#
+# NOTE: Replace @elumobility/ocpi-python-maintainers with your actual team or individual usernames
+# Example: * @your-username or * @your-org/your-team
+
+# CODEOWNERS file
+# This file defines code owners for different parts of the repository.
+# When a pull request is opened, these owners will be automatically requested for review.
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+#
+# NOTE: CODEOWNERS uses GitHub usernames (@username) or teams (@org/team-name), not email addresses.
+# If you need to find a GitHub username from an email, you can use: gh api user --jq 'select(.email=="email@example.com") | .login'
+
+# CODEOWNERS file
+# This file defines code owners for different parts of the repository.
+# When a pull request is opened, these owners will be automatically requested for review.
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+#
+# Maintainer:
+# - alfonso@elumobility.com (@alfonsosastre)
+
+# Global owners - review all changes
+* @alfonsosastre
+
+# Core OCPI functionality
+/ocpi/core/ @alfonsosastre
+/ocpi/main.py @alfonsosastre
+/ocpi/routers/ @alfonsosastre
+
+# OCPI Modules
+/ocpi/modules/ @alfonsosastre
+
+# Documentation
+/docs/ @alfonsosastre
+/mkdocs.yml @alfonsosastre
+
+# CI/CD and project configuration
+/.github/ @alfonsosastre
+/pyproject.toml @alfonsosastre
+/.pre-commit-config.yaml @alfonsosastre
+
+# Tests
+/tests/ @alfonsosastre
+
+# Examples
+/examples/ @alfonsosastre
+
+# README and important documentation
+/README.md @alfonsosastre
+/LICENSE @alfonsosastre
+/CHANGELOG.md @alfonsosastre
+/CONTRIBUTING.md @alfonsosastre
+/CODE_OF_CONDUCT.md @alfonsosastre
