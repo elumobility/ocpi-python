@@ -1,12 +1,12 @@
 """Tests for ocpi.modules.chargingprofiles.v_2_3_0.background_tasks module."""
 
+import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
 from uuid import uuid4
 
-import pytest
-
 from ocpi.core.adapter import BaseAdapter
 from ocpi.core.crud import Crud
+from ocpi.core.enums import Action, ModuleID, RoleEnum
 from ocpi.modules.chargingprofiles.v_2_3_0.background_tasks import (
     send_delete_chargingprofile,
     send_get_chargingprofile,
@@ -20,6 +20,7 @@ from ocpi.modules.chargingprofiles.v_2_3_0.schemas import (
     ChargingRateUnit,
     SetChargingProfile,
 )
+from ocpi.modules.versions.enums import VersionNumber
 
 
 class MockCrud(Crud):
@@ -55,28 +56,24 @@ async def test_send_get_chargingprofile_success():
     duration = 3600
     response_url = "https://example.com/callback"
     auth_token = "auth-token-123"
-
+    
     # Mock CRUD to return a result immediately
     mock_crud = AsyncMock(spec=MockCrud)
     mock_crud.do.return_value = "client-token-123"
     mock_crud.get.return_value = {"result": "accepted"}
-
+    
     mock_adapter = MagicMock(spec=BaseAdapter)
-    mock_adapter.active_charging_profile_result_adapter.return_value = (
-        ChargingProfileResult(result=ChargingProfileResultType.accepted)
+    mock_adapter.active_charging_profile_result_adapter.return_value = ChargingProfileResult(
+        result=ChargingProfileResultType.accepted
     )
-
+    
     # Mock httpx.AsyncClient
     mock_response = MagicMock()
     mock_response.status_code = 200
-
-    with patch(
-        "ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.httpx.AsyncClient"
-    ) as mock_client:
-        mock_client.return_value.__aenter__.return_value.post = AsyncMock(
-            return_value=mock_response
-        )
-
+    
+    with patch("ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.httpx.AsyncClient") as mock_client:
+        mock_client.return_value.__aenter__.return_value.post = AsyncMock(return_value=mock_response)
+        
         await send_get_chargingprofile(
             session_id=session_id,
             duration=duration,
@@ -85,7 +82,7 @@ async def test_send_get_chargingprofile_success():
             crud=mock_crud,
             adapter=mock_adapter,
         )
-
+    
     # Verify CRUD was called
     mock_crud.do.assert_awaited_once()
     mock_crud.get.assert_awaited()
@@ -98,32 +95,23 @@ async def test_send_get_chargingprofile_timeout():
     duration = 3600
     response_url = "https://example.com/callback"
     auth_token = "auth-token-123"
-
+    
     # Mock CRUD to never return a result (timeout scenario)
     mock_crud = AsyncMock(spec=MockCrud)
     mock_crud.do.return_value = "client-token-123"
     mock_crud.get.return_value = None  # Always returns None (timeout)
-
+    
     mock_adapter = MagicMock(spec=BaseAdapter)
-
+    
     # Mock httpx.AsyncClient
     mock_response = MagicMock()
     mock_response.status_code = 200
-
-    with (
-        patch(
-            "ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.httpx.AsyncClient"
-        ) as mock_client,
-        patch(
-            "ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.settings.GET_ACTIVE_PROFILE_AWAIT_TIME",
-            1,
-        ),
-        patch("ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.sleep") as _,
-    ):
-        mock_client.return_value.__aenter__.return_value.post = AsyncMock(
-            return_value=mock_response
-        )
-
+    
+    with patch("ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.httpx.AsyncClient") as mock_client, \
+         patch("ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.settings.GET_ACTIVE_PROFILE_AWAIT_TIME", 1), \
+         patch("ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.sleep") as mock_sleep:
+        mock_client.return_value.__aenter__.return_value.post = AsyncMock(return_value=mock_response)
+        
         await send_get_chargingprofile(
             session_id=session_id,
             duration=duration,
@@ -132,7 +120,7 @@ async def test_send_get_chargingprofile_timeout():
             crud=mock_crud,
             adapter=mock_adapter,
         )
-
+    
     # Should have tried multiple times
     assert mock_crud.get.await_count > 1
     # Should have sent rejected result
@@ -156,36 +144,27 @@ async def test_send_update_chargingprofile_success():
         ),
         response_url=response_url,
     )
-
+    
     # Mock CRUD: first call returns something, second call returns None (success)
     mock_crud = AsyncMock(spec=MockCrud)
     mock_crud.do.return_value = "client-token-123"
     # First call returns a result, second call returns None (cleared)
     mock_crud.get.side_effect = [{"result": "pending"}, None]
-
+    
     mock_adapter = MagicMock(spec=BaseAdapter)
-    mock_adapter.active_charging_profile_result_adapter.return_value = (
-        ChargingProfileResult(result=ChargingProfileResultType.accepted)
+    mock_adapter.active_charging_profile_result_adapter.return_value = ChargingProfileResult(
+        result=ChargingProfileResultType.accepted
     )
-
+    
     # Mock httpx.AsyncClient
     mock_response = MagicMock()
     mock_response.status_code = 200
-
-    with (
-        patch(
-            "ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.httpx.AsyncClient"
-        ) as mock_client,
-        patch(
-            "ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.settings.GET_ACTIVE_PROFILE_AWAIT_TIME",
-            1,
-        ),
-        patch("ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.sleep") as _,
-    ):
-        mock_client.return_value.__aenter__.return_value.post = AsyncMock(
-            return_value=mock_response
-        )
-
+    
+    with patch("ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.httpx.AsyncClient") as mock_client, \
+         patch("ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.settings.GET_ACTIVE_PROFILE_AWAIT_TIME", 1), \
+         patch("ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.sleep") as mock_sleep:
+        mock_client.return_value.__aenter__.return_value.post = AsyncMock(return_value=mock_response)
+        
         await send_update_chargingprofile(
             charging_profile=charging_profile,
             session_id=session_id,
@@ -194,7 +173,7 @@ async def test_send_update_chargingprofile_success():
             crud=mock_crud,
             adapter=mock_adapter,
         )
-
+    
     mock_crud.do.assert_awaited_once()
     # Should have called get at least twice
     assert mock_crud.get.await_count >= 1
@@ -217,34 +196,23 @@ async def test_send_update_chargingprofile_timeout():
         ),
         response_url=response_url,
     )
-
+    
     # Mock CRUD to always return a result (timeout - result never clears)
     mock_crud = AsyncMock(spec=MockCrud)
     mock_crud.do.return_value = "client-token-123"
-    mock_crud.get.return_value = {
-        "result": "pending"
-    }  # Always returns something (never None)
-
+    mock_crud.get.return_value = {"result": "pending"}  # Always returns something (never None)
+    
     mock_adapter = MagicMock(spec=BaseAdapter)
-
+    
     # Mock httpx.AsyncClient
     mock_response = MagicMock()
     mock_response.status_code = 200
-
-    with (
-        patch(
-            "ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.httpx.AsyncClient"
-        ) as mock_client,
-        patch(
-            "ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.settings.GET_ACTIVE_PROFILE_AWAIT_TIME",
-            1,
-        ),
-        patch("ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.sleep") as _,
-    ):
-        mock_client.return_value.__aenter__.return_value.post = AsyncMock(
-            return_value=mock_response
-        )
-
+    
+    with patch("ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.httpx.AsyncClient") as mock_client, \
+         patch("ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.settings.GET_ACTIVE_PROFILE_AWAIT_TIME", 1), \
+         patch("ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.sleep") as mock_sleep:
+        mock_client.return_value.__aenter__.return_value.post = AsyncMock(return_value=mock_response)
+        
         await send_update_chargingprofile(
             charging_profile=charging_profile,
             session_id=session_id,
@@ -253,7 +221,7 @@ async def test_send_update_chargingprofile_timeout():
             crud=mock_crud,
             adapter=mock_adapter,
         )
-
+    
     # Should have tried multiple times (until timeout)
     assert mock_crud.get.await_count > 1
     # Should have sent rejected result
@@ -266,25 +234,21 @@ async def test_send_delete_chargingprofile_success():
     session_id = str(uuid4())
     response_url = "https://example.com/callback"
     auth_token = "auth-token-123"
-
+    
     # Mock CRUD to return None (success - profile was cleared)
     mock_crud = AsyncMock(spec=MockCrud)
     mock_crud.do.return_value = "client-token-123"
     mock_crud.get.return_value = None  # Profile cleared successfully
-
+    
     mock_adapter = MagicMock(spec=BaseAdapter)
-
+    
     # Mock httpx.AsyncClient
     mock_response = MagicMock()
     mock_response.status_code = 200
-
-    with patch(
-        "ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.httpx.AsyncClient"
-    ) as mock_client:
-        mock_client.return_value.__aenter__.return_value.post = AsyncMock(
-            return_value=mock_response
-        )
-
+    
+    with patch("ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.httpx.AsyncClient") as mock_client:
+        mock_client.return_value.__aenter__.return_value.post = AsyncMock(return_value=mock_response)
+        
         await send_delete_chargingprofile(
             session_id=session_id,
             response_url=response_url,
@@ -292,7 +256,7 @@ async def test_send_delete_chargingprofile_success():
             crud=mock_crud,
             adapter=mock_adapter,
         )
-
+    
     mock_crud.do.assert_awaited_once()
     mock_crud.get.assert_awaited()
     # Should send accepted result when profile is cleared
@@ -305,32 +269,23 @@ async def test_send_delete_chargingprofile_timeout():
     session_id = str(uuid4())
     response_url = "https://example.com/callback"
     auth_token = "auth-token-123"
-
+    
     # Mock CRUD to always return a result (timeout - result never clears)
     mock_crud = AsyncMock(spec=MockCrud)
     mock_crud.do.return_value = "client-token-123"
     mock_crud.get.return_value = {"result": "pending"}  # Always returns something
-
+    
     mock_adapter = MagicMock(spec=BaseAdapter)
-
+    
     # Mock httpx.AsyncClient
     mock_response = MagicMock()
     mock_response.status_code = 200
-
-    with (
-        patch(
-            "ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.httpx.AsyncClient"
-        ) as mock_client,
-        patch(
-            "ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.settings.GET_ACTIVE_PROFILE_AWAIT_TIME",
-            1,
-        ),
-        patch("ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.sleep") as _,
-    ):
-        mock_client.return_value.__aenter__.return_value.post = AsyncMock(
-            return_value=mock_response
-        )
-
+    
+    with patch("ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.httpx.AsyncClient") as mock_client, \
+         patch("ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.settings.GET_ACTIVE_PROFILE_AWAIT_TIME", 1), \
+         patch("ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.sleep") as mock_sleep:
+        mock_client.return_value.__aenter__.return_value.post = AsyncMock(return_value=mock_response)
+        
         await send_delete_chargingprofile(
             session_id=session_id,
             response_url=response_url,
@@ -338,7 +293,7 @@ async def test_send_delete_chargingprofile_timeout():
             crud=mock_crud,
             adapter=mock_adapter,
         )
-
+    
     # Should have tried multiple times
     assert mock_crud.get.await_count > 1
     # Should have sent rejected result
@@ -352,27 +307,23 @@ async def test_send_get_chargingprofile_http_error():
     duration = 3600
     response_url = "https://example.com/callback"
     auth_token = "auth-token-123"
-
+    
     mock_crud = AsyncMock(spec=MockCrud)
     mock_crud.do.return_value = "client-token-123"
     mock_crud.get.return_value = {"result": "accepted"}
-
+    
     mock_adapter = MagicMock(spec=BaseAdapter)
-    mock_adapter.active_charging_profile_result_adapter.return_value = (
-        ChargingProfileResult(result=ChargingProfileResultType.accepted)
+    mock_adapter.active_charging_profile_result_adapter.return_value = ChargingProfileResult(
+        result=ChargingProfileResultType.accepted
     )
-
+    
     # Mock httpx.AsyncClient with error response
     mock_response = MagicMock()
     mock_response.status_code = 500
-
-    with patch(
-        "ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.httpx.AsyncClient"
-    ) as mock_client:
-        mock_client.return_value.__aenter__.return_value.post = AsyncMock(
-            return_value=mock_response
-        )
-
+    
+    with patch("ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.httpx.AsyncClient") as mock_client:
+        mock_client.return_value.__aenter__.return_value.post = AsyncMock(return_value=mock_response)
+        
         # Should not raise, just log the error
         await send_get_chargingprofile(
             session_id=session_id,
@@ -382,6 +333,6 @@ async def test_send_get_chargingprofile_http_error():
             crud=mock_crud,
             adapter=mock_adapter,
         )
-
+    
     # Should have attempted to send
     mock_client.return_value.__aenter__.return_value.post.assert_awaited_once()

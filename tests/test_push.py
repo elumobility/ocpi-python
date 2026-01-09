@@ -231,14 +231,15 @@ def test_push(async_client):
 
 def test_http_push_to_client():
     """Test http_push_to_client endpoint."""
-    from unittest.mock import AsyncMock, MagicMock, patch
-
+    from fastapi import Request
+    from unittest.mock import MagicMock, AsyncMock, patch
+    
     crud = AsyncMock()
     adapter = MagicMock()
-
+    
     crud.get.return_value = {"id": "loc-123"}
     adapter.location_adapter.return_value.model_dump.return_value = {"id": "loc-123"}
-
+    
     app = get_application(
         version_numbers=[VersionNumber.v_2_2_1],
         roles=[enums.RoleEnum.cpo],
@@ -248,18 +249,16 @@ def test_http_push_to_client():
         modules=[],
         http_push=True,
     )
-
+    
     client = TestClient(app)
     push_data = schemas.Push(
         module_id=enums.ModuleID.locations,
         object_id="loc-123",
         receivers=[
-            schemas.Receiver(
-                endpoints_url="http://example.com/versions", auth_token="token"
-            ),
+            schemas.Receiver(endpoints_url="http://example.com/versions", auth_token="token"),
         ],
     ).model_dump()
-
+    
     # Mock the endpoints and push responses
     with patch("ocpi.core.push.httpx.AsyncClient") as mock_client:
         # Mock endpoints response
@@ -276,24 +275,20 @@ def test_http_push_to_client():
                 ]
             }
         }
-
+        
         # Mock push response
         mock_push_response = MagicMock()
         mock_push_response.status_code = 200
         mock_push_response.json.return_value = {"status_code": 1000}
-
-        mock_client.return_value.__aenter__.return_value.get = AsyncMock(
-            return_value=mock_endpoints_response
-        )
-        mock_client.return_value.__aenter__.return_value.send = AsyncMock(
-            return_value=mock_push_response
-        )
+        
+        mock_client.return_value.__aenter__.return_value.get = AsyncMock(return_value=mock_endpoints_response)
+        mock_client.return_value.__aenter__.return_value.send = AsyncMock(return_value=mock_push_response)
         mock_client.return_value.__aenter__.return_value.build_request = MagicMock()
-
+        
         response = client.post(
             "/push/2.2.1",
             json=push_data,
             headers={"Authorization": f"Token {ENCODED_AUTH_TOKEN}"},
         )
-
+    
     assert response.status_code == 200

@@ -1,8 +1,8 @@
 """Tests for ocpi.core.push module."""
 
-from unittest.mock import AsyncMock, MagicMock, patch
-
 import pytest
+from unittest.mock import AsyncMock, MagicMock, patch
+from uuid import uuid4
 
 from ocpi.core import enums, schemas
 from ocpi.core.adapter import BaseAdapter
@@ -10,12 +10,15 @@ from ocpi.core.crud import Crud
 from ocpi.core.push import (
     client_method,
     client_url,
+    http_push_to_client,
     push_object,
     request_data,
     send_push_request,
+    websocket_push_to_client,
 )
 from ocpi.modules.versions.enums import VersionNumber
 from ocpi.modules.versions.v_2_2_1.enums import InterfaceRole
+from tests.test_modules.utils import ClientAuthenticator
 
 
 class MockCrud(Crud):
@@ -102,9 +105,7 @@ def test_request_data_locations():
     """Test request_data for locations module."""
     adapter = MockAdapter()
     data = {"id": "loc-123", "name": "Test Location"}
-    result = request_data(
-        enums.ModuleID.locations, data, adapter, VersionNumber.v_2_2_1
-    )
+    result = request_data(enums.ModuleID.locations, data, adapter, VersionNumber.v_2_2_1)
     assert result is not None
     assert "id" in result
 
@@ -145,21 +146,17 @@ def test_request_data_tokens():
 async def test_send_push_request_v2_1_1():
     """Test send_push_request for OCPI 2.1.1."""
     mock_adapter = MagicMock(spec=BaseAdapter)
-    mock_adapter.location_adapter.return_value.model_dump.return_value = {
-        "id": "loc-123"
-    }
-
+    mock_adapter.location_adapter.return_value.model_dump.return_value = {"id": "loc-123"}
+    
     endpoints = [{"identifier": enums.ModuleID.locations, "url": "https://example.com"}]
-
+    
     mock_response = MagicMock()
     mock_response.status_code = 200
-
+    
     with patch("ocpi.core.push.httpx.AsyncClient") as mock_client:
-        mock_client.return_value.__aenter__.return_value.send = AsyncMock(
-            return_value=mock_response
-        )
+        mock_client.return_value.__aenter__.return_value.send = AsyncMock(return_value=mock_response)
         mock_client.return_value.__aenter__.return_value.build_request = MagicMock()
-
+        
         response = await send_push_request(
             object_id="loc-123",
             object_data={"id": "loc-123"},
@@ -169,7 +166,7 @@ async def test_send_push_request_v2_1_1():
             endpoints=endpoints,
             version=VersionNumber.v_2_1_1,
         )
-
+    
     assert response.status_code == 200
 
 
@@ -177,10 +174,8 @@ async def test_send_push_request_v2_1_1():
 async def test_send_push_request_v2_2_1():
     """Test send_push_request for OCPI 2.2.1 with receiver role."""
     mock_adapter = MagicMock(spec=BaseAdapter)
-    mock_adapter.location_adapter.return_value.model_dump.return_value = {
-        "id": "loc-123"
-    }
-
+    mock_adapter.location_adapter.return_value.model_dump.return_value = {"id": "loc-123"}
+    
     endpoints = [
         {
             "identifier": enums.ModuleID.locations,
@@ -188,16 +183,14 @@ async def test_send_push_request_v2_2_1():
             "url": "https://example.com",
         }
     ]
-
+    
     mock_response = MagicMock()
     mock_response.status_code = 200
-
+    
     with patch("ocpi.core.push.httpx.AsyncClient") as mock_client:
-        mock_client.return_value.__aenter__.return_value.send = AsyncMock(
-            return_value=mock_response
-        )
+        mock_client.return_value.__aenter__.return_value.send = AsyncMock(return_value=mock_response)
         mock_client.return_value.__aenter__.return_value.build_request = MagicMock()
-
+        
         response = await send_push_request(
             object_id="loc-123",
             object_data={"id": "loc-123"},
@@ -207,7 +200,7 @@ async def test_send_push_request_v2_2_1():
             endpoints=endpoints,
             version=VersionNumber.v_2_2_1,
         )
-
+    
     assert response.status_code == 200
 
 
@@ -216,22 +209,18 @@ async def test_push_object_tokens_module():
     """Test push_object with tokens module (uses EMSP role)."""
     mock_crud = AsyncMock(spec=MockCrud)
     mock_crud.get.return_value = {"uid": "token-123", "type": "RFID"}
-
+    
     mock_adapter = MagicMock(spec=BaseAdapter)
-    mock_adapter.token_adapter.return_value.model_dump.return_value = {
-        "uid": "token-123"
-    }
-
+    mock_adapter.token_adapter.return_value.model_dump.return_value = {"uid": "token-123"}
+    
     push = schemas.Push(
         module_id=enums.ModuleID.tokens,
         object_id="token-123",
         receivers=[
-            schemas.Receiver(
-                endpoints_url="https://example.com/versions", auth_token="token"
-            ),
+            schemas.Receiver(endpoints_url="https://example.com/versions", auth_token="token"),
         ],
     )
-
+    
     # Mock endpoints response
     mock_endpoints_response = MagicMock()
     mock_endpoints_response.status_code = 200
@@ -245,21 +234,17 @@ async def test_push_object_tokens_module():
             ]
         }
     }
-
+    
     # Mock push request response
     mock_push_response = MagicMock()
     mock_push_response.status_code = 200
     mock_push_response.json.return_value = {"status_code": 1000}
-
+    
     with patch("ocpi.core.push.httpx.AsyncClient") as mock_client:
-        mock_client.return_value.__aenter__.return_value.get = AsyncMock(
-            return_value=mock_endpoints_response
-        )
-        mock_client.return_value.__aenter__.return_value.send = AsyncMock(
-            return_value=mock_push_response
-        )
+        mock_client.return_value.__aenter__.return_value.get = AsyncMock(return_value=mock_endpoints_response)
+        mock_client.return_value.__aenter__.return_value.send = AsyncMock(return_value=mock_push_response)
         mock_client.return_value.__aenter__.return_value.build_request = MagicMock()
-
+        
         result = await push_object(
             version=VersionNumber.v_2_1_1,
             push=push,
@@ -267,7 +252,7 @@ async def test_push_object_tokens_module():
             adapter=mock_adapter,
             auth_token="auth-token",
         )
-
+    
     assert len(result.receiver_responses) == 1
     assert result.receiver_responses[0].status_code == 200
     # Should use EMSP role for tokens
@@ -285,20 +270,18 @@ async def test_push_object_cdrs_module():
     """Test push_object with CDRs module (special response handling)."""
     mock_crud = AsyncMock(spec=MockCrud)
     mock_crud.get.return_value = {"id": "cdr-123", "currency": "EUR"}
-
+    
     mock_adapter = MagicMock(spec=BaseAdapter)
     mock_adapter.cdr_adapter.return_value.model_dump.return_value = {"id": "cdr-123"}
-
+    
     push = schemas.Push(
         module_id=enums.ModuleID.cdrs,
         object_id="cdr-123",
         receivers=[
-            schemas.Receiver(
-                endpoints_url="https://example.com/versions", auth_token="token"
-            ),
+            schemas.Receiver(endpoints_url="https://example.com/versions", auth_token="token"),
         ],
     )
-
+    
     # Mock endpoints response
     mock_endpoints_response = MagicMock()
     mock_endpoints_response.status_code = 200
@@ -312,21 +295,17 @@ async def test_push_object_cdrs_module():
             ]
         }
     }
-
+    
     # Mock push request response with headers
     mock_push_response = MagicMock()
     mock_push_response.status_code = 200
     mock_push_response.headers = {"X-Request-ID": "req-123"}
-
+    
     with patch("ocpi.core.push.httpx.AsyncClient") as mock_client:
-        mock_client.return_value.__aenter__.return_value.get = AsyncMock(
-            return_value=mock_endpoints_response
-        )
-        mock_client.return_value.__aenter__.return_value.send = AsyncMock(
-            return_value=mock_push_response
-        )
+        mock_client.return_value.__aenter__.return_value.get = AsyncMock(return_value=mock_endpoints_response)
+        mock_client.return_value.__aenter__.return_value.send = AsyncMock(return_value=mock_push_response)
         mock_client.return_value.__aenter__.return_value.build_request = MagicMock()
-
+        
         result = await push_object(
             version=VersionNumber.v_2_1_1,
             push=push,
@@ -334,7 +313,7 @@ async def test_push_object_cdrs_module():
             adapter=mock_adapter,
             auth_token="auth-token",
         )
-
+    
     assert len(result.receiver_responses) == 1
     assert result.receiver_responses[0].status_code == 200
     # CDR response should contain headers, not JSON
@@ -346,22 +325,18 @@ async def test_push_object_v2_1_1_token_encoding():
     """Test push_object with OCPI 2.1.1 (no Base64 encoding)."""
     mock_crud = AsyncMock(spec=MockCrud)
     mock_crud.get.return_value = {"id": "loc-123"}
-
+    
     mock_adapter = MagicMock(spec=BaseAdapter)
-    mock_adapter.location_adapter.return_value.model_dump.return_value = {
-        "id": "loc-123"
-    }
-
+    mock_adapter.location_adapter.return_value.model_dump.return_value = {"id": "loc-123"}
+    
     push = schemas.Push(
         module_id=enums.ModuleID.locations,
         object_id="loc-123",
         receivers=[
-            schemas.Receiver(
-                endpoints_url="https://example.com/versions", auth_token="raw-token"
-            ),
+            schemas.Receiver(endpoints_url="https://example.com/versions", auth_token="raw-token"),
         ],
     )
-
+    
     # Mock endpoints response
     mock_endpoints_response = MagicMock()
     mock_endpoints_response.status_code = 200
@@ -375,21 +350,17 @@ async def test_push_object_v2_1_1_token_encoding():
             ]
         }
     }
-
+    
     # Mock push request response
     mock_push_response = MagicMock()
     mock_push_response.status_code = 200
     mock_push_response.json.return_value = {"status_code": 1000}
-
+    
     with patch("ocpi.core.push.httpx.AsyncClient") as mock_client:
-        mock_client.return_value.__aenter__.return_value.get = AsyncMock(
-            return_value=mock_endpoints_response
-        )
-        mock_client.return_value.__aenter__.return_value.send = AsyncMock(
-            return_value=mock_push_response
-        )
+        mock_client.return_value.__aenter__.return_value.get = AsyncMock(return_value=mock_endpoints_response)
+        mock_client.return_value.__aenter__.return_value.send = AsyncMock(return_value=mock_push_response)
         mock_client.return_value.__aenter__.return_value.build_request = MagicMock()
-
+        
         await push_object(
             version=VersionNumber.v_2_1_1,
             push=push,
@@ -397,7 +368,7 @@ async def test_push_object_v2_1_1_token_encoding():
             adapter=mock_adapter,
             auth_token="auth-token",
         )
-
+    
     # Verify token was not Base64 encoded (2.1.1 uses raw tokens)
     # The build_request should have been called with raw token
     mock_client.return_value.__aenter__.return_value.build_request.assert_called()
@@ -410,22 +381,18 @@ async def test_push_object_v2_2_1_token_encoding():
     """Test push_object with OCPI 2.2.1 (Base64 encoding)."""
     mock_crud = AsyncMock(spec=MockCrud)
     mock_crud.get.return_value = {"id": "loc-123"}
-
+    
     mock_adapter = MagicMock(spec=BaseAdapter)
-    mock_adapter.location_adapter.return_value.model_dump.return_value = {
-        "id": "loc-123"
-    }
-
+    mock_adapter.location_adapter.return_value.model_dump.return_value = {"id": "loc-123"}
+    
     push = schemas.Push(
         module_id=enums.ModuleID.locations,
         object_id="loc-123",
         receivers=[
-            schemas.Receiver(
-                endpoints_url="https://example.com/versions", auth_token="raw-token"
-            ),
+            schemas.Receiver(endpoints_url="https://example.com/versions", auth_token="raw-token"),
         ],
     )
-
+    
     # Mock endpoints response
     mock_endpoints_response = MagicMock()
     mock_endpoints_response.status_code = 200
@@ -440,21 +407,17 @@ async def test_push_object_v2_2_1_token_encoding():
             ]
         }
     }
-
+    
     # Mock push request response
     mock_push_response = MagicMock()
     mock_push_response.status_code = 200
     mock_push_response.json.return_value = {"status_code": 1000}
-
+    
     with patch("ocpi.core.push.httpx.AsyncClient") as mock_client:
-        mock_client.return_value.__aenter__.return_value.get = AsyncMock(
-            return_value=mock_endpoints_response
-        )
-        mock_client.return_value.__aenter__.return_value.send = AsyncMock(
-            return_value=mock_push_response
-        )
+        mock_client.return_value.__aenter__.return_value.get = AsyncMock(return_value=mock_endpoints_response)
+        mock_client.return_value.__aenter__.return_value.send = AsyncMock(return_value=mock_push_response)
         mock_client.return_value.__aenter__.return_value.build_request = MagicMock()
-
+        
         await push_object(
             version=VersionNumber.v_2_2_1,
             push=push,
@@ -462,7 +425,7 @@ async def test_push_object_v2_2_1_token_encoding():
             adapter=mock_adapter,
             auth_token="auth-token",
         )
-
+    
     # Verify token was Base64 encoded (2.2.1 uses Base64)
     mock_client.return_value.__aenter__.return_value.build_request.assert_called()
     call_args = mock_client.return_value.__aenter__.return_value.build_request.call_args
@@ -475,25 +438,19 @@ async def test_push_object_multiple_receivers():
     """Test push_object with multiple receivers."""
     mock_crud = AsyncMock(spec=MockCrud)
     mock_crud.get.return_value = {"id": "loc-123"}
-
+    
     mock_adapter = MagicMock(spec=BaseAdapter)
-    mock_adapter.location_adapter.return_value.model_dump.return_value = {
-        "id": "loc-123"
-    }
-
+    mock_adapter.location_adapter.return_value.model_dump.return_value = {"id": "loc-123"}
+    
     push = schemas.Push(
         module_id=enums.ModuleID.locations,
         object_id="loc-123",
         receivers=[
-            schemas.Receiver(
-                endpoints_url="https://example1.com/versions", auth_token="token1"
-            ),
-            schemas.Receiver(
-                endpoints_url="https://example2.com/versions", auth_token="token2"
-            ),
+            schemas.Receiver(endpoints_url="https://example1.com/versions", auth_token="token1"),
+            schemas.Receiver(endpoints_url="https://example2.com/versions", auth_token="token2"),
         ],
     )
-
+    
     # Mock endpoints response
     mock_endpoints_response = MagicMock()
     mock_endpoints_response.status_code = 200
@@ -507,21 +464,17 @@ async def test_push_object_multiple_receivers():
             ]
         }
     }
-
+    
     # Mock push request response
     mock_push_response = MagicMock()
     mock_push_response.status_code = 200
     mock_push_response.json.return_value = {"status_code": 1000}
-
+    
     with patch("ocpi.core.push.httpx.AsyncClient") as mock_client:
-        mock_client.return_value.__aenter__.return_value.get = AsyncMock(
-            return_value=mock_endpoints_response
-        )
-        mock_client.return_value.__aenter__.return_value.send = AsyncMock(
-            return_value=mock_push_response
-        )
+        mock_client.return_value.__aenter__.return_value.get = AsyncMock(return_value=mock_endpoints_response)
+        mock_client.return_value.__aenter__.return_value.send = AsyncMock(return_value=mock_push_response)
         mock_client.return_value.__aenter__.return_value.build_request = MagicMock()
-
+        
         result = await push_object(
             version=VersionNumber.v_2_1_1,
             push=push,
@@ -529,7 +482,7 @@ async def test_push_object_multiple_receivers():
             adapter=mock_adapter,
             auth_token="auth-token",
         )
-
+    
     # Should have responses for both receivers
     assert len(result.receiver_responses) == 2
     assert mock_client.return_value.__aenter__.return_value.get.await_count == 2
