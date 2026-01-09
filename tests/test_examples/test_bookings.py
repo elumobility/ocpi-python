@@ -71,9 +71,7 @@ class TestBookingsExampleGet:
 
     def test_get_booking_not_found(self, client):
         """Test getting a non-existent booking returns OCPI 2003."""
-        response = client.get(
-            f"{CPO_BASE_URL}/NONEXISTENT", headers=AUTH_HEADER
-        )
+        response = client.get(f"{CPO_BASE_URL}/NONEXISTENT", headers=AUTH_HEADER)
         # OCPI returns 200 with status_code 2003 for unknown location
         assert response.status_code == 200
         data = response.json()
@@ -171,6 +169,8 @@ class TestBookingsExampleAuth:
         """Test that requests with invalid token are rejected."""
         response = client.get(
             CPO_BASE_URL,
-            headers={"Authorization": "Token aW52YWxpZC10b2tlbg=="},  # Base64 of "invalid-token"
+            headers={
+                "Authorization": "Token aW52YWxpZC10b2tlbg=="
+            },  # Base64 of "invalid-token"
         )
         assert response.status_code == 403
