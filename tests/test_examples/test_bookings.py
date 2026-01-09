@@ -9,9 +9,10 @@ from starlette.testclient import TestClient
 
 # Add example to path
 example_path = Path(__file__).parent.parent.parent / "examples" / "bookings"
-sys.path.insert(0, str(example_path))
+if str(example_path) not in sys.path:
+    sys.path.insert(0, str(example_path))
 
-from main import app
+from main import app  # noqa: E402
 
 CPO_BASE_URL = "/ocpi/cpo/2.3.0/bookings"
 # Base64-encoded token for OCPI 2.3.0 (my-cpo-token-123)
@@ -22,9 +23,10 @@ AUTH_HEADER = {"Authorization": "Token bXktY3BvLXRva2VuLTEyMw=="}
 def client():
     """Create test client."""
     # Clear storage between tests
-    from crud import bookings_storage
+    # Import here to ensure path is set up
+    import crud  # noqa: E402
 
-    bookings_storage.clear()
+    crud.bookings_storage.clear()
     return TestClient(app)
 
 
