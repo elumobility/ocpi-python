@@ -14,13 +14,13 @@ from ocpi.modules.commands.v_2_3_0.enums import (
 from ocpi.modules.tokens.v_2_3_0.enums import TokenType, WhitelistType
 from ocpi.modules.versions.enums import VersionNumber
 
+from tests.test_modules.utils import ClientAuthenticator
 from .utils import (
     AUTH_HEADERS,
     COMMAND_RESPONSE,
     COMMAND_RESULT,
     CPO_BASE_URL,
-    WRONG_AUTH_HEADERS,
-    ClientAuthenticator,
+    WRONG_AUTH_HEADERS, 
     Crud,
 )
 
