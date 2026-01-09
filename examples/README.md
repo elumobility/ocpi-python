@@ -39,6 +39,15 @@ Smart charging control using charging profiles (OCPI 2.2.1+).
 - Clear charging profiles
 - Smart charging control
 
+### [Bookings](bookings/)
+EV charging reservation system using the OCPI 2.3.0 Booking extension.
+
+**Features:**
+- Create booking reservations
+- Manage booking lifecycle (pending → confirmed → active → completed)
+- Cancel/update bookings
+- OCPI 2.3.0 specific module
+
 ## Running Examples
 
 Each example is self-contained and can be run independently:

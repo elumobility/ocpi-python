@@ -1,0 +1,26 @@
+{
+  "emsp_booking_id": "EMSP-REQ-001",
+  "token": {
+    "country_code": "DE",
+    "party_id": "EMS",
+    "uid": "RFID-12345678",
+    "type": "RFID",
+    "contract_id": "DE-EMS-C12345678-1",
+    "visual_number": "12345678",
+    "issuer": "EMS Provider",
+    "group_id": null,
+    "valid": true,
+    "whitelist": "ALWAYS",
+    "language": "de",
+    "default_profile_type": null,
+    "energy_contract": null,
+    "last_updated": "2026-01-09T12:00:00Z"
+  },
+  "location_id": "LOC-BERLIN-001",
+  "evse_uid": "EVSE-001",
+  "connector_id": "CONN-001",
+  "start_date_time": "2026-01-10T14:00:00Z",
+  "end_date_time": "2026-01-10T16:00:00Z",
+  "authorization_reference": "AUTH-REF-001",
+  "energy_estimate": 30.0
+}
