@@ -86,15 +86,18 @@ async def get_chargingprofile(
                 charging_profile_response["result"]
                 == ChargingProfileResponseType.accepted
             ):
-                background_tasks.add_task(
-                    send_get_chargingprofile,
-                    session_id=session_id,
-                    duration=duration,
-                    response_url=response_url,
-                    auth_token=auth_token,
-                    crud=crud,
-                    adapter=adapter,
-                )
+                if auth_token is None:
+                    logger.warning("Cannot send charging profile: auth_token is None")
+                else:
+                    background_tasks.add_task(
+                        send_get_chargingprofile,
+                        session_id=session_id,
+                        duration=duration,
+                        response_url=response_url,
+                        auth_token=auth_token,
+                        crud=crud,
+                        adapter=adapter,
+                    )
             return OCPIResponse(
                 data=[
                     adapter.charging_profile_response_adapter(
@@ -180,15 +183,18 @@ async def add_or_update_chargingprofile(
                 charging_profile_response["result"]
                 == ChargingProfileResponseType.accepted
             ):
-                background_tasks.add_task(
-                    send_update_chargingprofile,
-                    charging_profile=charging_profile,
-                    session_id=session_id,
-                    response_url=charging_profile.response_url,
-                    auth_token=auth_token,
-                    crud=crud,
-                    adapter=adapter,
-                )
+                if auth_token is None:
+                    logger.warning("Cannot send charging profile: auth_token is None")
+                else:
+                    background_tasks.add_task(
+                        send_update_chargingprofile,
+                        charging_profile=charging_profile,
+                        session_id=session_id,
+                        response_url=charging_profile.response_url,
+                        auth_token=auth_token,
+                        crud=crud,
+                        adapter=adapter,
+                    )
             return OCPIResponse(
                 data=[
                     adapter.charging_profile_response_adapter(
@@ -272,14 +278,17 @@ async def delete_chargingprofile(
                 charging_profile_response["result"]
                 == ChargingProfileResponseType.accepted
             ):
-                background_tasks.add_task(
-                    send_delete_chargingprofile,
-                    session_id=session_id,
-                    response_url=response_url,
-                    auth_token=auth_token,
-                    crud=crud,
-                    adapter=adapter,
-                )
+                if auth_token is None:
+                    logger.warning("Cannot send charging profile: auth_token is None")
+                else:
+                    background_tasks.add_task(
+                        send_delete_chargingprofile,
+                        session_id=session_id,
+                        response_url=response_url,
+                        auth_token=auth_token,
+                        crud=crud,
+                        adapter=adapter,
+                    )
             return OCPIResponse(
                 data=[
                     adapter.charging_profile_response_adapter(

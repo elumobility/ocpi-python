@@ -233,12 +233,12 @@ class Price(dict):
 class String:
     """Factory for String types with custom max_length."""
 
-    def __new__(cls, max_length: int = 255) -> type[str]:
+    def __new__(cls, max_length: int = 255) -> type[str]:  # type: ignore[misc]
         return type("String", (StringBase,), {"max_length": max_length})
 
 
 class CiString:
     """Factory for CiString types with custom max_length."""
 
-    def __new__(cls, max_length: int = 255) -> type:
+    def __new__(cls, max_length: int = 255) -> type:  # type: ignore[misc]
         return type("CiString", (CiStringBase,), {"max_length": max_length})

@@ -179,14 +179,17 @@ async def receive_command(
         )
         if command_response:
             if command_response["result"] == CommandResponseType.accepted:
-                background_tasks.add_task(
-                    send_command_result,
-                    command_data=command_data,
-                    command=command,
-                    auth_token=auth_token,
-                    crud=crud,
-                    adapter=adapter,
-                )
+                if auth_token is None:
+                    logger.warning("Cannot send command result: auth_token is None")
+                else:
+                    background_tasks.add_task(
+                        send_command_result,
+                        command_data=command_data,
+                        command=command,
+                        auth_token=auth_token,
+                        crud=crud,
+                        adapter=adapter,
+                    )
             return OCPIResponse(
                 data=[adapter.command_response_adapter(command_response).model_dump()],
                 **status.OCPI_1000_GENERIC_SUCESS_CODE,

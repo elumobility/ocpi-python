@@ -153,7 +153,7 @@ def get_application(
             raise ValueError("Version isn't supported yet.")
 
         _app.include_router(
-            mapped_version["version_router"],
+            mapped_version["version_router"],  # type: ignore[arg-type]
             prefix=f"/{settings.OCPI_PREFIX}",
         )
 
@@ -171,27 +171,27 @@ def get_application(
 
         if RoleEnum.cpo in roles:
             for module in modules:
-                cpo_router = mapped_version["cpo_router"].get(module)
+                cpo_router = mapped_version["cpo_router"].get(module)  # type: ignore[attr-defined]
                 if cpo_router:
                     _app.include_router(
-                        cpo_router,
+                        cpo_router,  # type: ignore[arg-type]
                         prefix=f"/{settings.OCPI_PREFIX}/cpo/{version.value}",
                         tags=[f"CPO {version.value}"],
                     )
-                    endpoint = ENDPOINTS[version][RoleEnum.cpo].get(module)
+                    endpoint = ENDPOINTS[version][RoleEnum.cpo].get(module)  # type: ignore[index]
                     if endpoint:
                         version_endpoints[version].append(endpoint)
 
         if RoleEnum.emsp in roles:
             for module in modules:
-                emsp_router = mapped_version["emsp_router"].get(module)
+                emsp_router = mapped_version["emsp_router"].get(module)  # type: ignore[attr-defined]
                 if emsp_router:
                     _app.include_router(
-                        emsp_router,
+                        emsp_router,  # type: ignore[arg-type]
                         prefix=f"/{settings.OCPI_PREFIX}/emsp/{version.value}",
                         tags=[f"EMSP {version.value}"],
                     )
-                    endpoint = ENDPOINTS[version][RoleEnum.emsp].get(module)
+                    endpoint = ENDPOINTS[version][RoleEnum.emsp].get(module)  # type: ignore[index]
                     if endpoint:
                         version_endpoints[version].append(endpoint)
 

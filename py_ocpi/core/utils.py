@@ -3,7 +3,7 @@ import importlib
 import urllib
 from typing import Any
 
-from fastapi import Request, Response
+from fastapi import Request, Response, WebSocket
 from pydantic import BaseModel
 
 from py_ocpi.core.config import logger, settings
@@ -19,7 +19,7 @@ def set_pagination_headers(response: Response, link: str, total: int, limit: int
 
 
 def get_auth_token(
-    request: Request,
+    request: Request | WebSocket,
     version: VersionNumber = VersionNumber.v_2_2_1,
 ) -> str | None:
     headers = request.headers
