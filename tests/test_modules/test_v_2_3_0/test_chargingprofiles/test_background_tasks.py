@@ -118,9 +118,7 @@ async def test_send_get_chargingprofile_timeout():
             "ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.settings.GET_ACTIVE_PROFILE_AWAIT_TIME",
             1,
         ),
-        patch(
-            "ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.sleep"
-        ) as _,
+        patch("ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.sleep") as _,
     ):
         mock_client.return_value.__aenter__.return_value.post = AsyncMock(
             return_value=mock_response
@@ -182,9 +180,7 @@ async def test_send_update_chargingprofile_success():
             "ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.settings.GET_ACTIVE_PROFILE_AWAIT_TIME",
             1,
         ),
-        patch(
-            "ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.sleep"
-        ) as _,
+        patch("ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.sleep") as _,
     ):
         mock_client.return_value.__aenter__.return_value.post = AsyncMock(
             return_value=mock_response
@@ -243,9 +239,7 @@ async def test_send_update_chargingprofile_timeout():
             "ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.settings.GET_ACTIVE_PROFILE_AWAIT_TIME",
             1,
         ),
-        patch(
-            "ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.sleep"
-        ) as _,
+        patch("ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.sleep") as _,
     ):
         mock_client.return_value.__aenter__.return_value.post = AsyncMock(
             return_value=mock_response
@@ -331,9 +325,7 @@ async def test_send_delete_chargingprofile_timeout():
             "ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.settings.GET_ACTIVE_PROFILE_AWAIT_TIME",
             1,
         ),
-        patch(
-            "ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.sleep"
-        ) as _,
+        patch("ocpi.modules.chargingprofiles.v_2_3_0.background_tasks.sleep") as _,
     ):
         mock_client.return_value.__aenter__.return_value.post = AsyncMock(
             return_value=mock_response
