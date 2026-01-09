@@ -7,11 +7,11 @@ from pathlib import Path
 import pytest
 from starlette.testclient import TestClient
 
-# Add example to path
-example_path = Path(__file__).parent.parent.parent / "examples" / "bookings"
-example_path_str = str(example_path)
-if example_path_str not in sys.path:
-    sys.path.insert(0, example_path_str)
+# Add bookings example to path (conftest.py adds examples/ to path)
+bookings_path = Path(__file__).parent.parent.parent / "examples" / "bookings"
+bookings_path_str = str(bookings_path)
+if bookings_path_str not in sys.path:
+    sys.path.insert(0, bookings_path_str)
 
 CPO_BASE_URL = "/ocpi/cpo/2.3.0/bookings"
 # Base64-encoded token for OCPI 2.3.0 (my-cpo-token-123)
@@ -22,12 +22,19 @@ AUTH_HEADER = {"Authorization": "Token bXktY3BvLXRva2VuLTEyMw=="}
 def client():
     """Create test client with isolated storage."""
     # Import here to avoid module-level import issues
-    import main  # noqa: E402
-    import crud  # noqa: E402
+    # Use absolute import from bookings directory
+    sys.path.insert(0, str(Path(__file__).parent.parent.parent / "examples" / "bookings"))
+    try:
+        import main  # noqa: E402
+        import crud  # noqa: E402
 
-    # Clear storage before each test
-    crud.bookings_storage.clear()
-    return TestClient(main.app)
+        # Clear storage before each test
+        crud.bookings_storage.clear()
+        return TestClient(main.app)
+    finally:
+        # Clean up path
+        if bookings_path_str in sys.path:
+            sys.path.remove(bookings_path_str)
 
 
 @pytest.fixture
