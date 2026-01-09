@@ -9,20 +9,7 @@ OCPI Python is available from GitHub. To install it, run:
 
 .. code-block:: sh
 
-    pip install git+https://github.com/elumobility/ocpi-python.git
-
-Or using Poetry:
-
-.. code-block:: sh
-
-    poetry add git+https://github.com/elumobility/ocpi-python.git
-
-In pyproject.toml (Poetry):
-
-.. code-block:: toml
-
-    [tool.poetry.dependencies]
-    ocpi-python = { git = "https://github.com/elumobility/ocpi-python.git", branch = "main" }
+    uv pip install git+https://github.com/elumobility/ocpi-python.git
 
 Install supported ASGI-server
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -31,7 +18,7 @@ Make sure to install any ASGI-server supported by FastAPI. Let's install `uvicor
 
 .. code-block:: sh
 
-    pip install uvicorn
+    uv pip install uvicorn
 
 Requirements
 ~~~~~~~~~~~~

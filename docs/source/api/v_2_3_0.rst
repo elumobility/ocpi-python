@@ -333,9 +333,6 @@ Payments module
 
     .. automodule:: py_ocpi.modules.payments.v_2_3_0.api.ptp.put_terminal
 
-.. http:post:: ptp/2.3.0/payments/financial-advice
-
-    .. automodule:: py_ocpi.modules.payments.v_2_3_0.api.ptp.post_financial_advice
 
 .. http:get:: ptp/2.3.0/payments/financial-advice-confirmations
 

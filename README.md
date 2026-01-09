@@ -30,24 +30,27 @@ A modern, production-ready Python implementation of the Open Charge Point Interf
 ### From PyPI (when published)
 
 ```bash
-pip install ocpi-python
+uv pip install ocpi-python
 ```
 
 ### From GitHub
 
 ```bash
-# Using pip
-pip install git+https://github.com/elumobility/ocpi-python.git
-
-# Using Poetry
-poetry add git+https://github.com/elumobility/ocpi-python.git
+uv pip install git+https://github.com/elumobility/ocpi-python.git
 ```
 
-### In pyproject.toml (Poetry)
+### In pyproject.toml
 
 ```toml
-[tool.poetry.dependencies]
-ocpi-python = { git = "https://github.com/elumobility/ocpi-python.git", branch = "main" }
+[project]
+dependencies = [
+    "ocpi-python @ git+https://github.com/elumobility/ocpi-python.git",
+]
+```
+
+Then install with:
+```bash
+uv pip install -e .
 ```
 
 ---

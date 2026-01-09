@@ -1,7 +1,4 @@
-
-# Contributing to extrawest_ocpi
-
----
+# Contributing to OCPI Python
 
 ---
 
@@ -9,67 +6,107 @@
 
 ---
 
-pyenv -> [installation guide](https://brain2life.hashnode.dev/how-to-install-pyenv-python-version-manager-on-ubuntu-2004)
+### Python Version Manager
 
-Make sure to run after installation:
+We recommend using `uv` for managing Python versions and dependencies. Install `uv`:
+
 ```bash
-  pyenv update
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-python >= 3.10
+Or using pip:
 ```bash
-  pyenv install 3.11.1
+pip install uv
 ```
 
-pipenv
+### Python Version
+
+Python >= 3.11
+
+With `uv`, you can create a project with the correct Python version:
+
 ```bash
-  pip install pipenv
+uv python install 3.11
 ```
 
+---
 
 ## Installation
 
 ---
 
-Clone the project
+### Clone the project
 
 ```bash
-  git clone https://github.com/extrawest/extrawest_ocpi.git
+git clone https://github.com/elumobility/ocpi-python.git
 ```
 
-Go to the project directory
+### Go to the project directory
 
 ```bash
-  cd extrawest_ocpi
+cd ocpi-python
 ```
 
-Install dependencies
+### Install dependencies
 
 ```bash
-  pipenv --python 3.11.1
+uv sync
 ```
+
+This will:
+- Create a virtual environment
+- Install all dependencies from `pyproject.toml`
+- Install development dependencies
+
+### Activate virtual environment
+
+With `uv`, you can run commands in the virtual environment:
 
 ```bash
-  pipenv update
+uv run <command>
 ```
 
-Activate virtual environment:
+Or activate the shell:
 ```bash
-  pipenv shell
+source .venv/bin/activate  # On Unix/macOS
+# or
+.venv\Scripts\activate  # On Windows
 ```
 
-Install pre-commit:
+### Install pre-commit
+
 ```bash
-  pre-commit install
+uv run pre-commit install
 ```
 
+---
 
 ## Running Tests
 
 ---
 
-To run tests, run the following command
+To run tests, use:
 
 ```bash
-  pytest
+uv run pytest
 ```
+
+Or with coverage:
+
+```bash
+uv run pytest --cov=py_ocpi --cov-report=term-missing
+```
+
+---
+
+## Development Workflow
+
+---
+
+1. Create a feature branch
+2. Make your changes
+3. Run tests: `uv run pytest`
+4. Run linting: `uv run ruff check .`
+5. Run type checking: `uv run mypy py_ocpi`
+6. Commit your changes (pre-commit hooks will run automatically)
+7. Push and create a Pull Request

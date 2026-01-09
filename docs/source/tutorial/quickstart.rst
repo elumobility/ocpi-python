@@ -104,7 +104,7 @@ And you're gonna use `MONGO` to store locations.
 
 .. code-block:: sh
 
-    $ pip install motor
+    $ uv pip install motor
 
 Open `db.py` and create `DbInterface` class containing your db logic.
 
