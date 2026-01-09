@@ -1,19 +1,18 @@
 from fastapi import APIRouter, Depends, Request, Response
 
-from py_ocpi.modules.cdrs.v_2_3_0.schemas import Cdr
-from py_ocpi.modules.versions.enums import VersionNumber
-from py_ocpi.core.utils import get_auth_token
 from py_ocpi.core import status
-from py_ocpi.core.schemas import OCPIResponse
 from py_ocpi.core.adapter import Adapter
 from py_ocpi.core.authentication.verifier import AuthorizationVerifier
+from py_ocpi.core.config import logger, settings
 from py_ocpi.core.crud import Crud
-from py_ocpi.core.config import logger
 from py_ocpi.core.data_types import CiString
+from py_ocpi.core.dependencies import get_adapter, get_crud
 from py_ocpi.core.enums import ModuleID, RoleEnum
 from py_ocpi.core.exceptions import NotFoundOCPIError
-from py_ocpi.core.config import settings
-from py_ocpi.core.dependencies import get_crud, get_adapter
+from py_ocpi.core.schemas import OCPIResponse
+from py_ocpi.core.utils import get_auth_token
+from py_ocpi.modules.cdrs.v_2_3_0.schemas import Cdr
+from py_ocpi.modules.versions.enums import VersionNumber
 
 router = APIRouter(
     prefix="/cdrs",
@@ -42,7 +41,7 @@ async def get_cdr(
     **Raises:**
         NotFoundOCPIError: If the CDR is not found.
     """
-    logger.info("Received request to get cdr with id - `%s`." % cdr_id)
+    logger.info(f"Received request to get cdr with id - `{cdr_id}`.")
     auth_token = get_auth_token(request)
 
     data = await crud.get(
@@ -57,7 +56,7 @@ async def get_cdr(
             data=[adapter.cdr_adapter(data, VersionNumber.v_2_3_0).model_dump()],
             **status.OCPI_1000_GENERIC_SUCESS_CODE,
         )
-    logger.debug("CDR with id `%s` was not found." % cdr_id)
+    logger.debug(f"CDR with id `{cdr_id}` was not found.")
     raise NotFoundOCPIError
 
 
@@ -81,7 +80,7 @@ async def add_cdr(
         The OCPIResponse containing the created CDR data.
     """
     logger.info("Received request to create cdr.")
-    logger.debug("CDR data to create - %s" % cdr.model_dump())
+    logger.debug(f"CDR data to create - {cdr.model_dump()}")
     auth_token = get_auth_token(request)
 
     data = await crud.create(

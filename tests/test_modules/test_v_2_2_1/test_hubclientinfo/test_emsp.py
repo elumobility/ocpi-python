@@ -1,6 +1,6 @@
 from py_ocpi.core.config import settings
 
-from .utils import CLIENT_INFO, AUTH_HEADERS, WRONG_AUTH_HEADERS, EMSP_BASE_URL
+from .utils import AUTH_HEADERS, CLIENT_INFO, EMSP_BASE_URL, WRONG_AUTH_HEADERS
 
 CLIENT_INFO_URL = f"{EMSP_BASE_URL}{settings.COUNTRY_CODE}/{settings.PARTY_ID}"
 

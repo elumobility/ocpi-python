@@ -1,7 +1,6 @@
-from typing import List
 from pydantic import BaseModel
 
-from py_ocpi.core.data_types import CiString, URL, String
+from py_ocpi.core.data_types import URL, CiString, String
 from py_ocpi.core.enums import RoleEnum
 from py_ocpi.modules.locations.v_2_2_1.schemas import BusinessDetails
 
@@ -24,4 +23,4 @@ class Credentials(BaseModel):
 
     token: String(64)  # type: ignore
     url: URL
-    roles: List[CredentialsRole]
+    roles: list[CredentialsRole]

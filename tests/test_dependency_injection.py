@@ -5,11 +5,10 @@ from fastapi.testclient import TestClient
 from py_ocpi import get_application
 from py_ocpi.core import enums
 from py_ocpi.modules.versions.enums import VersionNumber
-
 from tests.test_modules.utils import (
-    ClientAuthenticator,
-    ENCODED_AUTH_TOKEN,
     AUTH_TOKEN,
+    ENCODED_AUTH_TOKEN,
+    ClientAuthenticator,
 )
 
 

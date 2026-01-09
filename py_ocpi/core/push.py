@@ -1,19 +1,18 @@
-from typing import Union
 
 import httpx
-from fastapi import APIRouter, Request, WebSocket, Depends
+from fastapi import APIRouter, Depends, Request, WebSocket
 
 from py_ocpi.core.adapter import Adapter
 from py_ocpi.core.authentication.verifier import (
     HttpPushVerifier,
     WSPushVerifier,
 )
+from py_ocpi.core.config import logger, settings
 from py_ocpi.core.crud import Crud
+from py_ocpi.core.dependencies import get_adapter, get_crud
+from py_ocpi.core.enums import ModuleID, RoleEnum
 from py_ocpi.core.schemas import Push, PushResponse, ReceiverResponse
 from py_ocpi.core.utils import encode_string_base64, get_auth_token
-from py_ocpi.core.dependencies import get_crud, get_adapter
-from py_ocpi.core.enums import ModuleID, RoleEnum
-from py_ocpi.core.config import settings, logger
 from py_ocpi.modules.versions.enums import VersionNumber
 from py_ocpi.modules.versions.v_2_2_1.enums import InterfaceRole
 
@@ -67,10 +66,7 @@ async def send_push_request(
             version.value.startswith("2.2")
             and endpoint["identifier"] == module_id
             and endpoint["role"] == InterfaceRole.receiver
-        ) or (
-            version.value.startswith("2.1")
-            and endpoint["identifier"] == module_id
-        ):
+        ) or (version.value.startswith("2.1") and endpoint["identifier"] == module_id):
             base_url = endpoint["url"]
 
     # push object to client
@@ -90,7 +86,7 @@ async def push_object(
     push: Push,
     crud: Crud,
     adapter: Adapter,
-    auth_token: Union[str, None] = None,
+    auth_token: str | None = None,
 ) -> PushResponse:
     receiver_responses = []
     for receiver in push.receivers:
@@ -104,16 +100,15 @@ async def push_object(
 
         async with httpx.AsyncClient() as client:
             logger.info(
-                "Send request to get version details: %s"
-                % receiver.endpoints_url
+                f"Send request to get version details: {receiver.endpoints_url}"
             )
             response = await client.get(
                 receiver.endpoints_url,
                 headers={"authorization": client_auth_token},
             )
-            logger.info("Response status_code - `%s`" % response.status_code)
+            logger.info(f"Response status_code - `{response.status_code}`")
             endpoints = response.json()["data"]["endpoints"]
-            logger.debug("Endpoints response data - `%s`" % endpoints)
+            logger.debug(f"Endpoints response data - `{endpoints}`")
 
         # get object data
         if push.module_id == ModuleID.tokens:
@@ -126,7 +121,7 @@ async def push_object(
                 version=version,
             )
         else:
-            logger.debug("Requested module with push is `%s`." % push.module_id)
+            logger.debug(f"Requested module with push is `{push.module_id}`.")
             data = await crud.get(
                 push.module_id,
                 RoleEnum.cpo,
@@ -162,7 +157,7 @@ async def push_object(
                 )
             )
     result = PushResponse(receiver_responses=receiver_responses)
-    logger.debug("Result of push operation - %s" % result.model_dump())
+    logger.debug(f"Result of push operation - {result.model_dump()}")
     return result
 
 
@@ -186,7 +181,7 @@ async def http_push_to_client(
     adapter: Adapter = Depends(get_adapter),
 ):
     logger.info("Received push http request.")
-    logger.debug("Received push data - `%s`" % push.model_dump())
+    logger.debug(f"Received push data - `{push.model_dump()}`")
     auth_token = get_auth_token(request, version)
 
     return await push_object(version, push, crud, adapter, auth_token)
@@ -210,10 +205,8 @@ async def websocket_push_to_client(
 
     while True:
         data = await websocket.receive_json()
-        logger.debug("Received data through ws - `%s`" % data)
+        logger.debug(f"Received data through ws - `{data}`")
         push = Push(**data)
-        push_response = await push_object(
-            version, push, crud, adapter, auth_token
-        )
-        logger.debug("Sending push response - `%s`" % push_response.model_dump())
+        push_response = await push_object(version, push, crud, adapter, auth_token)
+        logger.debug(f"Sending push response - `{push_response.model_dump()}`")
         await websocket.send_json(push_response.model_dump())

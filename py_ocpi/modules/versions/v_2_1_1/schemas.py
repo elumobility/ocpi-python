@@ -1,10 +1,8 @@
-from typing import List
-
 from pydantic import BaseModel
 
-from py_ocpi.modules.versions.v_2_1_1.enums import VersionNumber
 from py_ocpi.core.data_types import URL
 from py_ocpi.core.enums import ModuleID
+from py_ocpi.modules.versions.v_2_1_1.enums import VersionNumber
 
 
 class Endpoint(BaseModel):
@@ -22,4 +20,4 @@ class VersionDetail(BaseModel):
     """
 
     version: VersionNumber
-    endpoints: List[Endpoint]
+    endpoints: list[Endpoint]

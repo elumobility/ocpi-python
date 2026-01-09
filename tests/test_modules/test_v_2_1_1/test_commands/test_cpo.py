@@ -1,29 +1,27 @@
-import pytest
-
 import datetime
 from uuid import uuid4
 
+import pytest
 from fastapi.testclient import TestClient
 
 from py_ocpi import get_application
 from py_ocpi.core import enums
 from py_ocpi.core.exceptions import NotFoundOCPIError
 from py_ocpi.modules.commands.v_2_1_1.enums import (
-    CommandType,
     CommandResponseType,
+    CommandType,
 )
 from py_ocpi.modules.versions.enums import VersionNumber
+from tests.test_modules.test_v_2_1_1.test_tokens.utils import TOKENS
 
 from .utils import (
-    Crud,
-    ClientAuthenticator,
+    AUTH_HEADERS,
     COMMAND_RESPONSE,
     CPO_BASE_URL,
-    AUTH_HEADERS,
     WRONG_AUTH_HEADERS,
+    ClientAuthenticator,
+    Crud,
 )
-
-from tests.test_modules.test_v_2_1_1.test_tokens.utils import TOKENS
 
 COMMAND_START_URL = f"{CPO_BASE_URL}{CommandType.start_session.value}"
 COMMAND_STOP_URL = f"{CPO_BASE_URL}{CommandType.stop_session.value}"
@@ -90,9 +88,7 @@ def test_cpo_receive_command_reserve_now_v_2_1_1(client_cpo_v_2_1_1):
     data = {
         "response_url": "https://dummy.restapiexample.com/api/v1/create",
         "token": TOKENS[0],
-        "expiry_date": str(
-            datetime.datetime.now() + datetime.timedelta(days=1)
-        ),
+        "expiry_date": str(datetime.datetime.now() + datetime.timedelta(days=1)),
         "reservation_id": 0,
         "location_id": str(uuid4()),
         "evse_uid": None,
@@ -133,9 +129,7 @@ def test_cpo_receive_command_reserve_now_unknown_location_v_2_1_1():
     data = {
         "response_url": "https://dummy.restapiexample.com/api/v1/create",
         "token": TOKENS[0],
-        "expiry_date": str(
-            datetime.datetime.now() + datetime.timedelta(days=1)
-        ),
+        "expiry_date": str(datetime.datetime.now() + datetime.timedelta(days=1)),
         "reservation_id": 0,
         "location_id": str(uuid4()),
         "evse_uid": None,

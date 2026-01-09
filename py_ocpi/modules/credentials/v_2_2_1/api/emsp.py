@@ -1,27 +1,28 @@
 import httpx
-
 from fastapi import (
     APIRouter,
     Depends,
     HTTPException,
     Request,
+)
+from fastapi import (
     status as fastapistatus,
 )
 
-from py_ocpi.core.schemas import OCPIResponse
+from py_ocpi.core import status
 from py_ocpi.core.adapter import Adapter
 from py_ocpi.core.authentication.verifier import (
     AuthorizationVerifier,
     CredentialsAuthorizationVerifier,
 )
-from py_ocpi.core.crud import Crud
 from py_ocpi.core.config import logger
-from py_ocpi.core.utils import encode_string_base64, get_auth_token
-from py_ocpi.core.dependencies import get_crud, get_adapter
-from py_ocpi.core import status
+from py_ocpi.core.crud import Crud
+from py_ocpi.core.dependencies import get_adapter, get_crud
 from py_ocpi.core.enums import ModuleID, RoleEnum
-from py_ocpi.modules.versions.enums import VersionNumber
+from py_ocpi.core.schemas import OCPIResponse
+from py_ocpi.core.utils import encode_string_base64, get_auth_token
 from py_ocpi.modules.credentials.v_2_2_1.schemas import Credentials
+from py_ocpi.modules.versions.enums import VersionNumber
 
 router = APIRouter(
     prefix="/credentials",
@@ -88,7 +89,7 @@ async def post_credentials(
                        or if the token is not valid (HTTP 401 Unauthorized).
     """
     logger.info("Received request to create credentials.")
-    logger.debug("POST credentials body: %s" % credentials.model_dump())
+    logger.debug(f"POST credentials body: {credentials.model_dump()}")
 
     auth_token = get_auth_token(request)
 
@@ -111,58 +112,49 @@ async def post_credentials(
     # Retrieve the versions and endpoints from the client
     async with httpx.AsyncClient() as client:
         credentials_client_token = credentials.token
-        authorization_token = (
-            f"Token {encode_string_base64(credentials_client_token)}"
-        )
+        authorization_token = f"Token {encode_string_base64(credentials_client_token)}"
 
-        logger.info("Send request to get versions: %s" % credentials.url)
+        logger.info(f"Send request to get versions: {credentials.url}")
 
         response_versions = await client.get(
             credentials.url, headers={"authorization": authorization_token}
         )
 
-        logger.info(
-            "GET versions status_code: %s" % response_versions.status_code
-        )
+        logger.info(f"GET versions status_code: {response_versions.status_code}")
 
         if response_versions.status_code == fastapistatus.HTTP_200_OK:
             version_url = None
             versions = response_versions.json()["data"]
 
-            logger.debug("GET versions response data: %s" % versions)
+            logger.debug(f"GET versions response data: {versions}")
 
             for version in versions:
                 if version["version"] == VersionNumber.v_2_2_1:
                     version_url = version["url"]
 
             if not version_url:
-                logger.debug(
-                    "Version %s is not supported" % VersionNumber.v_2_2_1
-                )
+                logger.debug(f"Version {VersionNumber.v_2_2_1} is not supported")
 
                 return OCPIResponse(
                     data=[],
                     **status.OCPI_3002_UNSUPPORTED_VERSION,
                 )
 
-            logger.info("Send request to get version details: %s" % version_url)
+            logger.info(f"Send request to get version details: {version_url}")
 
             response_endpoints = await client.get(
                 version_url, headers={"authorization": authorization_token}
             )
 
             logger.info(
-                "GET version details status_code: %s"
-                % response_endpoints.status_code
+                f"GET version details status_code: {response_endpoints.status_code}"
             )
 
             if response_endpoints.status_code == fastapistatus.HTTP_200_OK:
                 # Store client credentials and generate new credentials for sender
                 endpoints = response_endpoints.json()["data"]
 
-                logger.debug(
-                    "GET version details response data: %s" % endpoints
-                )
+                logger.debug(f"GET version details response data: {endpoints}")
 
                 new_credentials = await crud.create(
                     ModuleID.credentials_and_registration,
@@ -207,7 +199,7 @@ async def update_credentials(
             (HTTP 405 Method Not Allowed).
     """
     logger.info("Received request to update credentials.")
-    logger.debug("PUT credentials body: %s" % credentials.model_dump())
+    logger.debug(f"PUT credentials body: {credentials.model_dump()}")
     auth_token = get_auth_token(request)
 
     # Check if the client is already registered
@@ -222,49 +214,42 @@ async def update_credentials(
     # Retrieve the versions and endpoints from the client
     async with httpx.AsyncClient() as client:
         credentials_client_token = credentials.token
-        authorization_token = (
-            f"Token {encode_string_base64(credentials_client_token)}"
-        )
+        authorization_token = f"Token {encode_string_base64(credentials_client_token)}"
 
-        logger.info("Send request to get versions: %s" % credentials.url)
+        logger.info(f"Send request to get versions: {credentials.url}")
 
         response_versions = await client.get(
             credentials.url, headers={"authorization": authorization_token}
         )
 
-        logger.info(
-            "GET versions status_code: %s" % response_versions.status_code
-        )
+        logger.info(f"GET versions status_code: {response_versions.status_code}")
 
         if response_versions.status_code == fastapistatus.HTTP_200_OK:
             version_url = None
             versions = response_versions.json()["data"]
 
-            logger.debug("GET versions response data: %s" % versions)
+            logger.debug(f"GET versions response data: {versions}")
 
             for version in versions:
                 if version["version"] == VersionNumber.v_2_2_1:
                     version_url = version["url"]
 
             if not version_url:
-                logger.debug(
-                    "Version %s is not supported" % VersionNumber.v_2_2_1
-                )
+                logger.debug(f"Version {VersionNumber.v_2_2_1} is not supported")
 
                 return OCPIResponse(
                     data=[],
                     **status.OCPI_3002_UNSUPPORTED_VERSION,
                 )
 
-            logger.info("Send request to get version details: %s" % version_url)
+            logger.info(f"Send request to get version details: {version_url}")
 
             response_endpoints = await client.get(
                 version_url, headers={"authorization": authorization_token}
             )
 
             logger.info(
-                "GET version details status_code: %s"
-                % response_endpoints.status_code
+                f"GET version details status_code: {response_endpoints.status_code}"
             )
 
             if response_endpoints.status_code == fastapistatus.HTTP_200_OK:
@@ -272,9 +257,7 @@ async def update_credentials(
                 # system and generate new credentials token
                 endpoints = response_endpoints.json()["data"]
 
-                logger.debug(
-                    "GET version details response data: %s" % endpoints
-                )
+                logger.debug(f"GET version details response data: {endpoints}")
 
                 new_credentials = await crud.update(
                     ModuleID.credentials_and_registration,

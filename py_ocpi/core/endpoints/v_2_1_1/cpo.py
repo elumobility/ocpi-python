@@ -1,6 +1,5 @@
-from py_ocpi.core.enums import ModuleID
 from py_ocpi.core.endpoints.v_2_1_1.utils import cpo_generator
-
+from py_ocpi.core.enums import ModuleID
 
 CREDENTIALS_AND_REGISTRATION = cpo_generator.generate_endpoint(
     ModuleID.credentials_and_registration,

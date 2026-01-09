@@ -1,9 +1,9 @@
 from .utils import (
+    AUTH_HEADERS,
+    CPO_BASE_URL,
     TOKEN_UPDATE,
     TOKENS,
-    AUTH_HEADERS,
     WRONG_AUTH_HEADERS,
-    CPO_BASE_URL,
 )
 
 TOKEN_URL = (
@@ -73,7 +73,4 @@ def test_cpo_update_token_v_2_2_1(client_cpo_v_2_2_1):
 
     assert response.status_code == 200
     assert len(response.json()["data"]) == 1
-    assert (
-        response.json()["data"][0]["country_code"]
-        == TOKEN_UPDATE["country_code"]
-    )
+    assert response.json()["data"][0]["country_code"] == TOKEN_UPDATE["country_code"]

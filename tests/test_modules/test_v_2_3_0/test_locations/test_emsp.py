@@ -1,10 +1,10 @@
-import pytest
-
 from uuid import uuid4
+
+import pytest
 
 from py_ocpi.core.config import settings
 
-from .utils import EMSP_BASE_URL, AUTH_HEADERS, LOCATIONS, WRONG_AUTH_HEADERS
+from .utils import AUTH_HEADERS, EMSP_BASE_URL, LOCATIONS, WRONG_AUTH_HEADERS
 
 LOCATION_URL = (
     f"{EMSP_BASE_URL}{settings.COUNTRY_CODE}/{settings.PARTY_ID}/"

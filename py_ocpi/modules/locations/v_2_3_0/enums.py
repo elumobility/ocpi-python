@@ -1,3 +1,5 @@
+from enum import Enum
+
 from py_ocpi.modules.locations.enums import *  # noqa
 
 

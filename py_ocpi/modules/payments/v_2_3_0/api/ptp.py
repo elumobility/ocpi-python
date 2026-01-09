@@ -72,7 +72,9 @@ async def get_terminals(
 
     terminals = []
     for data in data_list:
-        terminals.append(adapter.terminal_adapter(data, VersionNumber.v_2_3_0).model_dump())
+        terminals.append(
+            adapter.terminal_adapter(data, VersionNumber.v_2_3_0).model_dump()
+        )
     logger.debug(f"Amount of terminals in response: {len(terminals)}")
     return OCPIResponse(
         data=terminals,
@@ -96,7 +98,7 @@ async def get_terminal(
     **Returns:**
         The OCPIResponse containing the terminal details.
     """
-    logger.info("Received request to get terminal by id - `%s`." % terminal_id)
+    logger.info(f"Received request to get terminal by id - `{terminal_id}`.")
     auth_token = get_auth_token(request)
 
     data = await crud.get(
@@ -111,7 +113,7 @@ async def get_terminal(
             data=[adapter.terminal_adapter(data, VersionNumber.v_2_3_0).model_dump()],
             **status.OCPI_1000_GENERIC_SUCESS_CODE,
         )
-    logger.debug("Terminal with id `%s` was not found." % terminal_id)
+    logger.debug(f"Terminal with id `{terminal_id}` was not found.")
     raise NotFoundOCPIError
 
 
@@ -164,7 +166,7 @@ async def deactivate_terminal(
     **Returns:**
         The OCPIResponse confirming deactivation.
     """
-    logger.info("Received request to deactivate terminal - `%s`." % terminal_id)
+    logger.info(f"Received request to deactivate terminal - `{terminal_id}`.")
     auth_token = get_auth_token(request)
 
     data = await crud.update(
@@ -202,7 +204,7 @@ async def put_terminal(
     **Returns:**
         The OCPIResponse containing the terminal details.
     """
-    logger.info("Received request to put terminal with id - `%s`." % terminal_id)
+    logger.info(f"Received request to put terminal with id - `{terminal_id}`.")
     auth_token = get_auth_token(request)
 
     data = await crud.update(
@@ -259,7 +261,9 @@ async def get_financial_advice_confirmations(
     confirmations = []
     for data in data_list:
         confirmations.append(
-            adapter.financial_advice_confirmation_adapter(data, VersionNumber.v_2_3_0).model_dump()
+            adapter.financial_advice_confirmation_adapter(
+                data, VersionNumber.v_2_3_0
+            ).model_dump()
         )
     return OCPIResponse(
         data=confirmations,
@@ -287,8 +291,7 @@ async def get_financial_advice_confirmation(
         The OCPIResponse containing the confirmation details.
     """
     logger.info(
-        "Received request to get financial advice confirmation - `%s`."
-        % confirmation_id
+        f"Received request to get financial advice confirmation - `{confirmation_id}`."
     )
     auth_token = get_auth_token(request)
 
@@ -302,7 +305,11 @@ async def get_financial_advice_confirmation(
     )
     if data:
         return OCPIResponse(
-            data=[adapter.financial_advice_confirmation_adapter(data, VersionNumber.v_2_3_0).model_dump()],
+            data=[
+                adapter.financial_advice_confirmation_adapter(
+                    data, VersionNumber.v_2_3_0
+                ).model_dump()
+            ],
             **status.OCPI_1000_GENERIC_SUCESS_CODE,
         )
     raise NotFoundOCPIError
@@ -332,8 +339,7 @@ async def put_financial_advice_confirmation(
         The OCPIResponse containing the confirmation details.
     """
     logger.info(
-        "Received request to put financial advice confirmation - `%s`."
-        % confirmation_id
+        f"Received request to put financial advice confirmation - `{confirmation_id}`."
     )
     auth_token = get_auth_token(request)
 
@@ -347,6 +353,10 @@ async def put_financial_advice_confirmation(
         object_type="financial_advice_confirmation",
     )
     return OCPIResponse(
-        data=[adapter.financial_advice_confirmation_adapter(data, VersionNumber.v_2_3_0).model_dump()],
+        data=[
+            adapter.financial_advice_confirmation_adapter(
+                data, VersionNumber.v_2_3_0
+            ).model_dump()
+        ],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
     )

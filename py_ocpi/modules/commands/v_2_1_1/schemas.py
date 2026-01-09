@@ -1,7 +1,7 @@
-from typing import Optional
+
 from pydantic import BaseModel
 
-from py_ocpi.core.data_types import String, URL, DateTime
+from py_ocpi.core.data_types import URL, DateTime, String
 from py_ocpi.modules.commands.v_2_1_1.enums import CommandResponseType
 from py_ocpi.modules.tokens.v_2_1_1.schemas import Token
 
@@ -24,7 +24,7 @@ class ReserveNow(BaseModel):
     expiry_date: DateTime
     reservation_id: int
     location_id: String(36)  # type: ignore
-    evse_uid: Optional[String(39)]  # type: ignore
+    evse_uid: String(39) | None  # type: ignore
 
 
 class StartSession(BaseModel):
@@ -35,7 +35,7 @@ class StartSession(BaseModel):
     response_url: URL
     token: Token
     location_id: String(39)  # type: ignore
-    evse_uid: Optional[String(39)]  # type: ignore
+    evse_uid: String(39) | None  # type: ignore
 
 
 class StopSession(BaseModel):

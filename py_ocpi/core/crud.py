@@ -1,14 +1,12 @@
-from typing import Any, Tuple, Optional
 from abc import ABC, abstractmethod
+from typing import Any
 
-from py_ocpi.core.enums import ModuleID, RoleEnum, Action
+from py_ocpi.core.enums import Action, ModuleID, RoleEnum
 
 
 class Crud(ABC):
     @abstractmethod
-    async def get(
-        cls, module: ModuleID, role: RoleEnum, id, *args, **kwargs
-    ) -> Any:
+    async def get(cls, module: ModuleID, role: RoleEnum, id, *args, **kwargs) -> Any:
         """Get an object
 
         :param module: The OCPI module
@@ -41,7 +39,7 @@ class Crud(ABC):
     @abstractmethod
     async def list(
         cls, module: ModuleID, role: RoleEnum, filters: dict, *args, **kwargs
-    ) -> Tuple[list, int, bool]:
+    ) -> tuple[list, int, bool]:
         """Get the list of objects
 
         :param module: The OCPI module
@@ -118,9 +116,7 @@ class Crud(ABC):
         pass
 
     @abstractmethod
-    async def delete(
-        cls, module: ModuleID, role: RoleEnum, id, *args, **kwargs
-    ):
+    async def delete(cls, module: ModuleID, role: RoleEnum, id, *args, **kwargs):
         """Delete an object
 
         :param module: The OCPI module
@@ -138,10 +134,10 @@ class Crud(ABC):
     async def do(
         cls,
         module: ModuleID,
-        role: Optional[RoleEnum],
+        role: RoleEnum | None,
         action: Action,
         *args,
-        data: Optional[dict] = None,
+        data: dict | None = None,
         **kwargs,
     ) -> Any:
         """Do an action (non-CRUD)

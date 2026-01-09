@@ -1,50 +1,50 @@
 from asyncio import sleep
-from typing import Union
 
+import httpx
 from fastapi import (
     APIRouter,
     BackgroundTasks,
     Depends,
     Request,
+)
+from fastapi import (
     status as fastapistatus,
 )
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from pydantic import ValidationError
-import httpx
 
-from py_ocpi.core.dependencies import get_crud, get_adapter
-from py_ocpi.core.enums import ModuleID, RoleEnum, Action
+from py_ocpi.core import status
+from py_ocpi.core.adapter import Adapter
 from py_ocpi.core.authentication.verifier import AuthorizationVerifier
+from py_ocpi.core.config import logger, settings
+from py_ocpi.core.crud import Crud
+from py_ocpi.core.dependencies import get_adapter, get_crud
+from py_ocpi.core.enums import Action, ModuleID, RoleEnum
 from py_ocpi.core.exceptions import NotFoundOCPIError
 from py_ocpi.core.schemas import OCPIResponse
-from py_ocpi.core.adapter import Adapter
-from py_ocpi.core.crud import Crud
-from py_ocpi.core.config import logger
-from py_ocpi.core import status
-from py_ocpi.core.config import settings
 from py_ocpi.core.utils import encode_string_base64, get_auth_token
-from py_ocpi.modules.versions.enums import VersionNumber
 from py_ocpi.modules.commands.v_2_2_1.enums import CommandType
 from py_ocpi.modules.commands.v_2_2_1.schemas import (
     CancelReservation,
+    CommandResponse,
+    CommandResponseType,
+    CommandResult,
+    CommandResultType,
     ReserveNow,
     StartSession,
     StopSession,
     UnlockConnector,
-    CommandResult,
-    CommandResultType,
-    CommandResponse,
-    CommandResponseType,
 )
+from py_ocpi.modules.versions.enums import VersionNumber
 
 router = APIRouter(
     prefix="/commands",
     dependencies=[Depends(AuthorizationVerifier(VersionNumber.v_2_2_1))],
 )
-UnionDataType = Union[
-    StartSession, StopSession, ReserveNow, UnlockConnector, CancelReservation
-]
+UnionDataType = (
+    StartSession | StopSession | ReserveNow | UnlockConnector | CancelReservation
+)
 
 
 async def apply_pydantic_schema(command: str, data: dict):
@@ -89,9 +89,7 @@ async def send_command_result(
             command=command,
         )
         if command_result:
-            logger.info(
-                "Command result from Charge Point - %s" % command_result
-            )
+            logger.info(f"Command result from Charge Point - {command_result}")
             break
         await sleep(2)
 
@@ -105,9 +103,7 @@ async def send_command_result(
 
     async with httpx.AsyncClient() as client:
         authorization_token = f"Token {encode_string_base64(client_auth_token)}"
-        logger.info(
-            "Send request with command result: %s" % command_data.response_url
-        )
+        logger.info(f"Send request with command result: {command_data.response_url}")
         res = await client.post(
             command_data.response_url,
             json=command_result.model_dump(),
@@ -115,7 +111,7 @@ async def send_command_result(
         )
         logger.info(
             "POST command data after receiving result from Charge Point"
-            " status_code: %s" % res.status_code
+            f" status_code: {res.status_code}"
         )
 
 
@@ -147,8 +143,8 @@ async def receive_command(
             the command action returns without a result.
         - NotFoundOCPIError: If the associated location is not found.
     """
-    logger.info("Received command - `%s`." % command)
-    logger.debug("Command data - %s" % data)
+    logger.info(f"Received command - `{command}`.")
+    logger.debug(f"Command data - {data}")
     auth_token = get_auth_token(request)
 
     try:
@@ -192,9 +188,7 @@ async def receive_command(
                     adapter=adapter,
                 )
             return OCPIResponse(
-                data=[
-                    adapter.command_response_adapter(command_response).model_dump()
-                ],
+                data=[adapter.command_response_adapter(command_response).model_dump()],
                 **status.OCPI_1000_GENERIC_SUCESS_CODE,
             )
         logger.debug("Send command action returned without result.")
@@ -208,9 +202,7 @@ async def receive_command(
 
     # when the location is not found
     except NotFoundOCPIError:
-        logger.info(
-            "Location with id `%s` was not found." % command_data.location_id
-        )
+        logger.info(f"Location with id `{command_data.location_id}` was not found.")
         command_response = CommandResponse(
             result=CommandResponseType.rejected, timeout=0
         )

@@ -2,22 +2,22 @@ import copy
 
 from fastapi import APIRouter, Depends, Request
 
-from py_ocpi.modules.sessions.v_2_2_1.schemas import (
-    SessionPartialUpdate,
-    Session,
-)
-from py_ocpi.modules.versions.enums import VersionNumber
-from py_ocpi.core.utils import get_auth_token, partially_update_attributes
 from py_ocpi.core import status
-from py_ocpi.core.schemas import OCPIResponse
 from py_ocpi.core.adapter import Adapter
 from py_ocpi.core.authentication.verifier import AuthorizationVerifier
-from py_ocpi.core.crud import Crud
 from py_ocpi.core.config import logger
+from py_ocpi.core.crud import Crud
 from py_ocpi.core.data_types import CiString
+from py_ocpi.core.dependencies import get_adapter, get_crud
 from py_ocpi.core.enums import ModuleID, RoleEnum
 from py_ocpi.core.exceptions import NotFoundOCPIError
-from py_ocpi.core.dependencies import get_crud, get_adapter
+from py_ocpi.core.schemas import OCPIResponse
+from py_ocpi.core.utils import get_auth_token, partially_update_attributes
+from py_ocpi.modules.sessions.v_2_2_1.schemas import (
+    Session,
+    SessionPartialUpdate,
+)
+from py_ocpi.modules.versions.enums import VersionNumber
 
 router = APIRouter(
     prefix="/sessions",
@@ -25,9 +25,7 @@ router = APIRouter(
 )
 
 
-@router.get(
-    "/{country_code}/{party_id}/{session_id}", response_model=OCPIResponse
-)
+@router.get("/{country_code}/{party_id}/{session_id}", response_model=OCPIResponse)
 async def get_session(
     request: Request,
     country_code: CiString(2),  # type: ignore
@@ -52,7 +50,7 @@ async def get_session(
     **Raises:**
         NotFoundOCPIError: If the session is not found.
     """
-    logger.info("Received request to get session with id - `%s`." % session_id)
+    logger.info(f"Received request to get session with id - `{session_id}`.")
     auth_token = get_auth_token(request)
 
     data = await crud.get(
@@ -69,13 +67,11 @@ async def get_session(
             data=[adapter.session_adapter(data, VersionNumber.v_2_2_1).model_dump()],
             **status.OCPI_1000_GENERIC_SUCESS_CODE,
         )
-    logger.debug("Session with id `%s` was not found." % session_id)
+    logger.debug(f"Session with id `{session_id}` was not found.")
     raise NotFoundOCPIError
 
 
-@router.put(
-    "/{country_code}/{party_id}/{session_id}", response_model=OCPIResponse
-)
+@router.put("/{country_code}/{party_id}/{session_id}", response_model=OCPIResponse)
 async def add_or_update_session(
     request: Request,
     country_code: CiString(2),  # type: ignore
@@ -102,9 +98,9 @@ async def add_or_update_session(
         The OCPIResponse containing the added or updated session data.
     """
     logger.info(
-        "Received request to add or update session with id - `%s`." % session_id
+        f"Received request to add or update session with id - `{session_id}`."
     )
-    logger.debug("Session data to update - %s" % session.model_dump())
+    logger.debug(f"Session data to update - {session.model_dump()}")
     auth_token = get_auth_token(request)
 
     data = await crud.get(
@@ -117,7 +113,7 @@ async def add_or_update_session(
         version=VersionNumber.v_2_2_1,
     )
     if data:
-        logger.debug("Update session with id - `%s`." % session_id)
+        logger.debug(f"Update session with id - `{session_id}`.")
         data = await crud.update(
             ModuleID.sessions,
             RoleEnum.emsp,
@@ -129,7 +125,7 @@ async def add_or_update_session(
             version=VersionNumber.v_2_2_1,
         )
     else:
-        logger.debug("Create session with id - `%s`." % session_id)
+        logger.debug(f"Create session with id - `{session_id}`.")
         data = await crud.create(
             ModuleID.sessions,
             RoleEnum.emsp,
@@ -146,9 +142,7 @@ async def add_or_update_session(
     )
 
 
-@router.patch(
-    "/{country_code}/{party_id}/{session_id}", response_model=OCPIResponse
-)
+@router.patch("/{country_code}/{party_id}/{session_id}", response_model=OCPIResponse)
 async def partial_update_session(
     request: Request,
     country_code: CiString(2),  # type: ignore
@@ -178,10 +172,9 @@ async def partial_update_session(
         NotFoundOCPIError: If the session is not found.
     """
     logger.info(
-        "Received request to partially update session with id - `%s`."
-        % session_id
+        f"Received request to partially update session with id - `{session_id}`."
     )
-    logger.debug("Session data to update - %s" % session.model_dump())
+    logger.debug(f"Session data to update - {session.model_dump()}")
     auth_token = get_auth_token(request)
 
     old_data = await crud.get(
@@ -216,5 +209,5 @@ async def partial_update_session(
             data=[adapter.session_adapter(data).model_dump()],
             **status.OCPI_1000_GENERIC_SUCESS_CODE,
         )
-    logger.debug("Session with id `%s` was not found." % session_id)
+    logger.debug(f"Session with id `{session_id}` was not found.")
     raise NotFoundOCPIError

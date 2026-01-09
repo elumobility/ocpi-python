@@ -5,10 +5,10 @@ from fastapi import APIRouter, Depends, Request
 from py_ocpi.core import status
 from py_ocpi.core.adapter import Adapter
 from py_ocpi.core.authentication.verifier import AuthorizationVerifier
-from py_ocpi.core.crud import Crud
 from py_ocpi.core.config import logger
+from py_ocpi.core.crud import Crud
 from py_ocpi.core.data_types import String
-from py_ocpi.core.dependencies import get_crud, get_adapter
+from py_ocpi.core.dependencies import get_adapter, get_crud
 from py_ocpi.core.enums import ModuleID, RoleEnum
 from py_ocpi.core.exceptions import NotFoundOCPIError
 from py_ocpi.core.schemas import OCPIResponse
@@ -25,9 +25,7 @@ router = APIRouter(
 )
 
 
-@router.get(
-    "/{country_code}/{party_id}/{tariff_id}", response_model=OCPIResponse
-)
+@router.get("/{country_code}/{party_id}/{tariff_id}", response_model=OCPIResponse)
 async def get_tariff(
     request: Request,
     country_code: String(2),  # type: ignore
@@ -52,7 +50,7 @@ async def get_tariff(
     **Raises:**
         NotFoundOCPIError: If the tariff is not found.
     """
-    logger.info("Received request to get tariff with id - `%s`." % tariff_id)
+    logger.info(f"Received request to get tariff with id - `{tariff_id}`.")
     auth_token = get_auth_token(request, VersionNumber.v_2_1_1)
 
     data = await crud.get(
@@ -69,13 +67,11 @@ async def get_tariff(
             data=[adapter.tariff_adapter(data, VersionNumber.v_2_1_1).model_dump()],
             **status.OCPI_1000_GENERIC_SUCESS_CODE,
         )
-    logger.debug("Tariff with id `%s` was not found." % tariff_id)
+    logger.debug(f"Tariff with id `{tariff_id}` was not found.")
     raise NotFoundOCPIError
 
 
-@router.put(
-    "/{country_code}/{party_id}/{tariff_id}", response_model=OCPIResponse
-)
+@router.put("/{country_code}/{party_id}/{tariff_id}", response_model=OCPIResponse)
 async def add_or_update_tariff(
     request: Request,
     country_code: String(2),  # type: ignore
@@ -101,10 +97,8 @@ async def add_or_update_tariff(
     **Returns:**
         The OCPIResponse containing the tariff data.
     """
-    logger.info(
-        "Received request to add or update tariff with id - `%s`." % tariff_id
-    )
-    logger.debug("Tariff data to update - %s" % tariff.model_dump())
+    logger.info(f"Received request to add or update tariff with id - `{tariff_id}`.")
+    logger.debug(f"Tariff data to update - {tariff.model_dump()}")
     auth_token = get_auth_token(request, VersionNumber.v_2_1_1)
 
     data = await crud.get(
@@ -117,7 +111,7 @@ async def add_or_update_tariff(
         version=VersionNumber.v_2_1_1,
     )
     if data:
-        logger.debug("Update tariff with id - `%s`." % tariff_id)
+        logger.debug(f"Update tariff with id - `{tariff_id}`.")
         data = await crud.update(
             ModuleID.tariffs,
             RoleEnum.emsp,
@@ -129,7 +123,7 @@ async def add_or_update_tariff(
             version=VersionNumber.v_2_1_1,
         )
     else:
-        logger.debug("Create tariff with id - `%s`." % tariff_id)
+        logger.debug(f"Create tariff with id - `{tariff_id}`.")
         data = await crud.create(
             ModuleID.tariffs,
             RoleEnum.emsp,
@@ -146,9 +140,7 @@ async def add_or_update_tariff(
     )
 
 
-@router.patch(
-    "/{country_code}/{party_id}/{tariff_id}", response_model=OCPIResponse
-)
+@router.patch("/{country_code}/{party_id}/{tariff_id}", response_model=OCPIResponse)
 async def partial_update_tariff(
     request: Request,
     country_code: String(2),  # type: ignore
@@ -178,10 +170,9 @@ async def partial_update_tariff(
         NotFoundOCPIError: If the tariff is not found.
     """
     logger.info(
-        "Received request to partially update tariff with id - `%s`."
-        % tariff_id
+        f"Received request to partially update tariff with id - `{tariff_id}`."
     )
-    logger.debug("Tariff data to update - %s" % tariff.model_dump())
+    logger.debug(f"Tariff data to update - {tariff.model_dump()}")
     auth_token = get_auth_token(request, VersionNumber.v_2_1_1)
 
     old_data = await crud.get(
@@ -216,13 +207,11 @@ async def partial_update_tariff(
             data=[adapter.tariff_adapter(data, VersionNumber.v_2_1_1).model_dump()],
             **status.OCPI_1000_GENERIC_SUCESS_CODE,
         )
-    logger.debug("Tariff with id `%s` was not found." % tariff_id)
+    logger.debug(f"Tariff with id `{tariff_id}` was not found.")
     raise NotFoundOCPIError
 
 
-@router.delete(
-    "/{country_code}/{party_id}/{tariff_id}", response_model=OCPIResponse
-)
+@router.delete("/{country_code}/{party_id}/{tariff_id}", response_model=OCPIResponse)
 async def delete_tariff(
     request: Request,
     country_code: String(2),  # type: ignore
@@ -247,7 +236,7 @@ async def delete_tariff(
     **Raises:**
         NotFoundOCPIError: If the tariff is not found.
     """
-    logger.info("Received request to delete tariff with id - `%s`." % tariff_id)
+    logger.info(f"Received request to delete tariff with id - `{tariff_id}`.")
     auth_token = get_auth_token(request, VersionNumber.v_2_1_1)
 
     tariff = await crud.get(
@@ -274,5 +263,5 @@ async def delete_tariff(
             data=[],
             **status.OCPI_1000_GENERIC_SUCESS_CODE,
         )
-    logger.debug("Tariff with id `%s` was not found." % tariff_id)
+    logger.debug(f"Tariff with id `{tariff_id}` was not found.")
     raise NotFoundOCPIError

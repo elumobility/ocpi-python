@@ -1,16 +1,16 @@
-from typing import List, Optional
+
 from pydantic import BaseModel
 
-from py_ocpi.modules.locations.enums import (
-    EnergySourceCategory,
-    Status,
-    EnvironmentalImpactCategory,
-)
 from py_ocpi.core.data_types import (
     DateTime,
     DisplayText,
     Number,
     String,
+)
+from py_ocpi.modules.locations.enums import (
+    EnergySourceCategory,
+    EnvironmentalImpactCategory,
+    Status,
 )
 
 
@@ -28,7 +28,7 @@ class AdditionalGeoLocation(GeoLocation):
     https://github.com/ocpi/ocpi/blob/2.2.1/mod_locations.asciidoc#mod_locations_additionalgeolocation_class
     """
 
-    name: Optional[DisplayText]
+    name: DisplayText | None
 
 
 class StatusSchedule(BaseModel):
@@ -37,7 +37,7 @@ class StatusSchedule(BaseModel):
     """
 
     period_begin: DateTime
-    period_end: Optional[DateTime]
+    period_end: DateTime | None
     status: Status
 
 
@@ -66,9 +66,9 @@ class Hours(BaseModel):
     """
 
     twentyfourseven: bool
-    regular_hours: List[RegularHours] = []
-    exceptional_openings: List[ExceptionalPeriod] = []
-    exceptional_closings: List[ExceptionalPeriod] = []
+    regular_hours: list[RegularHours] = []
+    exceptional_openings: list[ExceptionalPeriod] = []
+    exceptional_closings: list[ExceptionalPeriod] = []
 
 
 class EnergySource(BaseModel):
@@ -95,7 +95,7 @@ class EnergyMix(BaseModel):
     """
 
     is_green_energy: bool
-    energy_sources: List[EnergySource]
-    environ_impact: Optional[EnvironmentalImpact]
+    energy_sources: list[EnergySource]
+    environ_impact: EnvironmentalImpact | None
     supplier_name: String(max_length=64)  # type: ignore
     energy_product_name: String(max_length=64)  # type: ignore

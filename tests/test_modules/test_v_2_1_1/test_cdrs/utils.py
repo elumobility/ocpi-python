@@ -2,14 +2,11 @@ from uuid import uuid4
 
 from py_ocpi.core import enums
 from py_ocpi.modules.cdrs.v_2_1_1.enums import AuthMethod, CdrDimensionType
-
+from tests.test_modules.test_v_2_1_1.test_locations.utils import LOCATIONS
 from tests.test_modules.utils import (
     AUTH_TOKEN,
     RANDOM_AUTH_TOKEN,
-    ClientAuthenticator,
 )
-from tests.test_modules.test_v_2_1_1.test_locations.utils import LOCATIONS
-
 
 CPO_BASE_URL = "/ocpi/cpo/2.1.1/cdrs/"
 EMSP_BASE_URL = "/ocpi/emsp/2.1.1/cdrs/"
@@ -46,9 +43,7 @@ CDRS = [
         "charging_periods": [
             {
                 "start_date_time": "2022-01-02 00:00:00+00:00",
-                "dimensions": [
-                    {"type": CdrDimensionType.time, "volume": 1.973}
-                ],
+                "dimensions": [{"type": CdrDimensionType.time, "volume": 1.973}],
             }
         ],
         "total_cost": 4.00,

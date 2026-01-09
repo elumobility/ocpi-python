@@ -3,13 +3,11 @@ from uuid import uuid4
 from py_ocpi.core import enums
 from py_ocpi.modules.cdrs.v_2_1_1.enums import AuthMethod, CdrDimensionType
 from py_ocpi.modules.sessions.v_2_1_1.enums import SessionStatus
-
+from tests.test_modules.test_v_2_1_1.test_locations.utils import LOCATIONS
 from tests.test_modules.utils import (
     AUTH_TOKEN,
     RANDOM_AUTH_TOKEN,
-    ClientAuthenticator,
 )
-from tests.test_modules.test_v_2_1_1.test_locations.utils import LOCATIONS
 
 CPO_BASE_URL = "/ocpi/cpo/2.1.1/sessions/"
 EMSP_BASE_URL = "/ocpi/emsp/2.1.1/sessions/"

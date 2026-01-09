@@ -22,9 +22,7 @@ class Adapter(ABC):
         pass
 
     @abstractmethod
-    def session_adapter(
-        cls, data: dict, version: VersionNumber = VersionNumber.latest
-    ):
+    def session_adapter(cls, data: dict, version: VersionNumber = VersionNumber.latest):
         """Adapt the data to OCPI Session schema
 
         Args:
@@ -70,9 +68,7 @@ class Adapter(ABC):
         pass
 
     @abstractmethod
-    def cdr_adapter(
-        cls, data: dict, version: VersionNumber = VersionNumber.latest
-    ):
+    def cdr_adapter(cls, data: dict, version: VersionNumber = VersionNumber.latest):
         """Adapt the data to OCPI CDR schema
 
         Args:
@@ -86,9 +82,7 @@ class Adapter(ABC):
         pass
 
     @abstractmethod
-    def tariff_adapter(
-        cls, data: dict, version: VersionNumber = VersionNumber.latest
-    ):
+    def tariff_adapter(cls, data: dict, version: VersionNumber = VersionNumber.latest):
         """Adapt the data to OCPI Tariff schema
 
         Args:
@@ -134,9 +128,7 @@ class Adapter(ABC):
         pass
 
     @abstractmethod
-    def token_adapter(
-        cls, data: dict, version: VersionNumber = VersionNumber.latest
-    ):
+    def token_adapter(cls, data: dict, version: VersionNumber = VersionNumber.latest):
         """Adapt the data to OCPI Token schema
 
         Args:
@@ -264,9 +256,7 @@ class Adapter(ABC):
         pass
 
     @abstractmethod
-    def parking_adapter(
-        cls, data: dict, version: VersionNumber = VersionNumber.latest
-    ):
+    def parking_adapter(cls, data: dict, version: VersionNumber = VersionNumber.latest):
         """Adapt the data to OCPI Parking schema (2.3.0+)
 
         Args:
@@ -293,9 +283,7 @@ class BaseAdapter(Adapter):
         )(**data)
 
     @classmethod
-    def session_adapter(
-        cls, data: dict, version: VersionNumber = VersionNumber.latest
-    ):
+    def session_adapter(cls, data: dict, version: VersionNumber = VersionNumber.latest):
         """Adapt the data to OCPI Session schema"""
         return get_module_model(
             class_name="Session",
@@ -326,9 +314,7 @@ class BaseAdapter(Adapter):
         )(**data)
 
     @classmethod
-    def cdr_adapter(
-        cls, data: dict, version: VersionNumber = VersionNumber.latest
-    ):
+    def cdr_adapter(cls, data: dict, version: VersionNumber = VersionNumber.latest):
         """Adapt the data to OCPI Cdr schema"""
         return get_module_model(
             class_name="Cdr",
@@ -337,9 +323,7 @@ class BaseAdapter(Adapter):
         )(**data)
 
     @classmethod
-    def tariff_adapter(
-        cls, data: dict, version: VersionNumber = VersionNumber.latest
-    ):
+    def tariff_adapter(cls, data: dict, version: VersionNumber = VersionNumber.latest):
         """Adapt the data to OCPI Tariff schema"""
         return get_module_model(
             class_name="Tariff",
@@ -370,9 +354,7 @@ class BaseAdapter(Adapter):
         )(**data)
 
     @classmethod
-    def token_adapter(
-        cls, data: dict, version: VersionNumber = VersionNumber.latest
-    ):
+    def token_adapter(cls, data: dict, version: VersionNumber = VersionNumber.latest):
         """Adapt the data to OCPI Token schema"""
         return get_module_model(
             class_name="Token",
@@ -462,9 +444,7 @@ class BaseAdapter(Adapter):
     # New in OCPI 2.3.0 - Parking adapter
 
     @classmethod
-    def parking_adapter(
-        cls, data: dict, version: VersionNumber = VersionNumber.latest
-    ):
+    def parking_adapter(cls, data: dict, version: VersionNumber = VersionNumber.latest):
         """Adapt the data to OCPI Parking schema (2.3.0+)"""
         return get_module_model(
             class_name="Parking",

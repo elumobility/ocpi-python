@@ -1,29 +1,27 @@
-import pytest
-
 import datetime
-
 from uuid import uuid4
 
+import pytest
 from fastapi.testclient import TestClient
 
 from py_ocpi import get_application
 from py_ocpi.core import enums
 from py_ocpi.core.exceptions import NotFoundOCPIError
-from py_ocpi.modules.tokens.v_2_3_0.enums import TokenType, WhitelistType
 from py_ocpi.modules.commands.v_2_3_0.enums import (
-    CommandType,
     CommandResultType,
+    CommandType,
 )
+from py_ocpi.modules.tokens.v_2_3_0.enums import TokenType, WhitelistType
 from py_ocpi.modules.versions.enums import VersionNumber
 
 from .utils import (
+    AUTH_HEADERS,
     COMMAND_RESPONSE,
     COMMAND_RESULT,
-    AUTH_HEADERS,
-    WRONG_AUTH_HEADERS,
     CPO_BASE_URL,
-    Crud,
+    WRONG_AUTH_HEADERS,
     ClientAuthenticator,
+    Crud,
 )
 
 COMMAND_START_URL = f"{CPO_BASE_URL}{CommandType.start_session.value}"
@@ -123,9 +121,7 @@ def test_cpo_receive_command_reserve_now_v_2_3_0(client_cpo_v_2_3_0):
             "energy_contract": None,
             "last_updated": "2022-01-02 00:00:00+00:00",
         },
-        "expiry_date": str(
-            datetime.datetime.now() + datetime.timedelta(days=1)
-        ),
+        "expiry_date": str(datetime.datetime.now() + datetime.timedelta(days=1)),
         "reservation_id": str(uuid4()),
         "location_id": str(uuid4()),
         "evse_uid": None,
@@ -182,9 +178,7 @@ def test_cpo_receive_command_reserve_now_unknown_location_v_2_3_0():
             "energy_contract": None,
             "last_updated": "2022-01-02 00:00:00+00:00",
         },
-        "expiry_date": str(
-            datetime.datetime.now() + datetime.timedelta(days=1)
-        ),
+        "expiry_date": str(datetime.datetime.now() + datetime.timedelta(days=1)),
         "reservation_id": str(uuid4()),
         "location_id": str(uuid4()),
         "evse_uid": None,

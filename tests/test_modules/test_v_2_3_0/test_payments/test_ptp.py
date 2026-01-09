@@ -1,19 +1,20 @@
-import pytest
 from uuid import uuid4
 
 from .utils import (
-    TERMINALS,
-    FINANCIAL_ADVICE_CONFIRMATIONS,
     AUTH_HEADERS,
-    WRONG_AUTH_HEADERS,
+    FINANCIAL_ADVICE_CONFIRMATIONS,
     PTP_BASE_URL,
+    TERMINALS,
+    WRONG_AUTH_HEADERS,
 )
 
 GET_TERMINALS_URL = f"{PTP_BASE_URL}terminals"
 GET_TERMINAL_URL = f'{PTP_BASE_URL}terminals/{TERMINALS[0]["terminal_id"]}'
 POST_TERMINAL_URL = f'{PTP_BASE_URL}terminals/{TERMINALS[0]["terminal_id"]}'
 PATCH_TERMINAL_URL = f'{PTP_BASE_URL}terminals/{TERMINALS[0]["terminal_id"]}'
-FINANCIAL_ADVICE_URL = f'{PTP_BASE_URL}financial_advice/{FINANCIAL_ADVICE_CONFIRMATIONS[0]["id"]}'
+FINANCIAL_ADVICE_URL = (
+    f'{PTP_BASE_URL}financial_advice/{FINANCIAL_ADVICE_CONFIRMATIONS[0]["id"]}'
+)
 
 
 def test_ptp_get_terminals_not_authenticated(client_ptp_v_2_3_0):

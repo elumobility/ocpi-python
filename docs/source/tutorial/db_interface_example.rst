@@ -159,4 +159,3 @@ what parameters could be received as `*args` and `**kwargs`.
                     {"$gte": date_from.isoformat()}
                 )
             return query
-

@@ -1,14 +1,14 @@
-from fastapi import APIRouter, Depends, Response, Request
+from fastapi import APIRouter, Depends, Request, Response
 
-from py_ocpi.core.utils import get_list, get_auth_token
 from py_ocpi.core import status
-from py_ocpi.core.schemas import OCPIResponse
 from py_ocpi.core.adapter import Adapter
 from py_ocpi.core.authentication.verifier import AuthorizationVerifier
-from py_ocpi.core.crud import Crud
 from py_ocpi.core.config import logger
+from py_ocpi.core.crud import Crud
+from py_ocpi.core.dependencies import get_adapter, get_crud, pagination_filters
 from py_ocpi.core.enums import ModuleID, RoleEnum
-from py_ocpi.core.dependencies import get_crud, get_adapter, pagination_filters
+from py_ocpi.core.schemas import OCPIResponse
+from py_ocpi.core.utils import get_auth_token, get_list
 from py_ocpi.modules.versions.enums import VersionNumber
 
 router = APIRouter(

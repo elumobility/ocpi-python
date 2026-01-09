@@ -1,13 +1,13 @@
-from typing import Optional, List
+
 from pydantic import BaseModel
 
-from py_ocpi.core.data_types import String, CiString, DisplayText, DateTime
+from py_ocpi.core.data_types import CiString, DateTime, DisplayText, String
+from py_ocpi.modules.sessions.v_2_3_0.enums import ProfileType
 from py_ocpi.modules.tokens.v_2_3_0.enums import (
     AllowedType,
     TokenType,
     WhitelistType,
 )
-from py_ocpi.modules.sessions.v_2_3_0.enums import ProfileType
 
 
 class EnergyContract(BaseModel):
@@ -16,7 +16,7 @@ class EnergyContract(BaseModel):
     """
 
     supplier_name: String(64)  # type: ignore
-    contract_id: Optional[String(64)]  # type: ignore
+    contract_id: String(64) | None  # type: ignore
 
 
 class LocationReference(BaseModel):
@@ -25,7 +25,7 @@ class LocationReference(BaseModel):
     """
 
     location_id: CiString(36)  # type: ignore
-    evse_uids: List[CiString(36)] = []  # type: ignore
+    evse_uids: list[CiString(36)] = []  # type: ignore
 
 
 class Token(BaseModel):
@@ -38,32 +38,32 @@ class Token(BaseModel):
     uid: CiString(36)  # type: ignore
     type: TokenType
     contract_id: CiString(36)  # type: ignore
-    visual_number: Optional[String(64)]  # type: ignore
+    visual_number: String(64) | None  # type: ignore
     issuer: String(64)  # type: ignore
-    group_id: Optional[CiString(36)]  # type: ignore
+    group_id: CiString(36) | None  # type: ignore
     valid: bool
     whitelist: WhitelistType
-    language: Optional[String(2)]  # type: ignore
-    default_profile_type: Optional[ProfileType]
-    energy_contract: Optional[EnergyContract]
+    language: String(2) | None  # type: ignore
+    default_profile_type: ProfileType | None
+    energy_contract: EnergyContract | None
     last_updated: DateTime
 
 
 class TokenPartialUpdate(BaseModel):
-    country_code: Optional[CiString(2)] = None  # type: ignore
-    party_id: Optional[CiString(3)] = None  # type: ignore
-    uid: Optional[CiString(36)] = None  # type: ignore
-    type: Optional[TokenType] = None
-    contract_id: Optional[CiString(36)] = None  # type: ignore
-    visual_number: Optional[String(64)] = None  # type: ignore
-    issuer: Optional[String(64)] = None  # type: ignore
-    group_id: Optional[CiString(36)] = None  # type: ignore
-    valid: Optional[bool] = None
-    whitelist: Optional[WhitelistType] = None
-    language: Optional[String(2)] = None  # type: ignore
-    default_profile_type: Optional[ProfileType] = None
-    energy_contract: Optional[EnergyContract] = None
-    last_updated: Optional[DateTime] = None
+    country_code: CiString(2) | None = None  # type: ignore
+    party_id: CiString(3) | None = None  # type: ignore
+    uid: CiString(36) | None = None  # type: ignore
+    type: TokenType | None = None
+    contract_id: CiString(36) | None = None  # type: ignore
+    visual_number: String(64) | None = None  # type: ignore
+    issuer: String(64) | None = None  # type: ignore
+    group_id: CiString(36) | None = None  # type: ignore
+    valid: bool | None = None
+    whitelist: WhitelistType | None = None
+    language: String(2) | None = None  # type: ignore
+    default_profile_type: ProfileType | None = None
+    energy_contract: EnergyContract | None = None
+    last_updated: DateTime | None = None
 
 
 class AuthorizationInfo(BaseModel):
@@ -73,6 +73,6 @@ class AuthorizationInfo(BaseModel):
 
     allowed: AllowedType
     token: Token
-    location: Optional[LocationReference]
-    authorization_reference: Optional[CiString(36)]  # type: ignore
-    info: Optional[DisplayText]
+    location: LocationReference | None
+    authorization_reference: CiString(36) | None  # type: ignore
+    info: DisplayText | None

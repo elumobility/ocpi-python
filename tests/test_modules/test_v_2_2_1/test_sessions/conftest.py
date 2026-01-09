@@ -1,12 +1,11 @@
 import pytest
-
 from fastapi.testclient import TestClient
 
-from py_ocpi.main import get_application
 from py_ocpi.core import enums
+from py_ocpi.main import get_application
 from py_ocpi.modules.versions.enums import VersionNumber
 
-from .utils import Crud, ClientAuthenticator
+from .utils import ClientAuthenticator, Crud
 
 
 @pytest.fixture

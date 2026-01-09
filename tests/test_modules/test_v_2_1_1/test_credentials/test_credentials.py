@@ -1,6 +1,5 @@
-from uuid import uuid4
-from unittest.mock import patch
 from typing import Any
+from unittest.mock import patch
 
 import pytest
 from fastapi.testclient import TestClient
@@ -8,14 +7,14 @@ from httpx import AsyncClient
 
 from py_ocpi import get_application
 from py_ocpi.core import enums
-from py_ocpi.core.data_types import URL
 from py_ocpi.core.config import settings
+from py_ocpi.core.data_types import URL
 from py_ocpi.core.dependencies import get_versions
 from py_ocpi.modules.versions.enums import VersionNumber
 from py_ocpi.modules.versions.schemas import Version
-
-from .utils import Crud, CREDENTIALS_TOKEN_CREATE, AUTH_HEADERS, AUTH_HEADERS_A
 from tests.test_modules.utils import ClientAuthenticator
+
+from .utils import AUTH_HEADERS, AUTH_HEADERS_A, CREDENTIALS_TOKEN_CREATE, Crud
 
 
 def test_cpo_get_credentials_v_2_1_1():
@@ -75,6 +74,7 @@ async def test_cpo_post_credentials_v_2_1_1(async_client):
     app_1.dependency_overrides[get_versions] = override_get_versions
 
     from httpx import ASGITransport
+
     async_client.return_value = AsyncClient(
         transport=ASGITransport(app=app_1), base_url="http://test"
     )

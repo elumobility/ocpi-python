@@ -2,10 +2,10 @@ from fastapi import (
     Depends,
     Header,
     Path,
-    Security,
-    status,
     Query,
+    Security,
     WebSocketException,
+    status,
 )
 from fastapi.security import APIKeyHeader
 
@@ -63,8 +63,8 @@ class AuthorizationVerifier:
                     token = decode_string_base64(token)
                 except UnicodeDecodeError:
                     logger.debug(
-                        "Token `%s` cannot be decoded. "
-                        "Check if the token is already encoded." % token
+                        f"Token `{token}` cannot be decoded. "
+                        "Check if the token is already encoded."
                     )
                     raise AuthorizationOCPIError
             await authenticator.authenticate(token)
@@ -119,8 +119,8 @@ class CredentialsAuthorizationVerifier:
                     token = decode_string_base64(token)
                 except UnicodeDecodeError:
                     logger.debug(
-                        "Token `%s` cannot be decoded. "
-                        "Check if the token is already encoded." % token
+                        f"Token `{token}` cannot be decoded. "
+                        "Check if the token is already encoded."
                     )
                     raise AuthorizationOCPIError
         else:
@@ -196,8 +196,8 @@ class HttpPushVerifier:
                     token = decode_string_base64(token)
                 except UnicodeDecodeError:
                     logger.debug(
-                        "Token `%s` cannot be decoded. "
-                        "Check if the token is already encoded." % token
+                        f"Token `{token}` cannot be decoded. "
+                        "Check if the token is already encoded."
                     )
                     raise AuthorizationOCPIError
             await authenticator.authenticate(token)
@@ -247,8 +247,8 @@ class WSPushVerifier:
                     token = decode_string_base64(token)
                 except UnicodeDecodeError:
                     logger.debug(
-                        "Token `%s` cannot be decoded. "
-                        "Check if the token is already encoded." % token
+                        f"Token `{token}` cannot be decoded. "
+                        "Check if the token is already encoded."
                     )
                     raise AuthorizationOCPIError
             await authenticator.authenticate(token)

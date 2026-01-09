@@ -1,7 +1,6 @@
 from py_ocpi import get_application
 from py_ocpi.core import enums
 from py_ocpi.modules.versions.enums import VersionNumber
-
 from tests.test_modules.utils import ClientAuthenticator
 
 

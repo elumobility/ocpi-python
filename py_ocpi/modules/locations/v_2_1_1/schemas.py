@@ -1,9 +1,7 @@
-from typing import List, Optional
 
 from pydantic import BaseModel
 
-from py_ocpi.core.data_types import DisplayText, DateTime, String, URL
-
+from py_ocpi.core.data_types import URL, DateTime, DisplayText, String
 from py_ocpi.modules.locations.schemas import (
     AdditionalGeoLocation,
     EnergyMix,
@@ -16,10 +14,10 @@ from py_ocpi.modules.locations.v_2_1_1.enums import (
     ConnectorFormat,
     ConnectorType,
     Facility,
+    ImageCategory,
     LocationType,
     ParkingRestriction,
     PowerType,
-    ImageCategory,
     Status,
 )
 
@@ -30,11 +28,11 @@ class Image(BaseModel):
     """
 
     url: URL
-    thumbnail: Optional[URL]
+    thumbnail: URL | None
     category: ImageCategory
     type: String(max_length=4)  # type: ignore
-    width: Optional[int]
-    height: Optional[int]
+    width: int | None
+    height: int | None
 
 
 class BusinessDetails(BaseModel):
@@ -43,8 +41,8 @@ class BusinessDetails(BaseModel):
     """
 
     name: String(max_length=100)  # type: ignore
-    website: Optional[URL]
-    logo: Optional[Image]
+    website: URL | None
+    logo: Image | None
 
 
 class Connector(BaseModel):
@@ -59,20 +57,20 @@ class Connector(BaseModel):
     voltage: int
     amperage: int
     tariff_id: String(max_length=36)  # type: ignore
-    terms_and_conditions: Optional[URL]
+    terms_and_conditions: URL | None
     last_updated: DateTime
 
 
 class ConnectorPartialUpdate(BaseModel):
-    id: Optional[String(max_length=36)] = None  # type: ignore
-    standard: Optional[ConnectorType] = None
-    format: Optional[ConnectorFormat] = None
-    power_type: Optional[PowerType] = None
-    voltage: Optional[int] = None
-    amperage: Optional[int] = None
-    tariff_id: Optional[String(max_length=36)] = None  # type: ignore
-    terms_and_conditions: Optional[URL] = None
-    last_updated: Optional[DateTime] = None
+    id: String(max_length=36) | None = None  # type: ignore
+    standard: ConnectorType | None = None
+    format: ConnectorFormat | None = None
+    power_type: PowerType | None = None
+    voltage: int | None = None
+    amperage: int | None = None
+    tariff_id: String(max_length=36) | None = None  # type: ignore
+    terms_and_conditions: URL | None = None
+    last_updated: DateTime | None = None
 
 
 class EVSE(BaseModel):
@@ -81,34 +79,34 @@ class EVSE(BaseModel):
     """
 
     uid: String(max_length=39)  # type: ignore
-    evse_id: Optional[String(max_length=48)]  # type: ignore
+    evse_id: String(max_length=48) | None  # type: ignore
     status: Status
-    status_schedule: Optional[StatusSchedule]
-    capabilities: List[Capability] = []
-    connectors: List[Connector]
-    floor_level: Optional[String(max_length=4)]  # type: ignore
-    coordinates: Optional[GeoLocation]
-    physical_reference: Optional[String(max_length=16)]  # type: ignore
-    directions: List[DisplayText] = []
-    parking_restrictions: List[ParkingRestriction] = []
-    images: List[Image] = []
+    status_schedule: StatusSchedule | None
+    capabilities: list[Capability] = []
+    connectors: list[Connector]
+    floor_level: String(max_length=4) | None  # type: ignore
+    coordinates: GeoLocation | None
+    physical_reference: String(max_length=16) | None  # type: ignore
+    directions: list[DisplayText] = []
+    parking_restrictions: list[ParkingRestriction] = []
+    images: list[Image] = []
     last_updated: DateTime
 
 
 class EVSEPartialUpdate(BaseModel):
-    uid: Optional[String(max_length=39)] = None  # type: ignore
-    evse_id: Optional[String(max_length=48)] = None  # type: ignore
-    status: Optional[Status] = None
-    status_schedule: Optional[StatusSchedule] = None
-    capabilities: Optional[List[Capability]] = None
-    connectors: Optional[List[Connector]] = None
-    floor_level: Optional[String(max_length=4)] = None  # type: ignore
-    coordinates: Optional[GeoLocation] = None
-    physical_reference: Optional[String(max_length=16)] = None  # type: ignore
-    directions: Optional[List[DisplayText]] = None
-    parking_restrictions: Optional[List[ParkingRestriction]] = None
-    images: Optional[List[Image]] = None
-    last_updated: Optional[DateTime] = None
+    uid: String(max_length=39) | None = None  # type: ignore
+    evse_id: String(max_length=48) | None = None  # type: ignore
+    status: Status | None = None
+    status_schedule: StatusSchedule | None = None
+    capabilities: list[Capability] | None = None
+    connectors: list[Connector] | None = None
+    floor_level: String(max_length=4) | None = None  # type: ignore
+    coordinates: GeoLocation | None = None
+    physical_reference: String(max_length=16) | None = None  # type: ignore
+    directions: list[DisplayText] | None = None
+    parking_restrictions: list[ParkingRestriction] | None = None
+    images: list[Image] | None = None
+    last_updated: DateTime | None = None
 
 
 class Location(BaseModel):
@@ -118,46 +116,46 @@ class Location(BaseModel):
 
     id: String(max_length=39)  # type: ignore
     type: LocationType
-    name: Optional[String(max_length=255)]  # type: ignore
+    name: String(max_length=255) | None  # type: ignore
     address: String(max_length=45)  # type: ignore
     city: String(max_length=45)  # type: ignore
-    postal_code: Optional[String(max_length=10)]  # type: ignore
+    postal_code: String(max_length=10) | None  # type: ignore
     country: String(max_length=3)  # type: ignore
     coordinates: GeoLocation
-    related_locations: List[AdditionalGeoLocation] = []
-    evses: List[EVSE] = []
-    directions: List[DisplayText] = []
-    operator: Optional[BusinessDetails]
-    suboperator: Optional[BusinessDetails]
-    owner: Optional[BusinessDetails]
-    facilities: List[Facility] = []
+    related_locations: list[AdditionalGeoLocation] = []
+    evses: list[EVSE] = []
+    directions: list[DisplayText] = []
+    operator: BusinessDetails | None
+    suboperator: BusinessDetails | None
+    owner: BusinessDetails | None
+    facilities: list[Facility] = []
     time_zone: String(max_length=255)  # type: ignore
-    opening_times: Optional[Hours]
-    charging_when_closed: Optional[bool]
-    images: List[Image] = []
-    energy_mix: Optional[EnergyMix]
+    opening_times: Hours | None
+    charging_when_closed: bool | None
+    images: list[Image] = []
+    energy_mix: EnergyMix | None
     last_updated: DateTime
 
 
 class LocationPartialUpdate(BaseModel):
-    id: Optional[String(max_length=39)] = None  # type: ignore
-    type: Optional[LocationType] = None
-    name: Optional[String(max_length=255)] = None  # type: ignore
-    address: Optional[String(max_length=45)] = None  # type: ignore
-    city: Optional[String(max_length=45)] = None  # type: ignore
-    postal_code: Optional[String(max_length=10)] = None  # type: ignore
-    country: Optional[String(max_length=3)] = None  # type: ignore
-    coordinates: Optional[GeoLocation] = None
-    related_locations: Optional[List[AdditionalGeoLocation]] = None
-    evses: Optional[List[EVSE]] = None
-    directions: Optional[List[DisplayText]] = None
-    operator: Optional[BusinessDetails] = None
-    suboperator: Optional[BusinessDetails] = None
-    owner: Optional[BusinessDetails] = None
-    facilities: Optional[List[Facility]] = None
-    time_zone: Optional[String(max_length=255)] = None  # type: ignore
-    opening_times: Optional[Hours] = None
-    charging_when_closed: Optional[bool] = None
-    images: Optional[List[Image]] = None
-    energy_mix: Optional[EnergyMix] = None
-    last_updated: Optional[DateTime] = None
+    id: String(max_length=39) | None = None  # type: ignore
+    type: LocationType | None = None
+    name: String(max_length=255) | None = None  # type: ignore
+    address: String(max_length=45) | None = None  # type: ignore
+    city: String(max_length=45) | None = None  # type: ignore
+    postal_code: String(max_length=10) | None = None  # type: ignore
+    country: String(max_length=3) | None = None  # type: ignore
+    coordinates: GeoLocation | None = None
+    related_locations: list[AdditionalGeoLocation] | None = None
+    evses: list[EVSE] | None = None
+    directions: list[DisplayText] | None = None
+    operator: BusinessDetails | None = None
+    suboperator: BusinessDetails | None = None
+    owner: BusinessDetails | None = None
+    facilities: list[Facility] | None = None
+    time_zone: String(max_length=255) | None = None  # type: ignore
+    opening_times: Hours | None = None
+    charging_when_closed: bool | None = None
+    images: list[Image] | None = None
+    energy_mix: EnergyMix | None = None
+    last_updated: DateTime | None = None

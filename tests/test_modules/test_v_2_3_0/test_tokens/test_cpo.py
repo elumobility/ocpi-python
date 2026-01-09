@@ -1,6 +1,4 @@
-import pytest
-
-from .utils import TOKENS, AUTH_HEADERS, WRONG_AUTH_HEADERS, CPO_BASE_URL
+from .utils import AUTH_HEADERS, CPO_BASE_URL, TOKENS, WRONG_AUTH_HEADERS
 
 GET_TOKEN_URL = f'{CPO_BASE_URL}{TOKENS[0]["country_code"]}/{TOKENS[0]["party_id"]}/{TOKENS[0]["uid"]}'
 PUT_TOKEN_URL = f'{CPO_BASE_URL}{TOKENS[0]["country_code"]}/{TOKENS[0]["party_id"]}/{TOKENS[0]["uid"]}'

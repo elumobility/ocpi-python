@@ -1,7 +1,6 @@
 """CPO routers for OCPI 2.3.0."""
 
 from py_ocpi.core.enums import ModuleID
-
 from py_ocpi.modules.cdrs.v_2_3_0.api import (
     cpo_router as cdrs_cpo_2_3_0_router,
 )
@@ -32,7 +31,6 @@ from py_ocpi.modules.tariffs.v_2_3_0.api import (
 from py_ocpi.modules.tokens.v_2_3_0.api import (
     cpo_router as tokens_cpo_2_3_0_router,
 )
-
 
 router = {
     ModuleID.locations: locations_cpo_2_3_0_router,

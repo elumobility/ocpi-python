@@ -1,7 +1,7 @@
 from .utils import (
+    AUTH_HEADERS,
     COMMAND_RESPONSE,
     EMSP_BASE_URL,
-    AUTH_HEADERS,
     WRONG_AUTH_HEADERS,
 )
 

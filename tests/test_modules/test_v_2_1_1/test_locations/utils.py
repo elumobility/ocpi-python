@@ -1,13 +1,10 @@
 from uuid import uuid4
 
 from py_ocpi.core import enums
-
 from tests.test_modules.utils import (
     AUTH_TOKEN,
     RANDOM_AUTH_TOKEN,
-    ClientAuthenticator,
 )
-
 
 CPO_BASE_URL = "/ocpi/cpo/2.1.1/locations/"
 EMSP_BASE_URL = "/ocpi/emsp/2.1.1/locations/"

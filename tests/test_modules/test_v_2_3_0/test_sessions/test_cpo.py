@@ -1,8 +1,8 @@
 from .utils import (
-    SESSIONS,
     AUTH_HEADERS,
-    WRONG_AUTH_HEADERS,
     CPO_BASE_URL,
+    SESSIONS,
+    WRONG_AUTH_HEADERS,
 )
 
 GET_SESSION_URL = CPO_BASE_URL

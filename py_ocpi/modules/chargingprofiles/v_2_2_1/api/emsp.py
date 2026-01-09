@@ -1,19 +1,18 @@
 from fastapi import APIRouter, Depends, Request
 
-from py_ocpi.modules.versions.enums import VersionNumber
-from py_ocpi.core.utils import get_auth_token
 from py_ocpi.core import status
-from py_ocpi.core.schemas import OCPIResponse
 from py_ocpi.core.adapter import Adapter
 from py_ocpi.core.authentication.verifier import AuthorizationVerifier
-from py_ocpi.core.crud import Crud
 from py_ocpi.core.config import logger
+from py_ocpi.core.crud import Crud
+from py_ocpi.core.dependencies import get_adapter, get_crud
 from py_ocpi.core.enums import ModuleID, RoleEnum
-from py_ocpi.core.dependencies import get_crud, get_adapter
-
+from py_ocpi.core.schemas import OCPIResponse
+from py_ocpi.core.utils import get_auth_token
 from py_ocpi.modules.chargingprofiles.v_2_2_1.schemas import (
     ActiveChargingProfile,
 )
+from py_ocpi.modules.versions.enums import VersionNumber
 
 router = APIRouter(
     prefix="/chargingprofiles",
@@ -40,10 +39,10 @@ async def receive_chargingprofile_command(
         The OCPIResponse indicating the success of the operation.
     """
     logger.info("Received charging profile result.")
-    logger.debug("Chargingprofile result data - %s" % data)
+    logger.debug(f"Chargingprofile result data - {data}")
     auth_token = get_auth_token(request)
     query_params = request.query_params
-    logger.debug("Request query_params - %s" % query_params)
+    logger.debug(f"Request query_params - {query_params}")
 
     await crud.create(
         ModuleID.charging_profile,
@@ -85,11 +84,10 @@ async def add_or_update_chargingprofile(
     """
     logger.info(
         "Received request to add or update charging profile "
-        "with session_id - `%s`." % session_id
+        f"with session_id - `{session_id}`."
     )
     logger.debug(
-        "Active chargingprofile result data - %s"
-        % active_charging_profile.model_dump()
+        f"Active chargingprofile result data - {active_charging_profile.model_dump()}"
     )
     auth_token = get_auth_token(request)
 

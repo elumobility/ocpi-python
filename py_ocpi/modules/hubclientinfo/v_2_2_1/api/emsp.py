@@ -1,18 +1,18 @@
 from fastapi import APIRouter, Depends, Request
 
-from py_ocpi.core.utils import get_auth_token
 from py_ocpi.core import status
-from py_ocpi.core.schemas import OCPIResponse
 from py_ocpi.core.adapter import Adapter
 from py_ocpi.core.authentication.verifier import AuthorizationVerifier
-from py_ocpi.core.crud import Crud
 from py_ocpi.core.config import logger
+from py_ocpi.core.crud import Crud
 from py_ocpi.core.data_types import CiString
+from py_ocpi.core.dependencies import get_adapter, get_crud
 from py_ocpi.core.enums import ModuleID, RoleEnum
 from py_ocpi.core.exceptions import NotFoundOCPIError
-from py_ocpi.core.dependencies import get_crud, get_adapter
-from py_ocpi.modules.versions.enums import VersionNumber
+from py_ocpi.core.schemas import OCPIResponse
+from py_ocpi.core.utils import get_auth_token
 from py_ocpi.modules.hubclientinfo.v_2_2_1.schemas import ClientInfo
+from py_ocpi.modules.versions.enums import VersionNumber
 
 router = APIRouter(
     prefix="/clientinfo",
@@ -45,8 +45,8 @@ async def get_hubclientinfo(
         - NotFoundOCPIError: If the hub client info is not found.
     """
     logger.info(
-        "Received request to get hub client info with country code - `%s` "
-        "and party id - `%s`." % (country_code, party_id)
+        f"Received request to get hub client info with country code - `{country_code}` "
+        f"and party id - `{party_id}`."
     )
     auth_token = get_auth_token(request)
 
@@ -97,10 +97,9 @@ async def add_or_update_clienthubinfo(
     """
     logger.info(
         "Received request to add or update hub client info "
-        "with country code - `%s` and party id - `%s`."
-        % (country_code, party_id)
+        f"with country code - `{country_code}` and party id - `{party_id}`."
     )
-    logger.debug("Client hub info data to update - %s" % client_hub_info.model_dump())
+    logger.debug(f"Client hub info data to update - {client_hub_info.model_dump()}")
     auth_token = get_auth_token(request)
 
     data = await crud.get(

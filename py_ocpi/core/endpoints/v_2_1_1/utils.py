@@ -1,6 +1,6 @@
-from py_ocpi.core.enums import ModuleID, RoleEnum
-from py_ocpi.core.endpoints.utils import BaseEndpointGenerator
 from py_ocpi.core.data_types import URL
+from py_ocpi.core.endpoints.utils import BaseEndpointGenerator
+from py_ocpi.core.enums import ModuleID, RoleEnum
 from py_ocpi.modules.versions.v_2_1_1.schemas import (
     Endpoint,
     VersionNumber,

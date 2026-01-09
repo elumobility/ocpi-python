@@ -1,7 +1,7 @@
-from typing import Optional
+
 from pydantic import BaseModel
 
-from py_ocpi.core.data_types import DateTime, Number, URL
+from py_ocpi.core.data_types import URL, DateTime, Number
 from py_ocpi.modules.chargingprofiles.v_2_2_1.enums import (
     ChargingProfileResponseType,
     ChargingProfileResultType,
@@ -23,8 +23,8 @@ class ChargingProfile(BaseModel):
     https://github.com/ocpi/ocpi/blob/release-2.2.1-bugfixes/mod_charging_profiles.asciidoc#163-chargingprofile-class
     """
 
-    start_date_time: Optional[DateTime] = None
-    duration: Optional[int] = None
+    start_date_time: DateTime | None = None
+    duration: int | None = None
     charging_rate_unit: ChargingRateUnit
     min_charge_rate: Number
     charging_profile_period: ChargingProfilePeriod
@@ -54,7 +54,7 @@ class ActiveChargingProfileResult(BaseModel):
     """
 
     result: ChargingProfileResultType
-    profile: Optional[ActiveChargingProfile]
+    profile: ActiveChargingProfile | None
 
 
 class ChargingProfileResult(BaseModel):

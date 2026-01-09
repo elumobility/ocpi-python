@@ -1,6 +1,4 @@
-import pytest
-
-from .utils import TARIFFS, AUTH_HEADERS, WRONG_AUTH_HEADERS, EMSP_BASE_URL
+from .utils import AUTH_HEADERS, EMSP_BASE_URL, TARIFFS, WRONG_AUTH_HEADERS
 
 GET_TARIFF_URL = f'{EMSP_BASE_URL}{TARIFFS[0]["country_code"]}/{TARIFFS[0]["party_id"]}/{TARIFFS[0]["id"]}'
 

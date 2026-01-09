@@ -4,8 +4,8 @@ OCPI data types based on https://github.com/ocpi/ocpi/blob/2.2.1/types.asciidoc
 Requires Pydantic v2.
 """
 
-from datetime import datetime, timezone
-from typing import Any, Type
+from datetime import UTC, datetime
+from typing import Any
 
 from pydantic import GetCoreSchemaHandler, GetJsonSchemaHandler
 from pydantic.json_schema import JsonSchemaValue
@@ -119,9 +119,7 @@ class DateTime(str):
             "type": "string",
             "format": "date-time",
             "examples": [
-                datetime.now(timezone.utc)
-                .isoformat(timespec="seconds")
-                .replace("+00:00", "Z")
+                datetime.now(UTC).isoformat(timespec="seconds").replace("+00:00", "Z")
             ],
         }
 
@@ -133,9 +131,7 @@ class DateTime(str):
             formatted_v = datetime.fromisoformat(v)
         except ValueError as e:
             raise ValueError(f"Invalid RFC 3339 timestamp: {v}") from e
-        return cls(
-            formatted_v.isoformat(timespec="seconds").replace("+00:00", "Z")
-        )
+        return cls(formatted_v.isoformat(timespec="seconds").replace("+00:00", "Z"))
 
 
 class DisplayText(dict):
@@ -236,13 +232,13 @@ class Price(dict):
 # Factory functions for parameterized types
 class String:
     """Factory for String types with custom max_length."""
-    
-    def __new__(cls, max_length: int = 255) -> Type[str]:
+
+    def __new__(cls, max_length: int = 255) -> type[str]:
         return type("String", (StringBase,), {"max_length": max_length})
 
 
 class CiString:
     """Factory for CiString types with custom max_length."""
-    
+
     def __new__(cls, max_length: int = 255) -> type:
         return type("CiString", (CiStringBase,), {"max_length": max_length})

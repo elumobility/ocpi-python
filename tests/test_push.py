@@ -1,5 +1,5 @@
-from uuid import uuid4
 from unittest.mock import AsyncMock, MagicMock, patch
+from uuid import uuid4
 
 from fastapi.testclient import TestClient
 
@@ -10,10 +10,9 @@ from py_ocpi.modules.versions.enums import VersionNumber
 from tests.test_modules.mocks.async_client import (
     MockAsyncClientGeneratorVersionsAndEndpoints,
 )
-
 from tests.test_modules.utils import (
-    ClientAuthenticator,
     ENCODED_AUTH_TOKEN,
+    ClientAuthenticator,
 )
 
 LOCATIONS = [
@@ -217,9 +216,7 @@ def test_push(async_client):
         module_id=enums.ModuleID.locations,
         object_id="1",
         receivers=[
-            schemas.Receiver(
-                endpoints_url="http://example.com", auth_token="token"
-            ),
+            schemas.Receiver(endpoints_url="http://example.com", auth_token="token"),
         ],
     ).model_dump()
     client.post(

@@ -47,7 +47,7 @@ async def get_terminal(
     **Returns:**
         The OCPIResponse containing the terminal details.
     """
-    logger.info("Received request to get terminal by id - `%s`." % terminal_id)
+    logger.info(f"Received request to get terminal by id - `{terminal_id}`.")
     auth_token = get_auth_token(request)
 
     data = await crud.get(
@@ -62,7 +62,7 @@ async def get_terminal(
             data=[adapter.terminal_adapter(data, VersionNumber.v_2_3_0).model_dump()],
             **status.OCPI_1000_GENERIC_SUCESS_CODE,
         )
-    logger.debug("Terminal with id `%s` was not found." % terminal_id)
+    logger.debug(f"Terminal with id `{terminal_id}` was not found.")
     raise NotFoundOCPIError
 
 
@@ -86,7 +86,7 @@ async def put_terminal(
     **Returns:**
         The OCPIResponse containing the terminal details.
     """
-    logger.info("Received request to put terminal with id - `%s`." % terminal_id)
+    logger.info(f"Received request to put terminal with id - `{terminal_id}`.")
     auth_token = get_auth_token(request)
 
     data = await crud.update(
@@ -125,7 +125,7 @@ async def patch_terminal(
     **Returns:**
         The OCPIResponse containing the updated terminal.
     """
-    logger.info("Received request to patch terminal with id - `%s`." % terminal_id)
+    logger.info(f"Received request to patch terminal with id - `{terminal_id}`.")
     auth_token = get_auth_token(request)
 
     data = await crud.update(

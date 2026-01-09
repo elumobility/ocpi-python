@@ -1,7 +1,7 @@
-from typing import List, Optional
+
 from pydantic import BaseModel
 
-from py_ocpi.core.data_types import CiString, URL, DisplayText, DateTime
+from py_ocpi.core.data_types import URL, CiString, DateTime, DisplayText
 from py_ocpi.modules.commands.v_2_2_1.enums import (
     CommandResponseType,
     CommandResultType,
@@ -25,7 +25,7 @@ class CommandResponse(BaseModel):
 
     result: CommandResponseType
     timeout: int
-    message: List[DisplayText] = []
+    message: list[DisplayText] = []
 
 
 class CommandResult(BaseModel):
@@ -34,7 +34,7 @@ class CommandResult(BaseModel):
     """
 
     result: CommandResultType
-    message: List[DisplayText] = []
+    message: list[DisplayText] = []
 
 
 class ReserveNow(BaseModel):
@@ -47,8 +47,8 @@ class ReserveNow(BaseModel):
     expiry_date: DateTime
     reservation_id: CiString(36)  # type: ignore
     location_id: CiString(36)  # type: ignore
-    evse_uid: Optional[CiString(36)]  # type: ignore
-    authorization_reference: Optional[CiString(36)]  # type: ignore
+    evse_uid: CiString(36) | None  # type: ignore
+    authorization_reference: CiString(36) | None  # type: ignore
 
 
 class StartSession(BaseModel):
@@ -59,9 +59,9 @@ class StartSession(BaseModel):
     response_url: URL
     token: Token
     location_id: CiString(36)  # type: ignore
-    evse_uid: Optional[CiString(36)]  # type: ignore
-    connector_id: Optional[CiString(36)]  # type: ignore
-    authorization_reference: Optional[CiString(36)]  # type: ignore
+    evse_uid: CiString(36) | None  # type: ignore
+    connector_id: CiString(36) | None  # type: ignore
+    authorization_reference: CiString(36) | None  # type: ignore
 
 
 class StopSession(BaseModel):

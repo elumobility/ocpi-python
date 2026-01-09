@@ -1,20 +1,18 @@
 from fastapi import APIRouter, BackgroundTasks, Depends, Request
 
-from py_ocpi.modules.versions.enums import VersionNumber
-from py_ocpi.core.utils import get_auth_token
 from py_ocpi.core import status
-from py_ocpi.core.schemas import OCPIResponse
 from py_ocpi.core.adapter import Adapter
 from py_ocpi.core.authentication.verifier import AuthorizationVerifier
-from py_ocpi.core.crud import Crud
 from py_ocpi.core.config import logger
-from py_ocpi.core.data_types import CiString, URL
-from py_ocpi.core.enums import ModuleID, RoleEnum, Action
-from py_ocpi.core.dependencies import get_crud, get_adapter
-
+from py_ocpi.core.crud import Crud
+from py_ocpi.core.data_types import URL, CiString
+from py_ocpi.core.dependencies import get_adapter, get_crud
+from py_ocpi.core.enums import Action, ModuleID, RoleEnum
+from py_ocpi.core.schemas import OCPIResponse
+from py_ocpi.core.utils import get_auth_token
 from py_ocpi.modules.chargingprofiles.v_2_2_1.background_tasks import (
-    send_get_chargingprofile,
     send_delete_chargingprofile,
+    send_get_chargingprofile,
     send_update_chargingprofile,
 )
 from py_ocpi.modules.chargingprofiles.v_2_2_1.schemas import (
@@ -22,6 +20,7 @@ from py_ocpi.modules.chargingprofiles.v_2_2_1.schemas import (
     ChargingProfileResponseType,
     SetChargingProfile,
 )
+from py_ocpi.modules.versions.enums import VersionNumber
 
 router = APIRouter(
     prefix="/chargingprofiles",
@@ -58,8 +57,7 @@ async def get_chargingprofile(
         - NotFoundOCPIError: If the specified charging session is not found.
     """
     logger.info(
-        "Received request to get charging profile with session_id - `%s`."
-        % session_id
+        f"Received request to get charging profile with session_id - `{session_id}`."
     )
     auth_token = get_auth_token(request)
 
@@ -106,9 +104,7 @@ async def get_chargingprofile(
                 **status.OCPI_1000_GENERIC_SUCESS_CODE,
             )
 
-        logger.debug(
-            "Sent get charging profile action returned without result."
-        )
+        logger.debug("Sent get charging profile action returned without result.")
         charging_profile_response = ChargingProfileResponse(
             result=ChargingProfileResponseType.rejected, timeout=0
         )
@@ -117,7 +113,7 @@ async def get_chargingprofile(
             **status.OCPI_3000_GENERIC_SERVER_ERROR,
         )
 
-    logger.info("Session with id `%s` was not found." % session_id)
+    logger.info(f"Session with id `{session_id}` was not found.")
     charging_profile_response = ChargingProfileResponse(
         result=ChargingProfileResponseType.rejected, timeout=0
     )
@@ -154,10 +150,9 @@ async def add_or_update_chargingprofile(
         - NotFoundOCPIError: If the specified charging session is not found.
     """
     logger.info(
-        "Received request to get charging profile with session_id - `%s`."
-        % session_id
+        f"Received request to get charging profile with session_id - `{session_id}`."
     )
-    logger.debug("Set charging profile data - `%s`" % charging_profile.model_dump())
+    logger.debug(f"Set charging profile data - `{charging_profile.model_dump()}`")
     auth_token = get_auth_token(request)
 
     session = await crud.get(
@@ -203,9 +198,7 @@ async def add_or_update_chargingprofile(
                 **status.OCPI_1000_GENERIC_SUCESS_CODE,
             )
 
-        logger.debug(
-            "Sent update charging profile action returned without result."
-        )
+        logger.debug("Sent update charging profile action returned without result.")
         charging_profile_response = ChargingProfileResponse(
             result=ChargingProfileResponseType.rejected, timeout=0
         )
@@ -214,7 +207,7 @@ async def add_or_update_chargingprofile(
             **status.OCPI_3000_GENERIC_SERVER_ERROR,
         )
 
-    logger.info("Session with id `%s` was not found." % session_id)
+    logger.info(f"Session with id `{session_id}` was not found.")
     charging_profile_response = ChargingProfileResponse(
         result=ChargingProfileResponseType.rejected, timeout=0
     )
@@ -251,8 +244,7 @@ async def delete_chargingprofile(
         - NotFoundOCPIError: If the specified charging session is not found.
     """
     logger.info(
-        "Received request to get charging profile with session_id - `%s`."
-        % session_id
+        f"Received request to get charging profile with session_id - `{session_id}`."
     )
     auth_token = get_auth_token(request)
 
@@ -297,9 +289,7 @@ async def delete_chargingprofile(
                 **status.OCPI_1000_GENERIC_SUCESS_CODE,
             )
 
-        logger.debug(
-            "Sent delete charging profile action returned without result."
-        )
+        logger.debug("Sent delete charging profile action returned without result.")
         charging_profile_response = ChargingProfileResponse(
             result=ChargingProfileResponseType.rejected, timeout=0
         )
@@ -308,7 +298,7 @@ async def delete_chargingprofile(
             **status.OCPI_3000_GENERIC_SERVER_ERROR,
         )
 
-    logger.info("Session with id `%s` was not found." % session_id)
+    logger.info(f"Session with id `{session_id}` was not found.")
     charging_profile_response = ChargingProfileResponse(
         result=ChargingProfileResponseType.rejected, timeout=0
     )

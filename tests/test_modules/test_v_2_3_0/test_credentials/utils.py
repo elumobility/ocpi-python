@@ -4,7 +4,6 @@ from py_ocpi.core import enums
 from tests.test_modules.utils import (
     ENCODED_AUTH_TOKEN_V_2_3_0,
     ENCODED_RANDOM_AUTH_TOKEN_V_2_3_0,
-    ClientAuthenticator,
 )
 
 CPO_BASE_URL = "/ocpi/cpo/2.3.0/credentials/"
@@ -55,9 +54,7 @@ class Crud:
         return CREDENTIALS_TOKEN_CREATE
 
     @classmethod
-    async def create(
-        cls, module: enums.ModuleID, data, operation, *args, **kwargs
-    ):
+    async def create(cls, module: enums.ModuleID, data, operation, *args, **kwargs):
         if operation == "credentials":
             return None
         return CREDENTIALS_TOKEN_CREATE

@@ -1,17 +1,16 @@
-from typing import List, Optional
 
 from pydantic import BaseModel
-from py_ocpi.modules.cdrs.v_2_3_0.enums import AuthMethod, CdrDimensionType
 
-from py_ocpi.core.data_types import CiString, Number, Price, String, DateTime
-from py_ocpi.modules.tokens.v_2_3_0.enums import TokenType
-from py_ocpi.modules.tariffs.v_2_3_0.schemas import Tariff
-from py_ocpi.modules.locations.v_2_3_0.schemas import GeoLocation
+from py_ocpi.core.data_types import CiString, DateTime, Number, Price, String
+from py_ocpi.modules.cdrs.v_2_3_0.enums import AuthMethod, CdrDimensionType
 from py_ocpi.modules.locations.v_2_3_0.enums import (
     ConnectorFormat,
     ConnectorType,
     PowerType,
 )
+from py_ocpi.modules.locations.v_2_3_0.schemas import GeoLocation
+from py_ocpi.modules.tariffs.v_2_3_0.schemas import Tariff
+from py_ocpi.modules.tokens.v_2_3_0.enums import TokenType
 
 
 class SignedValue(BaseModel):
@@ -30,10 +29,10 @@ class SignedData(BaseModel):
     """
 
     encoding_method: CiString(36)  # type: ignore
-    encoding_method_version: Optional[int]
-    public_key: Optional[String(512)]  # type: ignore
-    signed_values: List[SignedValue]
-    url: Optional[String(512)]  # type: ignore
+    encoding_method_version: int | None
+    public_key: String(512) | None  # type: ignore
+    signed_values: list[SignedValue]
+    url: String(512) | None  # type: ignore
 
 
 class CdrDimension(BaseModel):
@@ -51,8 +50,8 @@ class ChargingPeriod(BaseModel):
     """
 
     start_date_time: DateTime
-    dimensions: List[CdrDimension]
-    tariff_id: Optional[CiString(36)]  # type: ignore
+    dimensions: list[CdrDimension]
+    tariff_id: CiString(36) | None  # type: ignore
 
 
 class CdrToken(BaseModel):
@@ -73,11 +72,11 @@ class CdrLocation(BaseModel):
     """
 
     id: CiString(36)  # type: ignore
-    name: Optional[String(255)]  # type: ignore
+    name: String(255) | None  # type: ignore
     address: String(45)  # type: ignore
     city: String(45)  # type: ignore
-    postal_code: Optional[String(10)]  # type: ignore
-    state: Optional[String(20)]  # type: ignore
+    postal_code: String(10) | None  # type: ignore
+    state: String(20) | None  # type: ignore
     country: String(3)  # type: ignore
     coordinates: GeoLocation
     evse_id: CiString(48)  # type: ignore
@@ -97,28 +96,28 @@ class Cdr(BaseModel):
     id: CiString(39)  # type: ignore
     start_date_time: DateTime
     end_date_time: DateTime
-    session_id: Optional[CiString(36)]  # type: ignore
+    session_id: CiString(36) | None  # type: ignore
     cdr_token: CdrToken
     auth_method: AuthMethod
-    authorization_reference: Optional[CiString(36)]  # type: ignore
+    authorization_reference: CiString(36) | None  # type: ignore
     cdr_location: CdrLocation
-    meter_id: Optional[String(255)]  # type: ignore
+    meter_id: String(255) | None  # type: ignore
     currency: String(3)  # type: ignore
-    tariffs: List[Tariff] = []
-    charging_periods: List[ChargingPeriod]
-    signed_data: Optional[SignedData]
+    tariffs: list[Tariff] = []
+    charging_periods: list[ChargingPeriod]
+    signed_data: SignedData | None
     total_cost: Price
-    total_fixed_cost: Optional[Price]
+    total_fixed_cost: Price | None
     total_energy: Number
-    total_energy_cost: Optional[Price]
+    total_energy_cost: Price | None
     total_time: Number
-    total_time_cost: Optional[Price]
-    total_parking_time: Optional[Number]
-    total_parking_cost: Optional[Price]
-    total_reservation_cost: Optional[Price]
-    remark: Optional[String(255)]  # type: ignore
-    invoice_reference_id: Optional[CiString(36)]  # type: ignore
-    credit: Optional[bool]
-    credit_reference_id: Optional[CiString(39)]  # type: ignore
-    home_charging_compensation: Optional[bool]
+    total_time_cost: Price | None
+    total_parking_time: Number | None
+    total_parking_cost: Price | None
+    total_reservation_cost: Price | None
+    remark: String(255) | None  # type: ignore
+    invoice_reference_id: CiString(36) | None  # type: ignore
+    credit: bool | None
+    credit_reference_id: CiString(39) | None  # type: ignore
+    home_charging_compensation: bool | None
     last_updated: DateTime

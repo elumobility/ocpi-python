@@ -1,23 +1,26 @@
 from fastapi import (
     APIRouter,
     Depends,
-    Request,
     HTTPException,
+    Request,
+)
+from fastapi import (
     status as fastapistatus,
 )
 
+from py_ocpi.core import status
 from py_ocpi.core.authentication.verifier import (
     VersionsAuthorizationVerifier,
 )
-from py_ocpi.core import status
 from py_ocpi.core.config import logger
 from py_ocpi.core.crud import Crud
 from py_ocpi.core.dependencies import (
-    get_versions as get_versions_,
     get_crud,
 )
+from py_ocpi.core.dependencies import (
+    get_versions as get_versions_,
+)
 from py_ocpi.core.schemas import OCPIResponse
-
 
 router = APIRouter()
 cred_dependency = VersionsAuthorizationVerifier(None)
@@ -38,7 +41,7 @@ async def get_versions(
     **Returns:**
         The OCPIResponse containing a list of available OCPI versions.
     """
-    logger.info("Received request for version details: %s" % request.url)
+    logger.info(f"Received request for version details: {request.url}")
     if server_cred is None:
         logger.debug("Unauthorized request.")
         raise HTTPException(

@@ -1,6 +1,4 @@
-import pytest
-
-from .utils import TERMINALS, AUTH_HEADERS, WRONG_AUTH_HEADERS, CPO_BASE_URL
+from .utils import AUTH_HEADERS, CPO_BASE_URL, TERMINALS, WRONG_AUTH_HEADERS
 
 GET_TERMINAL_URL = f'{CPO_BASE_URL}terminals/{TERMINALS[0]["terminal_id"]}'
 

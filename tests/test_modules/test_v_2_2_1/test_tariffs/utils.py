@@ -4,7 +4,6 @@ from py_ocpi.core import enums
 from tests.test_modules.utils import (
     ENCODED_AUTH_TOKEN,
     ENCODED_RANDOM_AUTH_TOKEN,
-    ClientAuthenticator,
 )
 
 CPO_BASE_URL = "/ocpi/cpo/2.2.1/tariffs/"

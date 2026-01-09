@@ -1,10 +1,9 @@
 from py_ocpi.core import enums
-
+from tests.test_modules.test_v_2_2_1.test_sessions.utils import SESSIONS
 from tests.test_modules.utils import (
     ENCODED_AUTH_TOKEN,
     ENCODED_RANDOM_AUTH_TOKEN,
 )
-from tests.test_modules.test_v_2_2_1.test_sessions.utils import SESSIONS
 
 CPO_BASE_URL = "/ocpi/cpo/2.2.1/chargingprofiles/"
 EMSP_BASE_URL = "/ocpi/emsp/2.2.1/chargingprofiles/"

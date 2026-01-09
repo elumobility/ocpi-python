@@ -1,46 +1,47 @@
-from typing import Any, List
+from typing import Any
 
-from fastapi import FastAPI, Request, status as fastapistatus
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI, Request
+from fastapi import status as fastapistatus
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from pydantic import ValidationError
 from starlette.middleware.base import (
     BaseHTTPMiddleware,
     RequestResponseEndpoint,
 )
-from py_ocpi.core.endpoints import ENDPOINTS
 
-from py_ocpi.modules.versions import router as versions_router
-from py_ocpi.modules.versions.enums import VersionNumber
-from py_ocpi.modules.versions.schemas import Version
-from py_ocpi.core.dependencies import (
-    get_crud,
-    get_adapter,
-    get_versions,
-    get_endpoints,
-    get_modules,
-    get_authenticator,
-)
 from py_ocpi.core import status
 from py_ocpi.core.adapter import BaseAdapter
-from py_ocpi.core.enums import RoleEnum, ModuleID
-from py_ocpi.core.config import settings, logger
+from py_ocpi.core.config import logger, settings
 from py_ocpi.core.data_types import URL
-from py_ocpi.core.schemas import OCPIResponse
+from py_ocpi.core.dependencies import (
+    get_adapter,
+    get_authenticator,
+    get_crud,
+    get_endpoints,
+    get_modules,
+    get_versions,
+)
+from py_ocpi.core.endpoints import ENDPOINTS
+from py_ocpi.core.enums import ModuleID, RoleEnum
 from py_ocpi.core.exceptions import AuthorizationOCPIError, NotFoundOCPIError
 from py_ocpi.core.push import (
     http_router as http_push_router,
+)
+from py_ocpi.core.push import (
     websocket_router as websocket_push_router,
 )
 from py_ocpi.core.routers import ROUTERS
+from py_ocpi.core.schemas import OCPIResponse
+from py_ocpi.modules.versions import router as versions_router
+from py_ocpi.modules.versions.enums import VersionNumber
+from py_ocpi.modules.versions.schemas import Version
 
 
 class ExceptionHandlerMiddleware(BaseHTTPMiddleware):
-    async def dispatch(
-        self, request: Request, call_next: RequestResponseEndpoint
-    ):
-        logger.debug("%s: %s" % (request.method, request.url))
-        logger.debug("Request headers - %s" % request.headers)
+    async def dispatch(self, request: Request, call_next: RequestResponseEndpoint):
+        logger.debug(f"{request.method}: {request.url}")
+        logger.debug(f"Request headers - {request.headers}")
 
         try:
             response = await call_next(request)
@@ -60,6 +61,7 @@ class ExceptionHandlerMiddleware(BaseHTTPMiddleware):
             logger.warning("OCPI middleware ValidationError exception.")
             logger.error(f"ValidationError details: {str(e)}")
             import traceback
+
             logger.error(f"ValidationError traceback: {traceback.format_exc()}")
             response = JSONResponse(
                 OCPIResponse(
@@ -81,10 +83,10 @@ class ExceptionHandlerMiddleware(BaseHTTPMiddleware):
 
 
 def get_application(
-    version_numbers: List[VersionNumber],
-    roles: List[RoleEnum],
+    version_numbers: list[VersionNumber],
+    roles: list[RoleEnum],
     crud: Any,
-    modules: List[ModuleID],
+    modules: list[ModuleID],
     authenticator: Any,
     adapter: Any = BaseAdapter,
     http_push: bool = False,
@@ -162,7 +164,7 @@ def get_application(
                     f"{settings.PROTOCOL}://{settings.OCPI_HOST}/"
                     f"{settings.OCPI_PREFIX}/{version.value}/details"
                 ),
-                ).model_dump(),
+            ).model_dump(),
         )
 
         version_endpoints[version] = []

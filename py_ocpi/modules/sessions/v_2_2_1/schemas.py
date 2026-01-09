@@ -1,10 +1,10 @@
-from typing import List, Optional
+
 from pydantic import BaseModel
 
+from py_ocpi.core.data_types import CiString, DateTime, Number, Price, String
 from py_ocpi.modules.cdrs.v_2_2_1.enums import AuthMethod
 from py_ocpi.modules.cdrs.v_2_2_1.schemas import CdrToken, ChargingPeriod
 from py_ocpi.modules.sessions.v_2_2_1.enums import ProfileType, SessionStatus
-from py_ocpi.core.data_types import CiString, Number, Price, String, DateTime
 
 
 class Session(BaseModel):
@@ -16,18 +16,18 @@ class Session(BaseModel):
     party_id: CiString(3)  # type: ignore
     id: CiString(36)  # type: ignore
     start_date_time: DateTime
-    end_date_time: Optional[DateTime]
+    end_date_time: DateTime | None
     kwh: Number
     cdr_token: CdrToken
     auth_method: AuthMethod
-    authorization_reference: Optional[CiString(36)]  # type: ignore
+    authorization_reference: CiString(36) | None  # type: ignore
     location_id: CiString(36)  # type: ignore
     evse_uid: CiString(36)  # type: ignore
     connector_id: CiString(36)  # type: ignore
-    meter_id: Optional[String(255)]  # type: ignore
+    meter_id: String(255) | None  # type: ignore
     currency: String(3)  # type: ignore
-    charging_periods: List[ChargingPeriod] = []
-    total_cost: Optional[Price]
+    charging_periods: list[ChargingPeriod] = []
+    total_cost: Price | None
     status: SessionStatus
     last_updated: DateTime
 
@@ -37,24 +37,24 @@ class SessionPartialUpdate(BaseModel):
     https://github.com/ocpi/ocpi/blob/2.2.1/mod_sessions.asciidoc#131-session-object
     """
 
-    country_code: Optional[CiString(2)] = None  # type: ignore
-    party_id: Optional[CiString(3)] = None  # type: ignore
-    id: Optional[CiString(36)] = None  # type: ignore
-    start_date_time: Optional[DateTime] = None
-    end_date_time: Optional[DateTime] = None
-    kwh: Optional[Number] = None
-    cdr_token: Optional[CdrToken] = None
-    auth_method: Optional[AuthMethod] = None
-    authorization_reference: Optional[CiString(36)] = None  # type: ignore
-    location_id: Optional[CiString(36)] = None  # type: ignore
-    evse_uid: Optional[CiString(36)] = None  # type: ignore
-    connector_id: Optional[CiString(36)] = None  # type: ignore
-    meter_id: Optional[String(255)] = None  # type: ignore
-    currency: Optional[String(3)] = None  # type: ignore
-    charging_periods: Optional[List[ChargingPeriod]] = None
-    total_cost: Optional[Price] = None
-    status: Optional[SessionStatus] = None
-    last_updated: Optional[DateTime] = None
+    country_code: CiString(2) | None = None  # type: ignore
+    party_id: CiString(3) | None = None  # type: ignore
+    id: CiString(36) | None = None  # type: ignore
+    start_date_time: DateTime | None = None
+    end_date_time: DateTime | None = None
+    kwh: Number | None = None
+    cdr_token: CdrToken | None = None
+    auth_method: AuthMethod | None = None
+    authorization_reference: CiString(36) | None = None  # type: ignore
+    location_id: CiString(36) | None = None  # type: ignore
+    evse_uid: CiString(36) | None = None  # type: ignore
+    connector_id: CiString(36) | None = None  # type: ignore
+    meter_id: String(255) | None = None  # type: ignore
+    currency: String(3) | None = None  # type: ignore
+    charging_periods: list[ChargingPeriod] | None = None
+    total_cost: Price | None = None
+    status: SessionStatus | None = None
+    last_updated: DateTime | None = None
 
 
 class ChargingPreferences(BaseModel):
@@ -63,6 +63,6 @@ class ChargingPreferences(BaseModel):
     """
 
     profile_type: ProfileType
-    departure_time: Optional[DateTime] = None
-    energy_need: Optional[Number] = None
-    discharge_allowed: Optional[bool] = None
+    departure_time: DateTime | None = None
+    energy_need: Number | None = None
+    discharge_allowed: bool | None = None

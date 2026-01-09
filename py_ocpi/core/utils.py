@@ -1,20 +1,17 @@
+import base64
 import importlib
 import urllib
-import base64
-from typing import Union, Any
+from typing import Any
 
-from fastapi import Response, Request
+from fastapi import Request, Response
 from pydantic import BaseModel
 
-from py_ocpi.core.config import logger
+from py_ocpi.core.config import logger, settings
 from py_ocpi.core.enums import ModuleID, RoleEnum
-from py_ocpi.core.config import settings
 from py_ocpi.modules.versions.enums import VersionNumber
 
 
-def set_pagination_headers(
-    response: Response, link: str, total: int, limit: int
-):
+def set_pagination_headers(response: Response, link: str, total: int, limit: int):
     response.headers["Link"] = link
     response.headers["X-Total-Count"] = str(total)
     response.headers["X-Limit"] = str(limit)
@@ -24,7 +21,7 @@ def set_pagination_headers(
 def get_auth_token(
     request: Request,
     version: VersionNumber = VersionNumber.v_2_2_1,
-) -> Union[str, None]:
+) -> str | None:
     headers = request.headers
     headers_token = headers.get("authorization", "Token Null")
     token = headers_token.split()[1]

@@ -1,12 +1,11 @@
-from typing import List, Optional
 
 from pydantic import BaseModel
+
+from py_ocpi.core.data_types import CiString, DateTime, Number, String
 from py_ocpi.modules.cdrs.v_2_1_1.enums import (
     AuthMethod,
     CdrDimensionType,
 )
-
-from py_ocpi.core.data_types import CiString, Number, String, DateTime
 from py_ocpi.modules.locations.v_2_1_1.schemas import Location
 from py_ocpi.modules.tariffs.v_2_1_1.schemas import Tariff
 
@@ -26,7 +25,7 @@ class ChargingPeriod(BaseModel):
     """
 
     start_date_time: DateTime
-    dimensions: List[CdrDimension]
+    dimensions: list[CdrDimension]
 
 
 class Cdr(BaseModel):
@@ -40,13 +39,13 @@ class Cdr(BaseModel):
     auth_id: String(36)  # type: ignore
     auth_method: AuthMethod
     location: Location
-    meter_id: Optional[String(255)]  # type: ignore
+    meter_id: String(255) | None  # type: ignore
     currency: String(3)  # type: ignore
-    tariffs: List[Tariff] = []
-    charging_periods: List[ChargingPeriod]
+    tariffs: list[Tariff] = []
+    charging_periods: list[ChargingPeriod]
     total_cost: Number
     total_energy: Number
     total_time: Number
-    total_parking_time: Optional[Number]
-    remark: Optional[String(255)]  # type: ignore
+    total_parking_time: Number | None
+    remark: String(255) | None  # type: ignore
     last_updated: DateTime

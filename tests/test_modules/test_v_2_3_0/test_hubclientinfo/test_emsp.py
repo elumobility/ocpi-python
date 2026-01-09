@@ -1,9 +1,11 @@
-import pytest
+from .utils import AUTH_HEADERS, EMSP_BASE_URL, HUB_CLIENT_INFO, WRONG_AUTH_HEADERS
 
-from .utils import HUB_CLIENT_INFO, AUTH_HEADERS, WRONG_AUTH_HEADERS, EMSP_BASE_URL
-
-GET_HUB_CLIENT_INFO_URL = f'{EMSP_BASE_URL}{HUB_CLIENT_INFO["country_code"]}/{HUB_CLIENT_INFO["party_id"]}'
-PUT_HUB_CLIENT_INFO_URL = f'{EMSP_BASE_URL}{HUB_CLIENT_INFO["country_code"]}/{HUB_CLIENT_INFO["party_id"]}'
+GET_HUB_CLIENT_INFO_URL = (
+    f'{EMSP_BASE_URL}{HUB_CLIENT_INFO["country_code"]}/{HUB_CLIENT_INFO["party_id"]}'
+)
+PUT_HUB_CLIENT_INFO_URL = (
+    f'{EMSP_BASE_URL}{HUB_CLIENT_INFO["country_code"]}/{HUB_CLIENT_INFO["party_id"]}'
+)
 
 
 def test_emsp_get_hubclientinfo_not_authenticated(client_emsp_v_2_3_0):

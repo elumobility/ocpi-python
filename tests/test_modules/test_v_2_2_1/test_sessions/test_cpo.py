@@ -1,9 +1,9 @@
 from .utils import (
-    CHARGING_PREFERENCES,
-    SESSIONS,
     AUTH_HEADERS,
-    WRONG_AUTH_HEADERS,
+    CHARGING_PREFERENCES,
     CPO_BASE_URL,
+    SESSIONS,
+    WRONG_AUTH_HEADERS,
 )
 
 GET_SESSION_URL = CPO_BASE_URL
@@ -47,6 +47,5 @@ def test_cpo_set_charging_preference_v_2_2_1(client_cpo_v_2_2_1):
     assert response.status_code == 200
     assert len(response.json()["data"]) == 1
     assert (
-        response.json()["data"][0]["energy_need"]
-        == CHARGING_PREFERENCES["energy_need"]
+        response.json()["data"][0]["energy_need"] == CHARGING_PREFERENCES["energy_need"]
     )

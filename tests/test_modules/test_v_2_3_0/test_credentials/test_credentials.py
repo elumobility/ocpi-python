@@ -1,24 +1,24 @@
-import pytest
-from unittest.mock import patch
 from typing import Any
+from unittest.mock import patch
+
+import pytest
 from httpx import ASGITransport, AsyncClient
 
-from py_ocpi.main import get_application
 from py_ocpi.core import enums
-from py_ocpi.core.dependencies import get_versions
-from py_ocpi.core.data_types import URL
 from py_ocpi.core.config import settings
+from py_ocpi.core.data_types import URL
+from py_ocpi.core.dependencies import get_versions
+from py_ocpi.main import get_application
 from py_ocpi.modules.versions.enums import VersionNumber
 from py_ocpi.modules.versions.schemas import Version
 
 from .utils import (
-    CREDENTIALS_TOKEN_CREATE,
-    CREDENTIALS_TOKEN_GET,
     AUTH_HEADERS,
-    WRONG_AUTH_HEADERS,
     CPO_BASE_URL,
-    Crud,
+    CREDENTIALS_TOKEN_CREATE,
+    WRONG_AUTH_HEADERS,
     ClientAuthenticator,
+    Crud,
 )
 
 

@@ -2,7 +2,7 @@ from uuid import uuid4
 
 from py_ocpi.core.config import settings
 
-from .utils import EMSP_BASE_URL, SESSIONS, AUTH_HEADERS, WRONG_AUTH_HEADERS
+from .utils import AUTH_HEADERS, EMSP_BASE_URL, SESSIONS, WRONG_AUTH_HEADERS
 
 GET_SESSION = (
     f"{EMSP_BASE_URL}{settings.COUNTRY_CODE}/{settings.PARTY_ID}/"

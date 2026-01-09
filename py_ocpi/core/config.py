@@ -2,7 +2,6 @@
 OCPI Server Configuration using Pydantic Settings v2.
 """
 
-from typing import List, Union
 
 from pydantic import AnyHttpUrl, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -22,7 +21,7 @@ class Settings(BaseSettings):
     ENVIRONMENT: str = "production"
     NO_AUTH: bool = False
     PROJECT_NAME: str = "OCPI"
-    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = []
+    BACKEND_CORS_ORIGINS: list[AnyHttpUrl] = []
     OCPI_HOST: str = "www.example.com"
     OCPI_PREFIX: str = "ocpi"
     PUSH_PREFIX: str = "push"
@@ -36,9 +35,7 @@ class Settings(BaseSettings):
 
     @field_validator("BACKEND_CORS_ORIGINS", mode="before")
     @classmethod
-    def assemble_cors_origins(
-        cls, v: Union[str, List[str]]
-    ) -> Union[List[str], str]:
+    def assemble_cors_origins(cls, v: str | list[str]) -> list[str] | str:
         if isinstance(v, str) and not v.startswith("["):
             return [i.strip() for i in v.split(",")]
         if isinstance(v, (list, str)):

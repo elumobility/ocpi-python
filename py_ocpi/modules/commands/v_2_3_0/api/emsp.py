@@ -1,16 +1,16 @@
 from fastapi import APIRouter, Depends, Request
 
-from py_ocpi.core.dependencies import get_crud, get_adapter
-from py_ocpi.core.enums import ModuleID, RoleEnum
-from py_ocpi.core.authentication.verifier import AuthorizationVerifier
-from py_ocpi.core.schemas import OCPIResponse
-from py_ocpi.core.adapter import Adapter
-from py_ocpi.core.crud import Crud
-from py_ocpi.core.config import logger
 from py_ocpi.core import status
+from py_ocpi.core.adapter import Adapter
+from py_ocpi.core.authentication.verifier import AuthorizationVerifier
+from py_ocpi.core.config import logger
+from py_ocpi.core.crud import Crud
+from py_ocpi.core.dependencies import get_adapter, get_crud
+from py_ocpi.core.enums import ModuleID, RoleEnum
+from py_ocpi.core.schemas import OCPIResponse
 from py_ocpi.core.utils import get_auth_token
-from py_ocpi.modules.versions.enums import VersionNumber
 from py_ocpi.modules.commands.v_2_3_0.schemas import CommandResult
+from py_ocpi.modules.versions.enums import VersionNumber
 
 router = APIRouter(
     prefix="/commands",
@@ -42,8 +42,8 @@ async def receive_command_result(
         The OCPIResponse indicating the success or failure of
             processing the command result.
     """
-    logger.info("Received command result with uid - `%s`." % uid)
-    logger.debug("Command result data - %s" % command_result.model_dump())
+    logger.info(f"Received command result with uid - `{uid}`.")
+    logger.debug(f"Command result data - {command_result.model_dump()}")
     auth_token = get_auth_token(request)
 
     await crud.update(

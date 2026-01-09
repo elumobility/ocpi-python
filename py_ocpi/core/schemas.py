@@ -1,9 +1,8 @@
-from datetime import datetime, timezone
-from typing import Optional, List, Union
+from datetime import UTC, datetime
 
 from pydantic import BaseModel, Field
 
-from py_ocpi.core.data_types import String, DateTime, URL
+from py_ocpi.core.data_types import URL, DateTime, String
 from py_ocpi.core.enums import ModuleID
 
 
@@ -12,14 +11,12 @@ class OCPIResponse(BaseModel):
     https://github.com/ocpi/ocpi/blob/2.2.1/transport_and_format.asciidoc#117-response-format
     """
 
-    data: Union[list, dict]
+    data: list | dict
     status_code: int
-    status_message: Optional[String(255)]  # type: ignore
+    status_message: String(255) | None  # type: ignore
     timestamp: DateTime = Field(  # type: ignore
         default_factory=lambda: (
-            datetime.now(tz=timezone.utc)
-            .isoformat(timespec="seconds")
-            .replace("+00:00", "Z")
+            datetime.now(tz=UTC).isoformat(timespec="seconds").replace("+00:00", "Z")
         ),
     )
 
@@ -32,7 +29,7 @@ class Receiver(BaseModel):
 class Push(BaseModel):
     module_id: ModuleID
     object_id: str
-    receivers: List[Receiver]
+    receivers: list[Receiver]
 
 
 class ReceiverResponse(BaseModel):
@@ -42,4 +39,4 @@ class ReceiverResponse(BaseModel):
 
 
 class PushResponse(BaseModel):
-    receiver_responses: List[ReceiverResponse]
+    receiver_responses: list[ReceiverResponse]

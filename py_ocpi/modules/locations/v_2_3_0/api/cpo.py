@@ -1,17 +1,17 @@
-from fastapi import APIRouter, Depends, Response, Request
+from fastapi import APIRouter, Depends, Request, Response
 
-from py_ocpi.modules.versions.enums import VersionNumber
-from py_ocpi.core.utils import get_list, get_auth_token
 from py_ocpi.core import status
-from py_ocpi.core.schemas import OCPIResponse
 from py_ocpi.core.adapter import Adapter
 from py_ocpi.core.authentication.verifier import AuthorizationVerifier
-from py_ocpi.core.crud import Crud
 from py_ocpi.core.config import logger
+from py_ocpi.core.crud import Crud
 from py_ocpi.core.data_types import CiString
+from py_ocpi.core.dependencies import get_adapter, get_crud, pagination_filters
 from py_ocpi.core.enums import ModuleID, RoleEnum
 from py_ocpi.core.exceptions import NotFoundOCPIError
-from py_ocpi.core.dependencies import get_crud, get_adapter, pagination_filters
+from py_ocpi.core.schemas import OCPIResponse
+from py_ocpi.core.utils import get_auth_token, get_list
+from py_ocpi.modules.versions.enums import VersionNumber
 
 router = APIRouter(
     prefix="/locations",
@@ -58,7 +58,9 @@ async def get_locations(
 
     locations = []
     for data in data_list:
-        locations.append(adapter.location_adapter(data, VersionNumber.v_2_3_0).model_dump())
+        locations.append(
+            adapter.location_adapter(data, VersionNumber.v_2_3_0).model_dump()
+        )
     logger.debug(f"Amount of locations in response: {len(locations)}")
     return OCPIResponse(
         data=locations,
@@ -87,7 +89,7 @@ async def get_location(
     **Raises:**
         NotFoundOCPIError: If the location with the specified ID is not found.
     """
-    logger.info("Received request to get location by id - `%s`." % location_id)
+    logger.info(f"Received request to get location by id - `{location_id}`.")
     auth_token = get_auth_token(request)
 
     data = await crud.get(
@@ -102,7 +104,7 @@ async def get_location(
             data=[adapter.location_adapter(data, VersionNumber.v_2_3_0).model_dump()],
             **status.OCPI_1000_GENERIC_SUCESS_CODE,
         )
-    logger.debug("Location with id `%s` was not found." % location_id)
+    logger.debug(f"Location with id `{location_id}` was not found.")
     raise NotFoundOCPIError
 
 
@@ -133,8 +135,7 @@ async def get_evse(
             or EVSE with the specified UID is not found.
     """
     logger.info(
-        "Received request to get evse by id - `%s` (location id - `%s`)"
-        % (location_id, evse_uid)
+        f"Received request to get evse by id - `{location_id}` (location id - `{evse_uid}`)"
     )
     auth_token = get_auth_token(request)
 
@@ -153,14 +154,12 @@ async def get_evse(
                     data=[evse.model_dump()],
                     **status.OCPI_1000_GENERIC_SUCESS_CODE,
                 )
-        logger.debug("Evse with id `%s` was not found." % evse_uid)
-    logger.debug("Location with id `%s` was not found." % location_id)
+        logger.debug(f"Evse with id `{evse_uid}` was not found.")
+    logger.debug(f"Location with id `{location_id}` was not found.")
     raise NotFoundOCPIError
 
 
-@router.get(
-    "/{location_id}/{evse_uid}/{connector_id}", response_model=OCPIResponse
-)
+@router.get("/{location_id}/{evse_uid}/{connector_id}", response_model=OCPIResponse)
 async def get_connector(
     request: Request,
     location_id: CiString(36),  # type: ignore
@@ -191,9 +190,8 @@ async def get_connector(
             the specified ID is not found.
     """
     logger.info(
-        "Received request to get connector by id - `%s` "
-        "(location id - `%s`, evse id - `%s`)"
-        % (connector_id, location_id, evse_uid)
+        f"Received request to get connector by id - `{connector_id}` "
+        f"(location id - `{location_id}`, evse id - `{evse_uid}`)"
     )
     auth_token = get_auth_token(request)
 
@@ -214,9 +212,7 @@ async def get_connector(
                             data=[connector.model_dump()],
                             **status.OCPI_1000_GENERIC_SUCESS_CODE,
                         )
-                logger.debug(
-                    "Connector with id `%s` was not found." % connector_id
-                )
-        logger.debug("Evse with id `%s` was not found." % evse_uid)
-    logger.debug("Location with id `%s` was not found." % location_id)
+                logger.debug(f"Connector with id `{connector_id}` was not found.")
+        logger.debug(f"Evse with id `{evse_uid}` was not found.")
+    logger.debug(f"Location with id `{location_id}` was not found.")
     raise NotFoundOCPIError

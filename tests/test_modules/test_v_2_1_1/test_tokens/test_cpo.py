@@ -1,16 +1,15 @@
 from py_ocpi.core.config import settings
 
 from .utils import (
-    TOKENS,
-    TOKEN_UPDATE,
-    CPO_BASE_URL,
     AUTH_HEADERS,
+    CPO_BASE_URL,
+    TOKEN_UPDATE,
+    TOKENS,
     WRONG_AUTH_HEADERS,
 )
 
 TOKEN_URL = (
-    f"{CPO_BASE_URL}{settings.COUNTRY_CODE}/{settings.PARTY_ID}/"
-    f'{TOKENS[0]["uid"]}'
+    f"{CPO_BASE_URL}{settings.COUNTRY_CODE}/{settings.PARTY_ID}/" f'{TOKENS[0]["uid"]}'
 )
 
 

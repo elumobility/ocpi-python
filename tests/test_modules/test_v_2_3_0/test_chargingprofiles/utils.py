@@ -1,13 +1,8 @@
-from uuid import uuid4
-
 from py_ocpi.core import enums
-from py_ocpi.modules.chargingprofiles.v_2_3_0.enums import ChargingProfileResponseType
 from tests.test_modules.test_v_2_3_0.test_sessions.utils import SESSIONS
-
 from tests.test_modules.utils import (
     ENCODED_AUTH_TOKEN_V_2_3_0,
     ENCODED_RANDOM_AUTH_TOKEN_V_2_3_0,
-    ClientAuthenticator,
 )
 
 CPO_BASE_URL = "/ocpi/cpo/2.3.0/chargingprofiles/"

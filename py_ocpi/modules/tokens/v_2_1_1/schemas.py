@@ -1,7 +1,7 @@
-from typing import Optional, List
+
 from pydantic import BaseModel
 
-from py_ocpi.core.data_types import String, DisplayText, DateTime
+from py_ocpi.core.data_types import DateTime, DisplayText, String
 from py_ocpi.modules.tokens.v_2_1_1.enums import (
     Allowed,
     TokenType,
@@ -15,8 +15,8 @@ class LocationReference(BaseModel):
     """
 
     location_id: String(39)  # type: ignore
-    evse_uids: List[String(39)] = []  # type: ignore
-    connector_ids: List[String(36)] = []  # type: ignore
+    evse_uids: list[String(39)] = []  # type: ignore
+    connector_ids: list[String(36)] = []  # type: ignore
 
 
 class Token(BaseModel):
@@ -27,24 +27,24 @@ class Token(BaseModel):
     uid: String(36)  # type: ignore
     type: TokenType
     auth_id: String(36)  # type: ignore
-    visual_number: Optional[String(64)]  # type: ignore
+    visual_number: String(64) | None  # type: ignore
     issuer: String(64)  # type: ignore
     valid: bool
     whitelist: WhitelistType
-    language: Optional[String(2)]  # type: ignore
+    language: String(2) | None  # type: ignore
     last_updated: DateTime
 
 
 class TokenPartialUpdate(BaseModel):
-    uid: Optional[String(36)] = None  # type: ignore
-    type: Optional[TokenType] = None
-    auth_id: Optional[String(36)] = None  # type: ignore
-    visual_number: Optional[String(64)] = None  # type: ignore
-    issuer: Optional[String(64)] = None  # type: ignore
-    valid: Optional[bool] = None
-    whitelist: Optional[WhitelistType] = None
-    language: Optional[String(2)] = None  # type: ignore
-    last_updated: Optional[DateTime] = None
+    uid: String(36) | None = None  # type: ignore
+    type: TokenType | None = None
+    auth_id: String(36) | None = None  # type: ignore
+    visual_number: String(64) | None = None  # type: ignore
+    issuer: String(64) | None = None  # type: ignore
+    valid: bool | None = None
+    whitelist: WhitelistType | None = None
+    language: String(2) | None = None  # type: ignore
+    last_updated: DateTime | None = None
 
 
 class AuthorizationInfo(BaseModel):
@@ -53,5 +53,5 @@ class AuthorizationInfo(BaseModel):
     """
 
     allowed: Allowed
-    location: Optional[LocationReference]
-    info: Optional[DisplayText]
+    location: LocationReference | None
+    info: DisplayText | None

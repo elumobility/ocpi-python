@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
-from py_ocpi.modules.versions.enums import VersionNumber
 from py_ocpi.core.data_types import URL
+from py_ocpi.modules.versions.enums import VersionNumber
 
 
 class Version(BaseModel):

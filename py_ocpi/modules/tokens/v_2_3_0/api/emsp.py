@@ -1,19 +1,19 @@
-from fastapi import APIRouter, Depends, Response, Request
+from fastapi import APIRouter, Depends, Request, Response
 
+from py_ocpi.core import status
+from py_ocpi.core.adapter import Adapter
+from py_ocpi.core.authentication.verifier import AuthorizationVerifier
+from py_ocpi.core.config import logger
+from py_ocpi.core.crud import Crud
+from py_ocpi.core.data_types import CiString
+from py_ocpi.core.dependencies import get_adapter, get_crud, pagination_filters
+from py_ocpi.core.enums import Action, ModuleID, RoleEnum
+from py_ocpi.core.exceptions import NotFoundOCPIError
+from py_ocpi.core.schemas import OCPIResponse
+from py_ocpi.core.utils import get_auth_token, get_list
 from py_ocpi.modules.tokens.v_2_3_0.enums import TokenType
 from py_ocpi.modules.tokens.v_2_3_0.schemas import LocationReference
 from py_ocpi.modules.versions.enums import VersionNumber
-from py_ocpi.core.utils import get_list, get_auth_token
-from py_ocpi.core import status
-from py_ocpi.core.schemas import OCPIResponse
-from py_ocpi.core.adapter import Adapter
-from py_ocpi.core.authentication.verifier import AuthorizationVerifier
-from py_ocpi.core.crud import Crud
-from py_ocpi.core.config import logger
-from py_ocpi.core.exceptions import NotFoundOCPIError
-from py_ocpi.core.data_types import CiString
-from py_ocpi.core.enums import ModuleID, RoleEnum, Action
-from py_ocpi.core.dependencies import get_crud, get_adapter, pagination_filters
 
 router = APIRouter(
     prefix="/tokens",
@@ -99,9 +99,9 @@ async def authorize_token(
     **Raises:**
         NotFoundOCPIError: If the token is not found.
     """
-    logger.info("Received request to authorize token with id `%s`" % token_uid)
-    logger.debug("Token type - `%s`" % token_type)
-    logger.debug("Location reference - `%s`" % location_reference)
+    logger.info(f"Received request to authorize token with id `{token_uid}`")
+    logger.debug(f"Token type - `{token_type}`")
+    logger.debug(f"Location reference - `{location_reference}`")
     auth_token = get_auth_token(request)
 
     # check if token exists
@@ -115,9 +115,7 @@ async def authorize_token(
     )
     if token:
         location_reference = (
-            location_reference.model_dump()
-            if location_reference
-            else None  # type: ignore
+            location_reference.model_dump() if location_reference else None  # type: ignore
         )
         data = {
             "token_uid": token_uid,
@@ -146,5 +144,5 @@ async def authorize_token(
             **status.OCPI_1000_GENERIC_SUCESS_CODE,
         )
 
-    logger.debug("Token with id `%s` was not found." % token_uid)
+    logger.debug(f"Token with id `{token_uid}` was not found.")
     raise NotFoundOCPIError

@@ -1,22 +1,21 @@
-from typing import List, Optional
 
 from pydantic import BaseModel
 
+from py_ocpi.core.data_types import (
+    URL,
+    CiString,
+    DateTime,
+    DisplayText,
+    Number,
+    Price,
+    String,
+)
 from py_ocpi.modules.locations.v_2_3_0.schemas import EnergyMix
 from py_ocpi.modules.tariffs.v_2_3_0.enums import (
     DayOfWeek,
     ReservationRestrictionType,
     TariffDimensionType,
     TariffType,
-)
-from py_ocpi.core.data_types import (
-    URL,
-    CiString,
-    DisplayText,
-    Number,
-    Price,
-    String,
-    DateTime,
 )
 
 
@@ -27,7 +26,7 @@ class PriceComponent(BaseModel):
 
     type: TariffDimensionType
     price: Number
-    vat: Optional[Number]
+    vat: Number | None
     step_size: int
 
 
@@ -36,20 +35,20 @@ class TariffRestrictions(BaseModel):
     https://github.com/ocpi/ocpi/blob/2.3.0/mod_tariffs.asciidoc#146-tariffrestrictions-class
     """
 
-    start_time: Optional[String(5)]  # type: ignore
-    end_time: Optional[String(5)]  # type: ignore
-    start_date: Optional[String(10)]  # type: ignore
-    end_date: Optional[String(10)]  # type: ignore
-    min_kwh: Optional[Number]
-    max_kwh: Optional[Number]
-    min_current: Optional[Number]
-    max_current: Optional[Number]
-    min_power: Optional[Number]
-    max_power: Optional[Number]
-    min_duration: Optional[int]
-    max_duration: Optional[int]
-    day_of_week: List[DayOfWeek] = []
-    reservation: Optional[ReservationRestrictionType]
+    start_time: String(5) | None  # type: ignore
+    end_time: String(5) | None  # type: ignore
+    start_date: String(10) | None  # type: ignore
+    end_date: String(10) | None  # type: ignore
+    min_kwh: Number | None
+    max_kwh: Number | None
+    min_current: Number | None
+    max_current: Number | None
+    min_power: Number | None
+    max_power: Number | None
+    min_duration: int | None
+    max_duration: int | None
+    day_of_week: list[DayOfWeek] = []
+    reservation: ReservationRestrictionType | None
 
 
 class TariffElement(BaseModel):
@@ -57,8 +56,8 @@ class TariffElement(BaseModel):
     https://github.com/ocpi/ocpi/blob/2.3.0/mod_tariffs.asciidoc#144-tariffelement-class
     """
 
-    price_components: List[PriceComponent]
-    restrictions: Optional[TariffRestrictions]
+    price_components: list[PriceComponent]
+    restrictions: TariffRestrictions | None
 
 
 class Tariff(BaseModel):
@@ -70,13 +69,13 @@ class Tariff(BaseModel):
     party_id: CiString(3)  # type: ignore
     id: CiString(36)  # type: ignore
     currency: String(3)  # type: ignore
-    type: Optional[TariffType]
-    tariff_alt_text: List[DisplayText] = []
-    tariff_alt_url: Optional[URL]
-    min_price: Optional[Price]
-    max_price: Optional[Price]
-    elements: List[TariffElement]
-    start_date_time: Optional[DateTime]
-    end_date_time: Optional[DateTime]
-    energy_mix: Optional[EnergyMix]
+    type: TariffType | None
+    tariff_alt_text: list[DisplayText] = []
+    tariff_alt_url: URL | None
+    min_price: Price | None
+    max_price: Price | None
+    elements: list[TariffElement]
+    start_date_time: DateTime | None
+    end_date_time: DateTime | None
+    energy_mix: EnergyMix | None
     last_updated: DateTime
