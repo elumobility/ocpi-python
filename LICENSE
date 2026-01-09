@@ -1,6 +1,11 @@
+This project is dual-licensed under the following licenses:
+
+===============================================================================
 MIT License
+===============================================================================
 
 Copyright (c) 2023 Extrawest
+Copyright (c) 2026 ELU Mobility
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +24,28 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+===============================================================================
+European Union Public Licence (EUPL) v.1.2
+===============================================================================
+
+Copyright (c) 2026 ELU Mobility
+
+This work is licensed under the European Union Public Licence (EUPL) v.1.2.
+
+The full text of the EUPL v.1.2 is available at:
+https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+
+You may use this work under either license (MIT or EUPL) at your choice.
+
+===============================================================================
+License Choice
+===============================================================================
+
+Users of this software may choose to use it under either:
+- The MIT License (permissive, allows proprietary use)
+- The European Union Public Licence v.1.2 (copyleft, requires sharing)
+
+This dual licensing approach provides maximum flexibility for users while
+respecting the original MIT-licensed upstream code and allowing EUPL licensing
+for European public sector use cases.

@@ -9,6 +9,8 @@ and this project adheres to [Calendar Versioning](https://calver.org/) (YYYY.M.P
 
 ### Added
 
+- **Dual licensing** - Project now available under both MIT and EUPL v.1.2 licenses
+
 - **OCPI 2.3.0 support** - Full implementation including:
   - Payments module (CPO and PTP roles)
   - Enhanced Locations module with Parking support

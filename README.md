@@ -3,7 +3,7 @@
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![Pydantic v2](https://img.shields.io/badge/pydantic-v2-blue.svg)](https://docs.pydantic.dev/)
 [![FastAPI 0.115+](https://img.shields.io/badge/fastapi-0.115+-green.svg)](https://fastapi.tiangolo.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT OR EUPL-1.2](https://img.shields.io/badge/License-MIT%20OR%20EUPL--1.2-blue.svg)](LICENSE)
 
 A modern, production-ready Python implementation of the Open Charge Point Interface (OCPI) protocol built on FastAPI.
 
@@ -113,7 +113,11 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-[MIT License](LICENSE)
+This project is **dual-licensed** under:
+- **[MIT License](LICENSE)** - Permissive, allows proprietary use
+- **[European Union Public Licence (EUPL) v.1.2](https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12)** - Copyleft, ideal for European public sector
+
+You may use this software under either license at your choice. See [LICENSE](LICENSE) for full details.
 
 ---
 

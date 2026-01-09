@@ -19,9 +19,9 @@ from py_ocpi import __version__  # noqa
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = "Extrawest OCPI"
-copyright = "2023, Extrawest"
-author = "Extrawest"
+project = "OCPI Python"
+copyright = "2026, ELU Mobility"
+author = "ELU Mobility"
 release = f"{__version__}"
 
 # -- General configuration ---------------------------------------------------

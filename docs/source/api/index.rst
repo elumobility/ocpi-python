@@ -5,5 +5,6 @@ API Reference
 .. toctree::
    :maxdepth: 3
 
+   v_2_3_0
    v_2_2_1
    v_2_1_1

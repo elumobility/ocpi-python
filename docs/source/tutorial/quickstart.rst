@@ -22,7 +22,7 @@ Create and activate virtual env and fill project dir with following contents:
 
 .. warning::
 
-    Make sure that you've used `python version 3.10` and higher.
+    Make sure that you've used `python version 3.11` and higher.
 
 
 .. code-block:: text
@@ -271,8 +271,8 @@ Authenticator class which would return list of valid tokens. Given
 authorization token will be compared with this list.
 
 .. note::
-    OCPI versions 2.2 and higher sends encoded authorization tokens,
-    so it will be decoded before compared.
+    OCPI versions 2.2.x send base64-encoded authorization tokens,
+    which will be decoded before comparison. OCPI 2.3.0 uses plain tokens.
 
 .. note::
     Make sure to retrieve valid tokens from the source you need.
@@ -314,7 +314,7 @@ main.py
 
 
     app = get_application(
-        version_numbers=[VersionNumber.v_2_1_1],
+        version_numbers=[VersionNumber.v_2_3_0],
         roles=[RoleEnum.cpo],
         modules=[ModuleID.locations],
         authenticator=ClientAuthenticator,
@@ -336,7 +336,7 @@ Request the list of locations
 
 .. code-block:: sh
 
-    $ curl --request GET 'http://127.0.0.1:8000/ocpi/cpo/2.1.1/locations/' --header 'Authorization: Token my_valid_token'
+    $ curl --request GET 'http://127.0.0.1:8000/ocpi/cpo/2.3.0/locations/' --header 'Authorization: Token my_valid_token'
 
 Check the API docs
 ~~~~~~~~~~~~~~~~~~
