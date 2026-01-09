@@ -1,5 +1,6 @@
 """Test utilities for OCPI 2.3.0 Bookings module."""
 
+import copy
 from datetime import UTC, datetime, timedelta
 
 from ocpi.core.adapter import BaseAdapter
@@ -18,47 +19,73 @@ EVSE_UID = "EVSE-001"
 CONNECTOR_ID = "CONN-001"
 EMSP_BOOKING_ID = "EMSP-BOOKING-001"
 
-TOKEN_DATA = {
-    "country_code": "DE",
-    "party_id": "ELU",
-    "uid": "TOKEN-001",
-    "type": TokenType.rfid,
-    "contract_id": "CONTRACT-001",
-    "visual_number": "12345678",
-    "issuer": "ELU Mobility",
-    "group_id": None,
-    "valid": True,
-    "whitelist": WhitelistType.always,
-    "language": "de",
-    "default_profile_type": None,
-    "energy_contract": None,
-    "last_updated": datetime.now(UTC).isoformat(),
-}
 
-BOOKINGS = [
-    {
+def get_token_data():
+    """Return fresh token data for each test."""
+    return {
         "country_code": "DE",
         "party_id": "ELU",
-        "id": BOOKING_ID,
-        "emsp_booking_id": EMSP_BOOKING_ID,
-        "token": TOKEN_DATA,
-        "location_id": LOCATION_ID,
-        "evse_uid": EVSE_UID,
-        "connector_id": CONNECTOR_ID,
-        "start_date_time": (datetime.now(UTC) + timedelta(hours=1)).isoformat(),
-        "end_date_time": (datetime.now(UTC) + timedelta(hours=3)).isoformat(),
-        "state": BookingState.confirmed,
-        "authorization_reference": "AUTH-REF-001",
-        "energy_estimate": 50.0,
-        "estimated_cost": {"excl_vat": 25.00, "incl_vat": 29.75},
-        "status_message": [],
-        "session_id": None,
+        "uid": "TOKEN-001",
+        "type": TokenType.rfid,
+        "contract_id": "CONTRACT-001",
+        "visual_number": "12345678",
+        "issuer": "ELU Mobility",
+        "group_id": None,
+        "valid": True,
+        "whitelist": WhitelistType.always,
+        "language": "de",
+        "default_profile_type": None,
+        "energy_contract": None,
         "last_updated": datetime.now(UTC).isoformat(),
     }
-]
+
+
+def get_bookings():
+    """Return fresh booking data for each test - avoids test isolation issues."""
+    return [
+        {
+            "country_code": "DE",
+            "party_id": "ELU",
+            "id": BOOKING_ID,
+            "emsp_booking_id": EMSP_BOOKING_ID,
+            "token": get_token_data(),
+            "location_id": LOCATION_ID,
+            "evse_uid": EVSE_UID,
+            "connector_id": CONNECTOR_ID,
+            "start_date_time": (datetime.now(UTC) + timedelta(hours=1)).isoformat(),
+            "end_date_time": (datetime.now(UTC) + timedelta(hours=3)).isoformat(),
+            "state": BookingState.confirmed,
+            "authorization_reference": "AUTH-REF-001",
+            "energy_estimate": 50.0,
+            "estimated_cost": {"excl_vat": 25.00, "incl_vat": 29.75},
+            "status_message": [],
+            "session_id": None,
+            "last_updated": datetime.now(UTC).isoformat(),
+        }
+    ]
+
+
+# Keep for backward compatibility but use fresh copy
+TOKEN_DATA = get_token_data()
+BOOKINGS = get_bookings()
 
 
 class Crud(Crud):
+    # Class-level storage that resets for each test class
+    _bookings = None
+
+    @classmethod
+    def _get_bookings(cls):
+        """Get bookings, initializing fresh data if needed."""
+        if cls._bookings is None:
+            cls._bookings = get_bookings()
+        return cls._bookings
+
+    @classmethod
+    def _reset_bookings(cls):
+        """Reset bookings to fresh state."""
+        cls._bookings = get_bookings()
+
     @classmethod
     async def list(
         cls,
@@ -68,7 +95,8 @@ class Crud(Crud):
         *args,
         **kwargs,
     ) -> tuple[list, int, bool]:
-        return BOOKINGS, len(BOOKINGS), True
+        bookings = cls._get_bookings()
+        return bookings, len(bookings), True
 
     @classmethod
     async def get(
@@ -79,9 +107,10 @@ class Crud(Crud):
         *args,
         **kwargs,
     ):
-        for booking in BOOKINGS:
+        bookings = cls._get_bookings()
+        for booking in bookings:
             if booking["id"] == id:
-                return booking
+                return copy.deepcopy(booking)
         return None
 
     @classmethod
@@ -93,11 +122,12 @@ class Crud(Crud):
         *args,
         **kwargs,
     ):
+        bookings = cls._get_bookings()
         # Create a new booking from request data
         new_booking = {
             "country_code": "DE",
             "party_id": "ELU",
-            "id": f"BOOKING-{len(BOOKINGS) + 1:03d}",
+            "id": f"BOOKING-{len(bookings) + 1:03d}",
             "emsp_booking_id": data.get("emsp_booking_id"),
             "token": data.get("token"),
             "location_id": data.get("location_id"),
@@ -125,11 +155,11 @@ class Crud(Crud):
         *args,
         **kwargs,
     ):
-        # For EMSP, also check country_code and party_id if provided
+        bookings = cls._get_bookings()
         country_code = kwargs.get("country_code")
         party_id = kwargs.get("party_id")
 
-        for booking in BOOKINGS:
+        for booking in bookings:
             if booking["id"] == id:
                 # If country_code and party_id are provided, verify they match
                 if country_code and party_id:
@@ -137,14 +167,17 @@ class Crud(Crud):
                         booking["country_code"] == country_code
                         and booking["party_id"] == party_id
                     ):
-                        booking.update(data)
-                        booking["last_updated"] = datetime.now(UTC).isoformat()
-                        return booking
+                        # Return updated copy without mutating original
+                        updated = copy.deepcopy(booking)
+                        updated.update(data)
+                        updated["last_updated"] = datetime.now(UTC).isoformat()
+                        return updated
                 else:
-                    # No country_code/party_id check (CPO context)
-                    booking.update(data)
-                    booking["last_updated"] = datetime.now(UTC).isoformat()
-                    return booking
+                    # Return updated copy without mutating original
+                    updated = copy.deepcopy(booking)
+                    updated.update(data)
+                    updated["last_updated"] = datetime.now(UTC).isoformat()
+                    return updated
         return None
 
     @classmethod
