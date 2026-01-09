@@ -28,6 +28,11 @@ class Session(BaseModel):
     charging_periods: list[ChargingPeriod] = []
     total_cost: Price | None
     status: SessionStatus
+    # New in OCPI 2.3.0 - State of Charge fields
+    soc_start: Number | None = None
+    soc_end: Number | None = None
+    # New in OCPI 2.3.0 - Odometer reading
+    odometer: Number | None = None
     last_updated: DateTime
 
 
@@ -53,6 +58,11 @@ class SessionPartialUpdate(BaseModel):
     charging_periods: list[ChargingPeriod] | None = None
     total_cost: Price | None = None
     status: SessionStatus | None = None
+    # New in OCPI 2.3.0 - State of Charge fields
+    soc_start: Number | None = None
+    soc_end: Number | None = None
+    # New in OCPI 2.3.0 - Odometer reading
+    odometer: Number | None = None
     last_updated: DateTime | None = None
 
 

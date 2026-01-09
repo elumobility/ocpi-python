@@ -269,6 +269,22 @@ class Adapter(ABC):
         """
         pass
 
+    # New in OCPI 2.3.0 - Bookings module adapter
+
+    @abstractmethod
+    def booking_adapter(cls, data: dict, version: VersionNumber = VersionNumber.latest):
+        """Adapt the data to OCPI Booking schema (2.3.0+)
+
+        Args:
+            data (dict): The object details
+            version (VersionNumber, optional):
+            The version number of the caller OCPI module
+
+        Returns:
+            Booking: The object data in proper OCPI schema
+        """
+        pass
+
 
 class BaseAdapter(Adapter):
     @classmethod
@@ -449,5 +465,16 @@ class BaseAdapter(Adapter):
         return get_module_model(
             class_name="Parking",
             module_name="locations",
+            version_name=version.name,
+        )(**data)
+
+    # New in OCPI 2.3.0 - Bookings module adapter
+
+    @classmethod
+    def booking_adapter(cls, data: dict, version: VersionNumber = VersionNumber.latest):
+        """Adapt the data to OCPI Booking schema (2.3.0+)"""
+        return get_module_model(
+            class_name="Booking",
+            module_name="bookings",
             version_name=version.name,
         )(**data)

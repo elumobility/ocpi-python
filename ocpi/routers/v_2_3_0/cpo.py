@@ -1,6 +1,9 @@
 """CPO routers for OCPI 2.3.0."""
 
 from ocpi.core.enums import ModuleID
+from ocpi.modules.bookings.v_2_3_0.api import (
+    cpo_router as bookings_cpo_2_3_0_router,
+)
 from ocpi.modules.cdrs.v_2_3_0.api import (
     cpo_router as cdrs_cpo_2_3_0_router,
 )
@@ -44,4 +47,5 @@ router = {
     ModuleID.charging_profile: chargingprofiles_cpo_2_3_0_router,
     # New in OCPI 2.3.0
     ModuleID.payments: payments_cpo_2_3_0_router,
+    ModuleID.bookings: bookings_cpo_2_3_0_router,
 }

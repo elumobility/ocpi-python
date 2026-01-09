@@ -1,6 +1,9 @@
 """EMSP routers for OCPI 2.3.0."""
 
 from ocpi.core.enums import ModuleID
+from ocpi.modules.bookings.v_2_3_0.api import (
+    emsp_router as bookings_emsp_2_3_0_router,
+)
 from ocpi.modules.cdrs.v_2_3_0.api import (
     emsp_router as cdrs_emsp_2_3_0_router,
 )
@@ -39,4 +42,6 @@ router = {
     ModuleID.cdrs: cdrs_emsp_2_3_0_router,
     ModuleID.hub_client_info: hubclientinfo_emsp_2_3_0_router,
     ModuleID.charging_profile: chargingprofiles_emsp_2_3_0_router,
+    # New in OCPI 2.3.0
+    ModuleID.bookings: bookings_emsp_2_3_0_router,
 }
