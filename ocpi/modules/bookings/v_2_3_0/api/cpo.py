@@ -6,6 +6,7 @@ The CPO receives booking requests from EMSPs and manages booking lifecycle.
 from fastapi import APIRouter, Depends, Request, Response
 
 from ocpi.core import status
+from ocpi.core.status import OCPI_2003_UNKNOWN_RESOURCE
 from ocpi.core.adapter import Adapter
 from ocpi.core.authentication.verifier import AuthorizationVerifier
 from ocpi.core.config import logger
@@ -98,9 +99,10 @@ async def get_booking(
     )
 
     if data is None:
+        # OCPI uses 2003 for any "resource not found" scenario
         return OCPIResponse(
             data=[],
-            **status.OCPI_2003_UNKNOWN_LOCATION,
+            **OCPI_2003_UNKNOWN_RESOURCE,
         )
 
     return OCPIResponse(
@@ -189,9 +191,10 @@ async def update_booking(
     )
 
     if data is None:
+        # OCPI uses 2003 for any "resource not found" scenario
         return OCPIResponse(
             data=[],
-            **status.OCPI_2003_UNKNOWN_LOCATION,
+            **OCPI_2003_UNKNOWN_RESOURCE,
         )
 
     return OCPIResponse(

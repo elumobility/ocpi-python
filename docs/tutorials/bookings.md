@@ -244,6 +244,237 @@ async def start_session_from_booking(booking_id: str, session_id: str):
     )
 ```
 
+## Booking → Session Integration
+
+A key feature of the Booking module is linking reservations to actual charging sessions. This section demonstrates the complete workflow.
+
+### Architecture Overview
+
+```mermaid
+sequenceDiagram
+    participant EMSP
+    participant CPO
+    participant EVSE
+    
+    EMSP->>CPO: POST /bookings (BookingRequest)
+    CPO-->>EMSP: BookingResponse (CONFIRMED)
+    
+    Note over EMSP,EVSE: User arrives at charging station
+    
+    EMSP->>CPO: POST /commands/START_SESSION
+    CPO->>EVSE: Start charging
+    EVSE-->>CPO: Session started
+    CPO->>CPO: Create Session, link to Booking
+    CPO-->>EMSP: PATCH /bookings (state=ACTIVE, session_id)
+    CPO-->>EMSP: PUT /sessions (new session)
+    
+    Note over EMSP,EVSE: Charging completes
+    
+    EVSE-->>CPO: Session ended
+    CPO->>CPO: Update Booking state=COMPLETED
+    CPO-->>EMSP: PATCH /bookings (state=COMPLETED)
+    CPO-->>EMSP: PATCH /sessions (status=COMPLETED)
+```
+
+### Complete Integration Example
+
+Here's a full implementation showing how to convert a booking into a session:
+
+```python
+from datetime import UTC, datetime
+import uuid
+
+from ocpi.core.crud import Crud
+from ocpi.core.enums import ModuleID, RoleEnum
+from ocpi.modules.bookings.v_2_3_0.enums import BookingState
+from ocpi.modules.sessions.v_2_3_0.enums import SessionStatus
+
+
+class IntegratedCrud(Crud):
+    """CRUD that handles booking-to-session conversion."""
+    
+    @classmethod
+    async def convert_booking_to_session(
+        cls,
+        booking_id: str,
+        auth_method: str = "WHITELIST",
+    ) -> dict:
+        """
+        Convert a confirmed booking into an active charging session.
+        
+        This is typically called when:
+        1. User arrives and authenticates at the EVSE
+        2. CPO receives START_SESSION command for a booked slot
+        
+        Args:
+            booking_id: The booking to convert
+            auth_method: How the user authenticated (WHITELIST, APP, etc.)
+            
+        Returns:
+            The created session object
+        """
+        # 1. Retrieve the booking
+        booking = await cls.get(ModuleID.bookings, RoleEnum.cpo, booking_id)
+        if not booking:
+            raise ValueError(f"Booking {booking_id} not found")
+        
+        if booking["state"] != BookingState.confirmed:
+            raise ValueError(f"Booking must be CONFIRMED, got {booking['state']}")
+        
+        # 2. Create a new session linked to this booking
+        session_id = f"SESSION-{uuid.uuid4().hex[:8].upper()}"
+        now = datetime.now(UTC).isoformat()
+        
+        session = {
+            "country_code": booking["country_code"],
+            "party_id": booking["party_id"],
+            "id": session_id,
+            "start_date_time": now,
+            "end_date_time": None,  # Session is ongoing
+            "kwh": 0.0,
+            "cdr_token": {
+                "country_code": booking["token"]["country_code"],
+                "party_id": booking["token"]["party_id"],
+                "uid": booking["token"]["uid"],
+                "type": booking["token"]["type"],
+                "contract_id": booking["token"]["contract_id"],
+            },
+            "auth_method": auth_method,
+            # Link session to booking via authorization_reference
+            "authorization_reference": booking.get("authorization_reference"),
+            "location_id": booking["location_id"],
+            "evse_uid": booking["evse_uid"],
+            "connector_id": booking["connector_id"],
+            "meter_id": None,
+            "currency": "EUR",
+            "charging_periods": [],
+            "total_cost": None,
+            "status": SessionStatus.active,
+            # New in OCPI 2.3.0 - EV battery info
+            "soc_start": None,  # Can be populated from EVSE data
+            "soc_end": None,
+            "odometer": None,
+            "last_updated": now,
+        }
+        
+        # 3. Save the session
+        await cls.create(ModuleID.sessions, RoleEnum.cpo, session)
+        
+        # 4. Update the booking with session_id and state
+        await cls.update(
+            ModuleID.bookings,
+            RoleEnum.cpo,
+            {
+                "state": BookingState.active,
+                "session_id": session_id,
+                "last_updated": now,
+            },
+            booking_id,
+        )
+        
+        return session
+    
+    @classmethod
+    async def complete_booking_session(
+        cls,
+        booking_id: str,
+        final_kwh: float,
+        total_cost: dict | None = None,
+    ) -> tuple[dict, dict]:
+        """
+        Complete a booking and its associated session.
+        
+        Args:
+            booking_id: The booking to complete
+            final_kwh: Total energy delivered (kWh)
+            total_cost: Final cost (optional)
+            
+        Returns:
+            Tuple of (updated_booking, updated_session)
+        """
+        booking = await cls.get(ModuleID.bookings, RoleEnum.cpo, booking_id)
+        if not booking or not booking.get("session_id"):
+            raise ValueError("Booking not found or has no linked session")
+        
+        now = datetime.now(UTC).isoformat()
+        
+        # 1. Update the session
+        session = await cls.update(
+            ModuleID.sessions,
+            RoleEnum.cpo,
+            {
+                "end_date_time": now,
+                "kwh": final_kwh,
+                "total_cost": total_cost,
+                "status": SessionStatus.completed,
+                "last_updated": now,
+            },
+            booking["session_id"],
+        )
+        
+        # 2. Update the booking
+        booking = await cls.update(
+            ModuleID.bookings,
+            RoleEnum.cpo,
+            {
+                "state": BookingState.completed,
+                "last_updated": now,
+            },
+            booking_id,
+        )
+        
+        return booking, session
+```
+
+### Using Authorization Reference for Correlation
+
+The `authorization_reference` field is key for linking bookings and sessions:
+
+```python
+# When creating a booking, EMSP provides authorization_reference
+booking_request = {
+    "emsp_booking_id": "EMSP-REQ-001",
+    "authorization_reference": "AUTH-2026-001",  # EMSP's reference
+    # ... other fields
+}
+
+# When session is created, CPO copies authorization_reference
+session = {
+    "authorization_reference": booking["authorization_reference"],
+    # ... other fields
+}
+
+# EMSP can correlate booking and session using this reference
+async def find_session_for_booking(authorization_reference: str):
+    """Find the session created from a booking."""
+    sessions = await database.find_sessions(
+        authorization_reference=authorization_reference
+    )
+    return sessions[0] if sessions else None
+```
+
+### Pushing Updates to EMSP
+
+When the booking state changes, notify the EMSP:
+
+```python
+import httpx
+
+async def notify_emsp_booking_update(booking: dict, emsp_url: str, token: str):
+    """Push booking update to EMSP."""
+    async with httpx.AsyncClient() as client:
+        await client.patch(
+            f"{emsp_url}/ocpi/emsp/2.3.0/bookings/"
+            f"{booking['country_code']}/{booking['party_id']}/{booking['id']}",
+            json={
+                "state": booking["state"],
+                "session_id": booking.get("session_id"),
+                "last_updated": booking["last_updated"],
+            },
+            headers={"Authorization": f"Token {token}"},
+        )
+```
+
 ## Complete Working Example
 
 See the [Bookings Example](../../examples/bookings/) for a complete, runnable application demonstrating:
