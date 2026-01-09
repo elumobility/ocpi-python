@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/images/logo.png" alt="OCPI Python Logo" width="200">
+</p>
+
 # Welcome to OCPI Python
 
 A modern, production-ready Python implementation of the Open Charge Point Interface (OCPI) protocol built on FastAPI.

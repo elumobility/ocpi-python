@@ -1,11 +1,17 @@
-# OCPI Python
+<p align="center">
+  <img src="docs/assets/images/logo.png" alt="OCPI Python Logo" width="200">
+</p>
 
-[![CI](https://github.com/elumobility/ocpi-python/actions/workflows/ci.yml/badge.svg)](https://github.com/elumobility/ocpi-python/actions/workflows/ci.yml)
-[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![Pydantic v2](https://img.shields.io/badge/pydantic-v2-blue.svg)](https://docs.pydantic.dev/)
-[![FastAPI 0.115+](https://img.shields.io/badge/fastapi-0.115+-green.svg)](https://fastapi.tiangolo.com/)
-[![License: MIT OR EUPL-1.2](https://img.shields.io/badge/License-MIT%20OR%20EUPL--1.2-blue.svg)](LICENSE)
-[![Code style: ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+<h1 align="center">OCPI Python</h1>
+
+<p align="center">
+  <a href="https://github.com/elumobility/ocpi-python/actions/workflows/ci.yml"><img src="https://github.com/elumobility/ocpi-python/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.11+-blue.svg" alt="Python 3.11+"></a>
+  <a href="https://docs.pydantic.dev/"><img src="https://img.shields.io/badge/pydantic-v2-blue.svg" alt="Pydantic v2"></a>
+  <a href="https://fastapi.tiangolo.com/"><img src="https://img.shields.io/badge/fastapi-0.115+-green.svg" alt="FastAPI 0.115+"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT%20OR%20EUPL--1.2-blue.svg" alt="License: MIT OR EUPL-1.2"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Code style: ruff"></a>
+</p>
 
 A modern, production-ready Python implementation of the Open Charge Point Interface (OCPI) protocol built on FastAPI.
 
