@@ -45,6 +45,11 @@ Comprehensive tutorials for using OCPI Python in different scenarios.
   - Clearing profiles
   - Load balancing
 
+- **[Booking Reservations](bookings.md)** - EV charging reservations (OCPI 2.3.0)
+  - Time slot reservations
+  - Booking lifecycle management
+  - Integration with sessions
+
 ## Complete Working Examples
 
 Ready-to-run examples with full source code:
@@ -64,6 +69,10 @@ Ready-to-run examples with full source code:
 - **[Charging Profiles](../../examples/charging_profiles/)** - Smart charging control
   - Charging profile management
   - Load balancing examples
+
+- **[Bookings](../../examples/bookings/)** - EV charging reservations (OCPI 2.3.0)
+  - Booking lifecycle management
+  - Time slot reservations
 
 ## Additional Resources
 
