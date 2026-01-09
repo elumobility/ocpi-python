@@ -50,13 +50,17 @@ cd ocpi-python
 ### Install dependencies
 
 ```bash
-uv sync
+# Install all dependencies including dev tools
+uv sync --all-extras
+
+# Or install specific extras
+uv sync --extra dev --extra docs
 ```
 
 This will:
 - Create a virtual environment
 - Install all dependencies from `pyproject.toml`
-- Install development dependencies
+- Install development and documentation dependencies
 
 ### Activate virtual environment
 
@@ -95,6 +99,23 @@ Or with coverage:
 
 ```bash
 uv run pytest --cov=py_ocpi --cov-report=term-missing
+```
+
+## Building Documentation
+
+---
+
+To build documentation locally:
+
+```bash
+# Install docs dependencies first
+uv sync --extra docs
+
+# Build HTML documentation
+uv run sphinx-build -b html docs/source docs/build/html
+
+# Or use the convenience script
+uv run python -m sphinx -b html docs/source docs/build/html
 ```
 
 ---
