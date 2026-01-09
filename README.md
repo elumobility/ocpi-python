@@ -59,13 +59,14 @@ uv pip install -e .
 
 ```python
 from ocpi import get_application
-from ocpi.core.enums import RoleEnum
+from ocpi.core.enums import RoleEnum, ModuleID
 from ocpi.modules.versions.enums import VersionNumber
 
 # Create OCPI application
 app = get_application(
     version_numbers=[VersionNumber.v_2_3_0],
     roles=[RoleEnum.cpo],
+    modules=[ModuleID.locations],
 )
 
 # Run with: uvicorn main:app --reload

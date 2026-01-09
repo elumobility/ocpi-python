@@ -111,11 +111,11 @@ To build documentation locally:
 # Install docs dependencies first
 uv sync --extra docs
 
-# Build HTML documentation
-uv run sphinx-build -b html docs/source docs/build/html
+# Build HTML documentation with MkDocs
+uv run mkdocs build
 
-# Or use the convenience script
-uv run python -m sphinx -b html docs/source docs/build/html
+# Serve documentation locally
+uv run mkdocs serve
 ```
 
 ---
