@@ -1,6 +1,7 @@
 # ruff: noqa: E402
 """Tests for the bookings example."""
 
+import importlib
 import sys
 from pathlib import Path
 
@@ -9,9 +10,13 @@ from starlette.testclient import TestClient
 
 # Add example to path
 example_path = Path(__file__).parent.parent.parent / "examples" / "bookings"
-if str(example_path) not in sys.path:
-    sys.path.insert(0, str(example_path))
+example_path_str = str(example_path)
+if example_path_str not in sys.path:
+    sys.path.insert(0, example_path_str)
 
+# Import app - reload to avoid caching issues
+if "main" in sys.modules:
+    importlib.reload(sys.modules["main"])
 from main import app  # noqa: E402
 
 CPO_BASE_URL = "/ocpi/cpo/2.3.0/bookings"
@@ -23,7 +28,9 @@ AUTH_HEADER = {"Authorization": "Token bXktY3BvLXRva2VuLTEyMw=="}
 def client():
     """Create test client."""
     # Clear storage between tests
-    # Import here to ensure path is set up
+    # Reload crud module to ensure fresh state
+    if "crud" in sys.modules:
+        importlib.reload(sys.modules["crud"])
     import crud  # noqa: E402
 
     crud.bookings_storage.clear()
