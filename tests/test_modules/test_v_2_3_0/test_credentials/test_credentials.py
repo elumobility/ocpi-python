@@ -15,12 +15,12 @@ from tests.test_modules.utils import (
     ENCODED_AUTH_TOKEN_A_V_2_3_0,
     ENCODED_AUTH_TOKEN_V_2_3_0,
     ENCODED_RANDOM_AUTH_TOKEN_V_2_3_0,
+    ClientAuthenticator,
 )
 
-from tests.test_modules.utils import ClientAuthenticator
 from .utils import (
     CPO_BASE_URL,
-    CREDENTIALS_TOKEN_CREATE, 
+    CREDENTIALS_TOKEN_CREATE,
     Crud,
 )
 

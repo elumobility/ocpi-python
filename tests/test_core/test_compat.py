@@ -1,10 +1,8 @@
 """Tests for ocpi.core.compat module."""
 
-import pytest
-
 from ocpi.core.compat import (
-    PYDANTIC_VERSION,
     PYDANTIC_V2,
+    PYDANTIC_VERSION,
     BaseSettings,
     CoreSchema,
     GetCoreSchemaHandler,
@@ -28,17 +26,19 @@ def test_pydantic_v2():
 
 def test_get_field_name_with_field_name():
     """Test get_field_name with object that has field_name attribute."""
+
     class MockInfo:
         field_name = "test_field"
-    
+
     assert get_field_name(MockInfo()) == "test_field"
 
 
 def test_get_field_name_without_field_name():
     """Test get_field_name with object without field_name attribute."""
+
     class MockInfo:
         pass
-    
+
     result = get_field_name(MockInfo())
     assert isinstance(result, str)
 

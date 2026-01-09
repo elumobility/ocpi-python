@@ -13,13 +13,13 @@ from ocpi.modules.commands.v_2_1_1.enums import (
 )
 from ocpi.modules.versions.enums import VersionNumber
 from tests.test_modules.test_v_2_1_1.test_tokens.utils import TOKENS
-
 from tests.test_modules.utils import ClientAuthenticator
+
 from .utils import (
     AUTH_HEADERS,
     COMMAND_RESPONSE,
     CPO_BASE_URL,
-    WRONG_AUTH_HEADERS, 
+    WRONG_AUTH_HEADERS,
     Crud,
 )
 

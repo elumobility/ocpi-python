@@ -1,11 +1,10 @@
 """Tests for ocpi.core.data_types module."""
 
-from datetime import UTC, datetime
-
 import pytest
 from pydantic import BaseModel, ValidationError
 
 from ocpi.core.data_types import (
+    URL,
     CiString,
     CiStringBase,
     DateTime,
@@ -14,7 +13,6 @@ from ocpi.core.data_types import (
     Price,
     String,
     StringBase,
-    URL,
 )
 
 
@@ -33,9 +31,10 @@ def test_string_factory():
 
 def test_string_base_valid_through_pydantic():
     """Test StringBase through Pydantic model."""
+
     class TestModel(BaseModel):
         value: StringBase
-    
+
     result = TestModel(value="test")
     assert isinstance(result.value, StringBase)
     assert result.value == "test"
@@ -50,9 +49,10 @@ def test_string_base_max_length():
 
 def test_string_base_exceeds_max_length():
     """Test StringBase exceeding max length raises ValidationError."""
+
     class TestModel(BaseModel):
         value: StringBase
-    
+
     long_string = "a" * 256
     with pytest.raises(ValidationError):
         TestModel(value=long_string)
@@ -74,9 +74,10 @@ def test_cistring_factory():
 
 def test_cistring_base_non_ascii():
     """Test CiStringBase with non-ASCII raises ValueError."""
+
     class TestModel(BaseModel):
         value: CiStringBase
-    
+
     with pytest.raises(ValidationError):
         TestModel(value="café")  # Contains non-ASCII character
 
@@ -119,9 +120,10 @@ def test_datetime_with_timezone():
 
 def test_datetime_invalid():
     """Test DateTime with invalid timestamp raises ValueError."""
+
     class TestModel(BaseModel):
         value: DateTime
-    
+
     with pytest.raises(ValidationError):
         TestModel(value="invalid-date")
 

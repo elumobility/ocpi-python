@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   test:
-    name: Test (Python ${{ matrix.python-version }})
+    name: Test (${{ matrix.python-version }})
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -64,10 +64,14 @@ jobs:
         run: |
           uv sync --extra dev
       
-      - name: Run ruff
+      # Run ruff check (same as pre-commit, but without --fix)
+      # Pre-commit automatically fixes issues, CI verifies they're fixed
+      - name: Run ruff check
         run: |
           uv run ruff check .
       
+      # Run ruff format check (same as pre-commit ruff-format, but --check only)
+      # Pre-commit automatically formats, CI verifies formatting is correct
       - name: Run ruff format check
         run: |
           uv run ruff format --check .

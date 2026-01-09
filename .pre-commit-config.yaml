@@ -1,12 +1,13 @@
 repos:
   # Ruff: Fast Python linter and formatter (replaces black + flake8)
+  # Note: Pre-commit fixes issues automatically, CI checks them
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.1.9
     hooks:
-      # Run the linter
+      # Run the linter (fixes issues automatically)
       - id: ruff
-        args: [--fix, --exit-non-zero-on-fix]
-      # Run the formatter
+        args: [--fix]
+      # Run the formatter (formats files automatically)
       - id: ruff-format
 
   # MyPy: Static type checker (updated for Pydantic v2)

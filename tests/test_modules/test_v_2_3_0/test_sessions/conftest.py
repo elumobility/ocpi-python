@@ -4,8 +4,8 @@ from fastapi.testclient import TestClient
 from ocpi.core import enums
 from ocpi.main import get_application
 from ocpi.modules.versions.enums import VersionNumber
-
 from tests.test_modules.utils import ClientAuthenticator
+
 from .utils import Crud
 
 
