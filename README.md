@@ -58,9 +58,9 @@ uv pip install -e .
 ## Quick Start
 
 ```python
-from py_ocpi import get_application
-from py_ocpi.core.enums import RoleEnum
-from py_ocpi.modules.versions.enums import VersionNumber
+from ocpi import get_application
+from ocpi.core.enums import RoleEnum
+from ocpi.modules.versions.enums import VersionNumber
 
 # Create OCPI application
 app = get_application(
@@ -104,7 +104,7 @@ app = get_application(
 
 ## Documentation
 
-For detailed documentation and examples, see the [documentation](https://github.com/elumobility/ocpi-python).
+For detailed documentation and examples, see the [documentation](https://elumobility.github.io/ocpi-python/).
 
 ---
 

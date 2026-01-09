@@ -1,4 +1,4 @@
-from py_ocpi.core.config import settings
+from ocpi.core.config import settings
 
 from .utils import AUTH_HEADERS, EMSP_BASE_URL, TARIFFS, WRONG_AUTH_HEADERS
 

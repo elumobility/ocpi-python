@@ -1,4 +1,4 @@
-from py_ocpi.modules.tokens.v_2_2_1.enums import AllowedType
+from ocpi.modules.tokens.v_2_2_1.enums import AllowedType
 
 from .utils import (
     AUTH_HEADERS,

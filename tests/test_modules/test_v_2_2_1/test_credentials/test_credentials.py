@@ -5,13 +5,13 @@ import pytest
 from fastapi.testclient import TestClient
 from httpx import ASGITransport, AsyncClient
 
-from py_ocpi import get_application
-from py_ocpi.core import enums
-from py_ocpi.core.config import settings
-from py_ocpi.core.data_types import URL
-from py_ocpi.core.dependencies import get_versions
-from py_ocpi.modules.versions.enums import VersionNumber
-from py_ocpi.modules.versions.schemas import Version
+from ocpi import get_application
+from ocpi.core import enums
+from ocpi.core.config import settings
+from ocpi.core.data_types import URL
+from ocpi.core.dependencies import get_versions
+from ocpi.modules.versions.enums import VersionNumber
+from ocpi.modules.versions.schemas import Version
 from tests.test_modules.utils import ClientAuthenticator
 
 from .utils import (
@@ -43,7 +43,7 @@ def test_cpo_get_credentials_v_2_2_1():
 
 
 @pytest.mark.asyncio
-@patch("py_ocpi.modules.credentials.v_2_2_1.api.cpo.httpx.AsyncClient")
+@patch("ocpi.modules.credentials.v_2_2_1.api.cpo.httpx.AsyncClient")
 async def test_cpo_post_credentials_v_2_2_1(async_client):
     class MockCrud(Crud):
         @classmethod

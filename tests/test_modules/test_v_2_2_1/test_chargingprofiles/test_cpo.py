@@ -1,6 +1,6 @@
 from unittest.mock import patch
 
-from py_ocpi.modules.chargingprofiles.v_2_2_1.schemas import (
+from ocpi.modules.chargingprofiles.v_2_2_1.schemas import (
     ChargingProfileResponseType,
 )
 
@@ -69,7 +69,7 @@ def test_cpo_get_chargingprofile_no_charging_response(mock_do, client_cpo_v_2_2_
     assert response.json()["data"][0]["result"] == ChargingProfileResponseType.rejected
 
 
-@patch("py_ocpi.modules.chargingprofiles.v_2_2_1.api.cpo.BackgroundTasks.add_task")
+@patch("ocpi.modules.chargingprofiles.v_2_2_1.api.cpo.BackgroundTasks.add_task")
 def test_cpo_get_chargingprofile_v_2_2_1(mock_background, client_cpo_v_2_2_1):
     response = client_cpo_v_2_2_1.get(
         f"{CHARGINGPROFILE_URL}?duration={1}&response_url=abs",
@@ -111,7 +111,7 @@ def test_cpo_add_or_update_chargingprofile_no_charging_response(
     assert response.json()["data"][0]["result"] == ChargingProfileResponseType.rejected
 
 
-@patch("py_ocpi.modules.chargingprofiles.v_2_2_1.api.cpo.BackgroundTasks.add_task")
+@patch("ocpi.modules.chargingprofiles.v_2_2_1.api.cpo.BackgroundTasks.add_task")
 def test_cpo_add_or_update_chargingprofile_v_2_2_1(mock_background, client_cpo_v_2_2_1):
     response = client_cpo_v_2_2_1.put(
         CHARGINGPROFILE_URL,
@@ -150,7 +150,7 @@ def test_cpo_delete_chargingprofile_no_charging_response(mock_do, client_cpo_v_2
     assert response.json()["data"][0]["result"] == ChargingProfileResponseType.rejected
 
 
-@patch("py_ocpi.modules.chargingprofiles.v_2_2_1.api.cpo.BackgroundTasks.add_task")
+@patch("ocpi.modules.chargingprofiles.v_2_2_1.api.cpo.BackgroundTasks.add_task")
 def test_cpo_delete_chargingprofile_v_2_2_1(mock_background, client_cpo_v_2_2_1):
     response = client_cpo_v_2_2_1.delete(
         f"{CHARGINGPROFILE_URL}?response_url=abs",

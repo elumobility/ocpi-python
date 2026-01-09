@@ -1,10 +1,11 @@
 from uuid import uuid4
 
-from py_ocpi.core import enums
-from py_ocpi.modules.tokens.v_2_3_0.enums import TokenType, WhitelistType
+from ocpi.core import enums
+from ocpi.modules.tokens.v_2_3_0.enums import TokenType, WhitelistType
 from tests.test_modules.utils import (
     ENCODED_AUTH_TOKEN_V_2_3_0,
     ENCODED_RANDOM_AUTH_TOKEN_V_2_3_0,
+    ClientAuthenticator,
 )
 
 CPO_BASE_URL = "/ocpi/cpo/2.3.0/tokens/"
@@ -18,6 +19,7 @@ TOKENS = [
         "party_id": "AAA",
         "uid": str(uuid4()),
         "type": TokenType.rfid,
+        "contract_id": str(uuid4()),
         "auth_id": str(uuid4()),
         "visual_number": None,
         "issuer": "Test Issuer",
@@ -34,7 +36,7 @@ TOKENS = [
 AUTHORIZATION_INFO = {
     "allowed": "ALLOWED",
     "token": TOKENS[0],
-    "location_id": None,
+    "location": None,
     "authorization_reference": None,
     "info": None,
 }

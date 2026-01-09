@@ -1,4 +1,4 @@
-from py_ocpi.core import enums
+from ocpi.core import enums
 from tests.test_modules.test_v_2_2_1.test_sessions.utils import SESSIONS
 from tests.test_modules.utils import (
     ENCODED_AUTH_TOKEN,

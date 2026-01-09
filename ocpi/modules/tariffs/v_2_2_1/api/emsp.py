@@ -1,0 +1,191 @@
+from fastapi import APIRouter, Depends, Request
+
+from ocpi.core import status
+from ocpi.core.adapter import Adapter
+from ocpi.core.authentication.verifier import AuthorizationVerifier
+from ocpi.core.config import logger
+from ocpi.core.crud import Crud
+from ocpi.core.data_types import CiString
+from ocpi.core.dependencies import get_adapter, get_crud
+from ocpi.core.enums import ModuleID, RoleEnum
+from ocpi.core.exceptions import NotFoundOCPIError
+from ocpi.core.schemas import OCPIResponse
+from ocpi.core.utils import get_auth_token
+from ocpi.modules.tariffs.v_2_2_1.schemas import Tariff
+from ocpi.modules.versions.enums import VersionNumber
+
+router = APIRouter(
+    prefix="/tariffs",
+    dependencies=[Depends(AuthorizationVerifier(VersionNumber.v_2_2_1))],
+)
+
+
+@router.get("/{country_code}/{party_id}/{tariff_id}", response_model=OCPIResponse)
+async def get_tariff(
+    request: Request,
+    country_code: CiString(2),  # type: ignore
+    party_id: CiString(3),  # type: ignore
+    tariff_id: CiString(36),  # type: ignore
+    crud: Crud = Depends(get_crud),
+    adapter: Adapter = Depends(get_adapter),
+):
+    """
+    Get Tariff.
+
+    Retrieves a tariff based on the specified parameters.
+
+    **Path parameters:**
+        - country_code (str): The two-letter country code.
+        - party_id (str): The three-letter party ID.
+        - tariff_id (str): The ID of the tariff (36 characters).
+
+    **Returns:**
+        The OCPIResponse containing the tariff data.
+
+    **Raises:**
+        NotFoundOCPIError: If the tariff is not found.
+    """
+    logger.info(f"Received request to get tariff with id - `{tariff_id}`.")
+    auth_token = get_auth_token(request)
+
+    data = await crud.get(
+        ModuleID.tariffs,
+        RoleEnum.emsp,
+        tariff_id,
+        auth_token=auth_token,
+        country_code=country_code,
+        party_id=party_id,
+        version=VersionNumber.v_2_2_1,
+    )
+    if data:
+        return OCPIResponse(
+            data=[adapter.tariff_adapter(data, VersionNumber.v_2_2_1).model_dump()],
+            **status.OCPI_1000_GENERIC_SUCESS_CODE,
+        )
+    logger.debug(f"Tariff with id `{tariff_id}` was not found.")
+    raise NotFoundOCPIError
+
+
+@router.put("/{country_code}/{party_id}/{tariff_id}", response_model=OCPIResponse)
+async def add_or_update_tariff(
+    request: Request,
+    country_code: CiString(2),  # type: ignore
+    party_id: CiString(3),  # type: ignore
+    tariff_id: CiString(36),  # type: ignore
+    tariff: Tariff,
+    crud: Crud = Depends(get_crud),
+    adapter: Adapter = Depends(get_adapter),
+):
+    """
+    Add or Update Tariff.
+
+    Adds or updates a tariff based on the specified parameters.
+
+    **Path parameters:**
+        - country_code (str): The two-letter country code.
+        - party_id (str): The three-letter party ID.
+        - tariff_id (str): The ID of the tariff (36 characters).
+
+    **Request body:**
+        tariff (Tariff): The tariff object.
+
+    **Returns:**
+        The OCPIResponse containing the tariff data.
+    """
+    logger.info(f"Received request to add or update tariff with id - `{tariff_id}`.")
+    logger.debug(f"Tariff data to update - {tariff.model_dump()}")
+    auth_token = get_auth_token(request)
+
+    data = await crud.get(
+        ModuleID.tariffs,
+        RoleEnum.emsp,
+        tariff_id,
+        auth_token=auth_token,
+        country_code=country_code,
+        party_id=party_id,
+        version=VersionNumber.v_2_2_1,
+    )
+    if data:
+        logger.debug(f"Update tariff with id - `{tariff_id}`.")
+        data = await crud.update(
+            ModuleID.tariffs,
+            RoleEnum.emsp,
+            tariff.model_dump(),
+            tariff_id,
+            auth_token=auth_token,
+            country_code=country_code,
+            party_id=party_id,
+            version=VersionNumber.v_2_2_1,
+        )
+    else:
+        logger.debug(f"Create tariff with id - `{tariff_id}`.")
+        data = await crud.create(
+            ModuleID.tariffs,
+            RoleEnum.emsp,
+            tariff.model_dump(),
+            auth_token=auth_token,
+            country_code=country_code,
+            party_id=party_id,
+            version=VersionNumber.v_2_2_1,
+        )
+
+    return OCPIResponse(
+        data=[adapter.tariff_adapter(data).model_dump()],
+        **status.OCPI_1000_GENERIC_SUCESS_CODE,
+    )
+
+
+@router.delete("/{country_code}/{party_id}/{tariff_id}", response_model=OCPIResponse)
+async def delete_tariff(
+    request: Request,
+    country_code: CiString(2),  # type: ignore
+    party_id: CiString(3),  # type: ignore
+    tariff_id: CiString(36),  # type: ignore
+    crud: Crud = Depends(get_crud),
+    adapter: Adapter = Depends(get_adapter),
+):
+    """
+    Delete Tariff.
+
+    Deletes a tariff based on the specified parameters.
+
+    **Path parameters:**
+        - country_code (str): The two-letter country code.
+        - party_id (str): The three-letter party ID.
+        - tariff_id (str): The ID of the tariff to delete (36 characters).
+
+    **Returns:**
+        The OCPIResponse indicating the success of the operation.
+
+    **Raises:**
+        NotFoundOCPIError: If the tariff is not found.
+    """
+    logger.info(f"Received request to delete tariff with id - `{tariff_id}`.")
+    auth_token = get_auth_token(request)
+
+    tariff = await crud.get(
+        ModuleID.tariffs,
+        RoleEnum.emsp,
+        tariff_id,
+        auth_token=auth_token,
+        country_code=country_code,
+        party_id=party_id,
+        version=VersionNumber.v_2_2_1,
+    )
+    if tariff:
+        await crud.delete(
+            ModuleID.tariffs,
+            RoleEnum.emsp,
+            tariff_id,
+            auth_token=auth_token,
+            country_code=country_code,
+            party_id=party_id,
+            version=VersionNumber.v_2_2_1,
+        )
+
+        return OCPIResponse(
+            data=[],
+            **status.OCPI_1000_GENERIC_SUCESS_CODE,
+        )
+    logger.debug(f"Tariff with id `{tariff_id}` was not found.")
+    raise NotFoundOCPIError

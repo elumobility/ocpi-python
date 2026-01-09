@@ -1,12 +1,13 @@
 from uuid import uuid4
 
-from py_ocpi.core import enums
-from py_ocpi.modules.cdrs.v_2_3_0.enums import AuthMethod, CdrDimensionType
-from py_ocpi.modules.cdrs.v_2_3_0.schemas import TokenType
-from py_ocpi.modules.sessions.v_2_3_0.enums import SessionStatus
+from ocpi.core import enums
+from ocpi.modules.cdrs.v_2_3_0.enums import AuthMethod, CdrDimensionType
+from ocpi.modules.cdrs.v_2_3_0.schemas import TokenType
+from ocpi.modules.sessions.v_2_3_0.enums import SessionStatus
 from tests.test_modules.utils import (
     ENCODED_AUTH_TOKEN_V_2_3_0,
     ENCODED_RANDOM_AUTH_TOKEN_V_2_3_0,
+    ClientAuthenticator,
 )
 
 CPO_BASE_URL = "/ocpi/cpo/2.3.0/sessions/"

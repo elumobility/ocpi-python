@@ -13,7 +13,7 @@ what parameters could be received as `*args` and `**kwargs`.
 
     from motor import motor_asyncio
 
-    from py_ocpi.core.enums import ModuleID
+    from ocpi.core.enums import ModuleID
 
     client = motor_asyncio.AsyncIOMotorClient("db_url")
     db = client.ocpi_database

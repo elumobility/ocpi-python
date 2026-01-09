@@ -6,12 +6,12 @@ Version endpoints
 
 .. http:get:: versions
 
-    .. automodule:: py_ocpi.modules.versions.main.get_versions
+    .. automodule:: ocpi.modules.versions.main.get_versions
        :noindex:
 
 .. http:get:: 2.3.0/details
 
-    .. automodule:: py_ocpi.modules.versions.v_2_3_0.api.main.get_version_details
+    .. automodule:: ocpi.modules.versions.v_2_3_0.api.main.get_version_details
 
 
 API's for CPO role
@@ -23,19 +23,19 @@ Credentials module
 
 .. http:get:: cpo/2.3.0/credentials/
 
-    .. automodule:: py_ocpi.modules.credentials.v_2_3_0.api.cpo.get_credentials
+    .. automodule:: ocpi.modules.credentials.v_2_3_0.api.cpo.get_credentials
 
 .. http:post:: cpo/2.3.0/credentials/
 
-    .. automodule:: py_ocpi.modules.credentials.v_2_3_0.api.cpo.post_credentials
+    .. automodule:: ocpi.modules.credentials.v_2_3_0.api.cpo.post_credentials
 
 .. http:put:: cpo/2.3.0/credentials/
 
-    .. automodule:: py_ocpi.modules.credentials.v_2_3_0.api.cpo.update_credentials
+    .. automodule:: ocpi.modules.credentials.v_2_3_0.api.cpo.update_credentials
 
 .. http:delete:: cpo/2.3.0/credentials/
 
-    .. automodule:: py_ocpi.modules.credentials.v_2_3_0.api.cpo.remove_credentials
+    .. automodule:: ocpi.modules.credentials.v_2_3_0.api.cpo.remove_credentials
 
 
 Locations module
@@ -43,19 +43,19 @@ Locations module
 
 .. http:get:: cpo/2.3.0/locations/
 
-    .. automodule:: py_ocpi.modules.locations.v_2_3_0.api.cpo.get_locations
+    .. automodule:: ocpi.modules.locations.v_2_3_0.api.cpo.get_locations
 
 .. http:get:: cpo/2.3.0/locations/{location_id}
 
-    .. automodule:: py_ocpi.modules.locations.v_2_3_0.api.cpo.get_location
+    .. automodule:: ocpi.modules.locations.v_2_3_0.api.cpo.get_location
 
 .. http:get:: cpo/2.3.0/locations/{location_id}/{evse_uid}
 
-    .. automodule:: py_ocpi.modules.locations.v_2_3_0.api.cpo.get_evse
+    .. automodule:: ocpi.modules.locations.v_2_3_0.api.cpo.get_evse
 
 .. http:get:: cpo/2.3.0/locations/{location_id}/{evse_uid}/{connector_id}
 
-    .. automodule:: py_ocpi.modules.locations.v_2_3_0.api.cpo.get_connector
+    .. automodule:: ocpi.modules.locations.v_2_3_0.api.cpo.get_connector
 
 
 CDRs module
@@ -63,7 +63,7 @@ CDRs module
 
 .. http:get:: cpo/2.3.0/cdrs/
 
-    .. automodule:: py_ocpi.modules.cdrs.v_2_3_0.api.cpo.get_cdrs
+    .. automodule:: ocpi.modules.cdrs.v_2_3_0.api.cpo.get_cdrs
 
 
 Sessions module
@@ -71,7 +71,7 @@ Sessions module
 
 .. http:get:: cpo/2.3.0/sessions/
 
-    .. automodule:: py_ocpi.modules.sessions.v_2_3_0.api.cpo.get_sessions
+    .. automodule:: ocpi.modules.sessions.v_2_3_0.api.cpo.get_sessions
 
 
 Tokens module
@@ -79,15 +79,15 @@ Tokens module
 
 .. http:get:: cpo/2.3.0/tokens/{country_code}/{party_id}/{token_uid}
 
-    .. automodule:: py_ocpi.modules.tokens.v_2_3_0.api.cpo.get_token
+    .. automodule:: ocpi.modules.tokens.v_2_3_0.api.cpo.get_token
 
 .. http:put:: cpo/2.3.0/tokens/{country_code}/{party_id}/{token_uid}
 
-    .. automodule:: py_ocpi.modules.tokens.v_2_3_0.api.cpo.add_or_update_token
+    .. automodule:: ocpi.modules.tokens.v_2_3_0.api.cpo.add_or_update_token
 
 .. http:patch:: cpo/2.3.0/tokens/{country_code}/{party_id}/{token_uid}
 
-    .. automodule:: py_ocpi.modules.tokens.v_2_3_0.api.cpo.partial_update_token
+    .. automodule:: ocpi.modules.tokens.v_2_3_0.api.cpo.partial_update_token
 
 
 Tariffs module
@@ -95,7 +95,7 @@ Tariffs module
 
 .. http:get:: cpo/2.3.0/tariffs/
 
-    .. automodule:: py_ocpi.modules.tariffs.v_2_3_0.api.cpo.get_tariffs
+    .. automodule:: ocpi.modules.tariffs.v_2_3_0.api.cpo.get_tariffs
 
 
 Commands module
@@ -103,7 +103,7 @@ Commands module
 
 .. http:post:: cpo/2.3.0/commands/{command}
 
-    .. automodule:: py_ocpi.modules.commands.v_2_3_0.api.cpo.receive_command
+    .. automodule:: ocpi.modules.commands.v_2_3_0.api.cpo.receive_command
 
 
 Charging profiles module
@@ -111,15 +111,15 @@ Charging profiles module
 
 .. http:get:: cpo/2.3.0/chargingprofiles/{session_id}
 
-    .. automodule:: py_ocpi.modules.chargingprofiles.v_2_3_0.api.cpo.get_chargingprofile
+    .. automodule:: ocpi.modules.chargingprofiles.v_2_3_0.api.cpo.get_chargingprofile
 
 .. http:put:: cpo/2.3.0/chargingprofiles/{session_id}
 
-    .. automodule:: py_ocpi.modules.chargingprofiles.v_2_3_0.api.cpo.add_or_update_chargingprofile
+    .. automodule:: ocpi.modules.chargingprofiles.v_2_3_0.api.cpo.add_or_update_chargingprofile
 
 .. http:delete:: cpo/2.3.0/chargingprofiles/{session_id}
 
-    .. automodule:: py_ocpi.modules.chargingprofiles.v_2_3_0.api.cpo.delete_chargingprofile
+    .. automodule:: ocpi.modules.chargingprofiles.v_2_3_0.api.cpo.delete_chargingprofile
 
 
 Hub client info module
@@ -127,11 +127,11 @@ Hub client info module
 
 .. http:get:: cpo/2.3.0/clientinfo/{country_code}/{party_id}
 
-    .. automodule:: py_ocpi.modules.hubclientinfo.v_2_3_0.api.cpo.get_hubclientinfo
+    .. automodule:: ocpi.modules.hubclientinfo.v_2_3_0.api.cpo.get_hubclientinfo
 
 .. http:put:: cpo/2.3.0/clientinfo/{country_code}/{party_id}
 
-    .. automodule:: py_ocpi.modules.hubclientinfo.v_2_3_0.api.cpo.add_or_update_clienthubinfo
+    .. automodule:: ocpi.modules.hubclientinfo.v_2_3_0.api.cpo.add_or_update_clienthubinfo
 
 
 Payments module
@@ -139,15 +139,15 @@ Payments module
 
 .. http:get:: cpo/2.3.0/payments/terminals/{terminal_id}
 
-    .. automodule:: py_ocpi.modules.payments.v_2_3_0.api.cpo.get_terminal
+    .. automodule:: ocpi.modules.payments.v_2_3_0.api.cpo.get_terminal
 
 .. http:put:: cpo/2.3.0/payments/terminals/{terminal_id}
 
-    .. automodule:: py_ocpi.modules.payments.v_2_3_0.api.cpo.put_terminal
+    .. automodule:: ocpi.modules.payments.v_2_3_0.api.cpo.put_terminal
 
 .. http:patch:: cpo/2.3.0/payments/terminals/{terminal_id}
 
-    .. automodule:: py_ocpi.modules.payments.v_2_3_0.api.cpo.patch_terminal
+    .. automodule:: ocpi.modules.payments.v_2_3_0.api.cpo.patch_terminal
 
 
 
@@ -160,19 +160,19 @@ Credentials module
 
 .. http:get:: emsp/2.3.0/credentials/
 
-    .. automodule:: py_ocpi.modules.credentials.v_2_3_0.api.emsp.get_credentials
+    .. automodule:: ocpi.modules.credentials.v_2_3_0.api.emsp.get_credentials
 
 .. http:post:: emsp/2.3.0/credentials/
 
-    .. automodule:: py_ocpi.modules.credentials.v_2_3_0.api.emsp.post_credentials
+    .. automodule:: ocpi.modules.credentials.v_2_3_0.api.emsp.post_credentials
 
 .. http:put:: emsp/2.3.0/credentials/
 
-    .. automodule:: py_ocpi.modules.credentials.v_2_3_0.api.emsp.update_credentials
+    .. automodule:: ocpi.modules.credentials.v_2_3_0.api.emsp.update_credentials
 
 .. http:delete:: emsp/2.3.0/credentials/
 
-    .. automodule:: py_ocpi.modules.credentials.v_2_3_0.api.emsp.remove_credentials
+    .. automodule:: ocpi.modules.credentials.v_2_3_0.api.emsp.remove_credentials
 
 
 Locations module
@@ -180,42 +180,42 @@ Locations module
 
 .. http:get:: emsp/2.3.0/locations/{country_code}/{party_id}/{location_id}
 
-    .. automodule:: py_ocpi.modules.locations.v_2_3_0.api.emsp.get_location
+    .. automodule:: ocpi.modules.locations.v_2_3_0.api.emsp.get_location
 
 .. http:get:: emsp/2.3.0/locations/{country_code}/{party_id}/{location_id}/{evse_uid}
 
-    .. automodule:: py_ocpi.modules.locations.v_2_3_0.api.emsp.get_evse
+    .. automodule:: ocpi.modules.locations.v_2_3_0.api.emsp.get_evse
 
 .. http:get:: emsp/2.3.0/locations/{country_code}/{party_id}/{location_id}/{evse_uid}/{connector_id}
 
-    .. automodule:: py_ocpi.modules.locations.v_2_3_0.api.emsp.get_connector
+    .. automodule:: ocpi.modules.locations.v_2_3_0.api.emsp.get_connector
 
 
 
 .. http:put:: emsp/2.3.0/locations/{country_code}/{party_id}/{location_id}
 
-    .. automodule:: py_ocpi.modules.locations.v_2_3_0.api.emsp.add_or_update_location
+    .. automodule:: ocpi.modules.locations.v_2_3_0.api.emsp.add_or_update_location
 
 .. http:put:: emsp/2.3.0/locations/{country_code}/{party_id}/{location_id}/{evse_uid}
 
-    .. automodule:: py_ocpi.modules.locations.v_2_3_0.api.emsp.add_or_update_evse
+    .. automodule:: ocpi.modules.locations.v_2_3_0.api.emsp.add_or_update_evse
 
 .. http:put:: emsp/2.3.0/locations/{country_code}/{party_id}/{location_id}/{evse_uid}/{connector_id}
 
-    .. automodule:: py_ocpi.modules.locations.v_2_3_0.api.emsp.add_or_update_connector
+    .. automodule:: ocpi.modules.locations.v_2_3_0.api.emsp.add_or_update_connector
 
 
 .. http:patch:: emsp/2.3.0/locations/{country_code}/{party_id}/{location_id}
 
-    .. automodule:: py_ocpi.modules.locations.v_2_3_0.api.emsp.partial_update_location
+    .. automodule:: ocpi.modules.locations.v_2_3_0.api.emsp.partial_update_location
 
 .. http:patch:: emsp/2.3.0/locations/{country_code}/{party_id}/{location_id}/{evse_uid}
 
-    .. automodule:: py_ocpi.modules.locations.v_2_3_0.api.emsp.partial_update_evse
+    .. automodule:: ocpi.modules.locations.v_2_3_0.api.emsp.partial_update_evse
 
 .. http:patch:: emsp/2.3.0/locations/{country_code}/{party_id}/{location_id}/{evse_uid}/{connector_id}
 
-    .. automodule:: py_ocpi.modules.locations.v_2_3_0.api.emsp.partial_update_connector
+    .. automodule:: ocpi.modules.locations.v_2_3_0.api.emsp.partial_update_connector
 
 
 CDRs module
@@ -223,11 +223,11 @@ CDRs module
 
 .. http:get:: emsp/2.3.0/cdrs/{cdr_id}
 
-    .. automodule:: py_ocpi.modules.cdrs.v_2_3_0.api.emsp.get_cdr
+    .. automodule:: ocpi.modules.cdrs.v_2_3_0.api.emsp.get_cdr
 
 .. http:post:: emsp/2.3.0/cdrs/
 
-    .. automodule:: py_ocpi.modules.cdrs.v_2_3_0.api.emsp.add_cdr
+    .. automodule:: ocpi.modules.cdrs.v_2_3_0.api.emsp.add_cdr
 
 
 Sessions module
@@ -235,15 +235,15 @@ Sessions module
 
 .. http:get:: emsp/2.3.0/sessions/{country_code}/{party_id}/{session_id}
 
-    .. automodule:: py_ocpi.modules.sessions.v_2_3_0.api.emsp.get_session
+    .. automodule:: ocpi.modules.sessions.v_2_3_0.api.emsp.get_session
 
 .. http:put:: emsp/2.3.0/sessions/{country_code}/{party_id}/{session_id}
 
-    .. automodule:: py_ocpi.modules.sessions.v_2_3_0.api.emsp.add_or_update_session
+    .. automodule:: ocpi.modules.sessions.v_2_3_0.api.emsp.add_or_update_session
 
 .. http:patch:: emsp/2.3.0/sessions/{country_code}/{party_id}/{session_id}
 
-    .. automodule:: py_ocpi.modules.sessions.v_2_3_0.api.emsp.partial_update_session
+    .. automodule:: ocpi.modules.sessions.v_2_3_0.api.emsp.partial_update_session
 
 
 Tokens module
@@ -251,11 +251,11 @@ Tokens module
 
 .. http:get:: emsp/2.3.0/tokens/
 
-    .. automodule:: py_ocpi.modules.tokens.v_2_3_0.api.emsp.get_tokens
+    .. automodule:: ocpi.modules.tokens.v_2_3_0.api.emsp.get_tokens
 
 .. http:post:: emsp/2.3.0/tokens/{token_uid}/authorize
 
-    .. automodule:: py_ocpi.modules.tokens.v_2_3_0.api.emsp.authorize_token
+    .. automodule:: ocpi.modules.tokens.v_2_3_0.api.emsp.authorize_token
 
 
 Tariffs module
@@ -263,15 +263,15 @@ Tariffs module
 
 .. http:get:: emsp/2.3.0/tariffs/{country_code}/{party_id}/{tariff_id}
 
-    .. automodule:: py_ocpi.modules.tariffs.v_2_3_0.api.emsp.get_tariff
+    .. automodule:: ocpi.modules.tariffs.v_2_3_0.api.emsp.get_tariff
 
 .. http:put:: emsp/2.3.0/tariffs/{country_code}/{party_id}/{tariff_id}
 
-    .. automodule:: py_ocpi.modules.tariffs.v_2_3_0.api.emsp.add_or_update_tariff
+    .. automodule:: ocpi.modules.tariffs.v_2_3_0.api.emsp.add_or_update_tariff
 
 .. http:delete:: emsp/2.3.0/tariffs/{country_code}/{party_id}/{tariff_id}
 
-    .. automodule:: py_ocpi.modules.tariffs.v_2_3_0.api.emsp.delete_tariff
+    .. automodule:: ocpi.modules.tariffs.v_2_3_0.api.emsp.delete_tariff
 
 
 Commands module
@@ -279,7 +279,7 @@ Commands module
 
 .. http:post:: emsp/2.3.0/commands/{uid}
 
-    .. automodule:: py_ocpi.modules.commands.v_2_3_0.api.emsp.receive_command_result
+    .. automodule:: ocpi.modules.commands.v_2_3_0.api.emsp.receive_command_result
 
 
 Charging profiles module
@@ -287,11 +287,11 @@ Charging profiles module
 
 .. http:post:: emsp/2.3.0/chargingprofiles/
 
-    .. automodule:: py_ocpi.modules.chargingprofiles.v_2_3_0.api.emsp.receive_chargingprofile_command
+    .. automodule:: ocpi.modules.chargingprofiles.v_2_3_0.api.emsp.receive_chargingprofile_command
 
 .. http:put:: emsp/2.3.0/chargingprofiles/{session_id}
 
-    .. automodule:: py_ocpi.modules.chargingprofiles.v_2_3_0.api.emsp.add_or_update_chargingprofile
+    .. automodule:: ocpi.modules.chargingprofiles.v_2_3_0.api.emsp.add_or_update_chargingprofile
 
 
 Hub client info module
@@ -299,11 +299,11 @@ Hub client info module
 
 .. http:get:: emsp/2.3.0/clientinfo/{country_code}/{party_id}
 
-    .. automodule:: py_ocpi.modules.hubclientinfo.v_2_3_0.api.emsp.get_hubclientinfo
+    .. automodule:: ocpi.modules.hubclientinfo.v_2_3_0.api.emsp.get_hubclientinfo
 
 .. http:put:: emsp/2.3.0/clientinfo/{country_code}/{party_id}
 
-    .. automodule:: py_ocpi.modules.hubclientinfo.v_2_3_0.api.emsp.add_or_update_clienthubinfo
+    .. automodule:: ocpi.modules.hubclientinfo.v_2_3_0.api.emsp.add_or_update_clienthubinfo
 
 
 
@@ -315,36 +315,36 @@ Payments module
 
 .. http:get:: ptp/2.3.0/payments/terminals
 
-    .. automodule:: py_ocpi.modules.payments.v_2_3_0.api.ptp.get_terminals
+    .. automodule:: ocpi.modules.payments.v_2_3_0.api.ptp.get_terminals
 
 .. http:get:: ptp/2.3.0/payments/terminals/{terminal_id}
 
-    .. automodule:: py_ocpi.modules.payments.v_2_3_0.api.ptp.get_terminal
+    .. automodule:: ocpi.modules.payments.v_2_3_0.api.ptp.get_terminal
 
 .. http:post:: ptp/2.3.0/payments/terminals/activate
 
-    .. automodule:: py_ocpi.modules.payments.v_2_3_0.api.ptp.activate_terminal
+    .. automodule:: ocpi.modules.payments.v_2_3_0.api.ptp.activate_terminal
 
 .. http:post:: ptp/2.3.0/payments/terminals/{terminal_id}/deactivate
 
-    .. automodule:: py_ocpi.modules.payments.v_2_3_0.api.ptp.deactivate_terminal
+    .. automodule:: ocpi.modules.payments.v_2_3_0.api.ptp.deactivate_terminal
 
 .. http:put:: ptp/2.3.0/payments/terminals/{terminal_id}
 
-    .. automodule:: py_ocpi.modules.payments.v_2_3_0.api.ptp.put_terminal
+    .. automodule:: ocpi.modules.payments.v_2_3_0.api.ptp.put_terminal
 
 
 .. http:get:: ptp/2.3.0/payments/financial-advice-confirmations
 
-    .. automodule:: py_ocpi.modules.payments.v_2_3_0.api.ptp.get_financial_advice_confirmations
+    .. automodule:: ocpi.modules.payments.v_2_3_0.api.ptp.get_financial_advice_confirmations
 
 .. http:get:: ptp/2.3.0/payments/financial-advice-confirmations/{confirmation_id}
 
-    .. automodule:: py_ocpi.modules.payments.v_2_3_0.api.ptp.get_financial_advice_confirmation
+    .. automodule:: ocpi.modules.payments.v_2_3_0.api.ptp.get_financial_advice_confirmation
 
 .. http:put:: ptp/2.3.0/payments/financial-advice-confirmations/{confirmation_id}
 
-    .. automodule:: py_ocpi.modules.payments.v_2_3_0.api.ptp.put_financial_advice_confirmation
+    .. automodule:: ocpi.modules.payments.v_2_3_0.api.ptp.put_financial_advice_confirmation
 
 
 
@@ -354,73 +354,73 @@ Schemas
 Credentials module
 ^^^^^^^^^^^^^^^^^^
 
-    .. automodule:: py_ocpi.modules.credentials.v_2_3_0.schemas
+    .. automodule:: ocpi.modules.credentials.v_2_3_0.schemas
        :members:
 
 
 Locations module
 ^^^^^^^^^^^^^^^^
 
-    .. automodule:: py_ocpi.modules.locations.v_2_3_0.schemas
+    .. automodule:: ocpi.modules.locations.v_2_3_0.schemas
        :members:
 
-    .. automodule:: py_ocpi.modules.locations.schemas
+    .. automodule:: ocpi.modules.locations.schemas
        :members:
 
 
 CDRs module
 ^^^^^^^^^^^
 
-    .. automodule:: py_ocpi.modules.cdrs.v_2_3_0.schemas
+    .. automodule:: ocpi.modules.cdrs.v_2_3_0.schemas
        :members:
 
 
 Sessions module
 ^^^^^^^^^^^^^^^
 
-    .. automodule:: py_ocpi.modules.sessions.v_2_3_0.schemas
+    .. automodule:: ocpi.modules.sessions.v_2_3_0.schemas
        :members:
 
 
 Tokens module
 ^^^^^^^^^^^^^
 
-    .. automodule:: py_ocpi.modules.tokens.v_2_3_0.schemas
+    .. automodule:: ocpi.modules.tokens.v_2_3_0.schemas
        :members:
 
 
 Tariffs module
 ^^^^^^^^^^^^^^
 
-    .. automodule:: py_ocpi.modules.tariffs.v_2_3_0.schemas
+    .. automodule:: ocpi.modules.tariffs.v_2_3_0.schemas
        :members:
 
 
 Commands module
 ^^^^^^^^^^^^^^^
 
-    .. automodule:: py_ocpi.modules.commands.v_2_3_0.schemas
+    .. automodule:: ocpi.modules.commands.v_2_3_0.schemas
        :members:
 
 
 Charging profiles module
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-    .. automodule:: py_ocpi.modules.chargingprofiles.v_2_3_0.schemas
+    .. automodule:: ocpi.modules.chargingprofiles.v_2_3_0.schemas
        :members:
 
 
 Hub client info module
 ^^^^^^^^^^^^^^^^^^^^^^
 
-    .. automodule:: py_ocpi.modules.hubclientinfo.v_2_3_0.schemas
+    .. automodule:: ocpi.modules.hubclientinfo.v_2_3_0.schemas
        :members:
 
 
 Payments module
 ^^^^^^^^^^^^^^^
 
-    .. automodule:: py_ocpi.modules.payments.v_2_3_0.schemas
+    .. automodule:: ocpi.modules.payments.v_2_3_0.schemas
        :members:
 
 
@@ -431,7 +431,7 @@ Enums
 Credentials module
 ^^^^^^^^^^^^^^^^^^
 
-    .. automodule:: py_ocpi.modules.credentials.v_2_3_0.enums
+    .. automodule:: ocpi.modules.credentials.v_2_3_0.enums
        :members:
        :undoc-members:
 
@@ -439,11 +439,11 @@ Credentials module
 Locations module
 ^^^^^^^^^^^^^^^^
 
-    .. automodule:: py_ocpi.modules.locations.v_2_3_0.enums
+    .. automodule:: ocpi.modules.locations.v_2_3_0.enums
        :members:
        :undoc-members:
 
-    .. automodule:: py_ocpi.modules.locations.enums
+    .. automodule:: ocpi.modules.locations.enums
        :members:
        :undoc-members:
        :noindex:
@@ -452,7 +452,7 @@ Locations module
 CDRs module
 ^^^^^^^^^^^
 
-    .. automodule:: py_ocpi.modules.cdrs.v_2_3_0.enums
+    .. automodule:: ocpi.modules.cdrs.v_2_3_0.enums
        :members:
        :undoc-members:
 
@@ -460,7 +460,7 @@ CDRs module
 Sessions module
 ^^^^^^^^^^^^^^^
 
-    .. automodule:: py_ocpi.modules.sessions.v_2_3_0.enums
+    .. automodule:: ocpi.modules.sessions.v_2_3_0.enums
        :members:
        :undoc-members:
 
@@ -468,7 +468,7 @@ Sessions module
 Tokens module
 ^^^^^^^^^^^^^
 
-    .. automodule:: py_ocpi.modules.tokens.v_2_3_0.enums
+    .. automodule:: ocpi.modules.tokens.v_2_3_0.enums
        :members:
        :undoc-members:
 
@@ -476,11 +476,11 @@ Tokens module
 Tariffs module
 ^^^^^^^^^^^^^^
 
-    .. automodule:: py_ocpi.modules.tariffs.v_2_3_0.enums
+    .. automodule:: ocpi.modules.tariffs.v_2_3_0.enums
        :members:
        :undoc-members:
 
-    .. automodule:: py_ocpi.modules.tariffs.enums
+    .. automodule:: ocpi.modules.tariffs.enums
        :members:
        :undoc-members:
        :noindex:
@@ -489,7 +489,7 @@ Tariffs module
 Commands module
 ^^^^^^^^^^^^^^^
 
-    .. automodule:: py_ocpi.modules.commands.v_2_3_0.enums
+    .. automodule:: ocpi.modules.commands.v_2_3_0.enums
        :members:
        :undoc-members:
 
@@ -497,7 +497,7 @@ Commands module
 Hub client info module
 ^^^^^^^^^^^^^^^^^^^^^^
 
-    .. automodule:: py_ocpi.modules.hubclientinfo.v_2_3_0.enums
+    .. automodule:: ocpi.modules.hubclientinfo.v_2_3_0.enums
        :members:
        :undoc-members:
 
@@ -505,7 +505,7 @@ Hub client info module
 Charging profile module
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-    .. automodule:: py_ocpi.modules.chargingprofiles.v_2_3_0.enums
+    .. automodule:: ocpi.modules.chargingprofiles.v_2_3_0.enums
        :members:
        :undoc-members:
 
@@ -513,6 +513,6 @@ Charging profile module
 Payments module
 ^^^^^^^^^^^^^^^
 
-    .. automodule:: py_ocpi.modules.payments.v_2_3_0.enums
+    .. automodule:: ocpi.modules.payments.v_2_3_0.enums
        :members:
        :undoc-members:

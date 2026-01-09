@@ -98,7 +98,7 @@ uv run pytest
 Or with coverage:
 
 ```bash
-uv run pytest --cov=py_ocpi --cov-report=term-missing
+uv run pytest --cov=ocpi --cov-report=term-missing
 ```
 
 ## Building Documentation
@@ -128,6 +128,6 @@ uv run python -m sphinx -b html docs/source docs/build/html
 2. Make your changes
 3. Run tests: `uv run pytest`
 4. Run linting: `uv run ruff check .`
-5. Run type checking: `uv run mypy py_ocpi`
+5. Run type checking: `uv run mypy ocpi`
 6. Commit your changes (pre-commit hooks will run automatically)
 7. Push and create a Pull Request

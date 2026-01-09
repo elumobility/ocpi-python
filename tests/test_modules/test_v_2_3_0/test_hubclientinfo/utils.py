@@ -1,8 +1,9 @@
-from py_ocpi.core import enums
-from py_ocpi.modules.hubclientinfo.v_2_3_0.enums import ConnectionStatus
+from ocpi.core import enums
+from ocpi.modules.hubclientinfo.v_2_3_0.enums import ConnectionStatus
 from tests.test_modules.utils import (
     ENCODED_AUTH_TOKEN_V_2_3_0,
     ENCODED_RANDOM_AUTH_TOKEN_V_2_3_0,
+    ClientAuthenticator,
 )
 
 CPO_BASE_URL = "/ocpi/cpo/2.3.0/clientinfo/"
@@ -11,8 +12,8 @@ AUTH_HEADERS = {"Authorization": f"Token {ENCODED_AUTH_TOKEN_V_2_3_0}"}
 WRONG_AUTH_HEADERS = {"Authorization": f"Token {ENCODED_RANDOM_AUTH_TOKEN_V_2_3_0}"}
 
 HUB_CLIENT_INFO = {
-    "party_id": "AAA",
-    "country_code": "US",
+    "party_id": "aaa",  # CiString normalizes to lowercase
+    "country_code": "us",  # CiString normalizes to lowercase
     "role": enums.RoleEnum.cpo,
     "status": ConnectionStatus.connected,
     "last_updated": "2022-01-02 00:00:00+00:00",

@@ -4,15 +4,15 @@ from uuid import uuid4
 import pytest
 from fastapi.testclient import TestClient
 
-from py_ocpi import get_application
-from py_ocpi.core import enums
-from py_ocpi.core.exceptions import NotFoundOCPIError
-from py_ocpi.modules.commands.v_2_3_0.enums import (
+from ocpi import get_application
+from ocpi.core import enums
+from ocpi.core.exceptions import NotFoundOCPIError
+from ocpi.modules.commands.v_2_3_0.enums import (
     CommandResultType,
     CommandType,
 )
-from py_ocpi.modules.tokens.v_2_3_0.enums import TokenType, WhitelistType
-from py_ocpi.modules.versions.enums import VersionNumber
+from ocpi.modules.tokens.v_2_3_0.enums import TokenType, WhitelistType
+from ocpi.modules.versions.enums import VersionNumber
 
 from .utils import (
     AUTH_HEADERS,

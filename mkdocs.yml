@@ -1,0 +1,103 @@
+site_name: OCPI Python
+site_description: A modern Python implementation of the Open Charge Point Interface (OCPI) protocol
+site_author: ELU Mobility
+site_url: https://elumobility.github.io/ocpi-python/
+
+repo_name: elumobility/ocpi-python
+repo_url: https://github.com/elumobility/ocpi-python
+edit_uri: edit/main/docs/
+
+copyright: Copyright &copy; 2026 ELU Mobility
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.annotate
+    - content.code.copy
+  icon:
+    repo: fontawesome/brands/github
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - admonition
+  - pymdownx.details
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [ocpi]
+          options:
+            show_source: true
+            show_root_heading: true
+            show_root_toc_entry: true
+            show_root_full_path: false
+            show_object_full_path: false
+            show_category_heading: true
+            show_if_no_docstring: false
+            separate_signature: true
+            line_length: 88
+
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - Quick Start: quickstart.md
+  - Tutorials:
+    - Tutorials Overview: tutorials/index.md
+    - Managing Locations: tutorials/locations.md
+    - Handling Sessions: tutorials/sessions.md
+    - Token Authorization: tutorials/tokens.md
+    - CDR Generation: tutorials/cdrs.md
+    - Commands: tutorials/commands.md
+    - Charging Profiles: tutorials/charging_profiles.md
+    - CRUD Operations: tutorials/crud.md
+    - Database Interface: tutorials/db_interface.md
+    - Push Notifications: tutorials/push.md
+  - API Reference:
+    - API Overview: api/index.md
+    - OCPI 2.3.0: api/v_2_3_0.md
+    - OCPI 2.2.1: api/v_2_2_1.md
+    - OCPI 2.1.1: api/v_2_1_1.md
+  - Contributing: contributing.md
+  - Changelog: changelog.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/elumobility/ocpi-python
+  version:
+    provider: mike

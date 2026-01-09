@@ -1,7 +1,7 @@
 from uuid import uuid4
 
-from py_ocpi.core.authentication.authenticator import Authenticator
-from py_ocpi.core.utils import encode_string_base64
+from ocpi.core.authentication.authenticator import Authenticator
+from ocpi.core.utils import encode_string_base64
 
 AUTH_TOKEN = str(uuid4())
 AUTH_TOKEN_A = str(uuid4())

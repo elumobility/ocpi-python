@@ -42,9 +42,9 @@ and this project adheres to [Calendar Versioning](https://calver.org/) (YYYY.M.P
 
 ### Changed
 
-- `py_ocpi/core/compat.py` - Simplified to Pydantic v2 only
-- `py_ocpi/core/config.py` - Uses `pydantic-settings` v2 with `SettingsConfigDict`
-- `py_ocpi/core/data_types.py` - All custom types use `__get_pydantic_core_schema__`
+- `ocpi/core/compat.py` - Simplified to Pydantic v2 only
+- `ocpi/core/config.py` - Uses `pydantic-settings` v2 with `SettingsConfigDict`
+- `ocpi/core/data_types.py` - All custom types use `__get_pydantic_core_schema__`
 - `pyproject.toml` - Updated dependencies:
   - `pydantic>=2.0.0,<3.0.0`
   - `pydantic-settings>=2.0.0`

@@ -40,9 +40,9 @@ main.py
 
 .. code-block:: python
 
-    from py_ocpi import get_application
-    from py_ocpi.core.enums import RoleEnum, ModuleID
-    from py_ocpi.modules.versions.enums import VersionNumber
+    from ocpi import get_application
+    from ocpi.core.enums import RoleEnum, ModuleID
+    from ocpi.modules.versions.enums import VersionNumber
 
     from auth import ClientAuthenticator
     from crud import Crud

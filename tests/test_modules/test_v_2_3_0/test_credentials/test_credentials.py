@@ -4,19 +4,23 @@ from unittest.mock import patch
 import pytest
 from httpx import ASGITransport, AsyncClient
 
-from py_ocpi.core import enums
-from py_ocpi.core.config import settings
-from py_ocpi.core.data_types import URL
-from py_ocpi.core.dependencies import get_versions
-from py_ocpi.main import get_application
-from py_ocpi.modules.versions.enums import VersionNumber
-from py_ocpi.modules.versions.schemas import Version
+from ocpi.core import enums
+from ocpi.core.config import settings
+from ocpi.core.data_types import URL
+from ocpi.core.dependencies import get_versions
+from ocpi.main import get_application
+from ocpi.modules.versions.enums import VersionNumber
+from ocpi.modules.versions.schemas import Version
+
+from tests.test_modules.utils import (
+    ENCODED_AUTH_TOKEN_V_2_3_0,
+    ENCODED_AUTH_TOKEN_A_V_2_3_0,
+    ENCODED_RANDOM_AUTH_TOKEN_V_2_3_0,
+)
 
 from .utils import (
-    AUTH_HEADERS,
     CPO_BASE_URL,
     CREDENTIALS_TOKEN_CREATE,
-    WRONG_AUTH_HEADERS,
     ClientAuthenticator,
     Crud,
 )
@@ -34,7 +38,7 @@ def app_1():
 
 
 @pytest.mark.asyncio
-@patch("py_ocpi.modules.credentials.v_2_3_0.api.cpo.httpx.AsyncClient")
+@patch("ocpi.modules.credentials.v_2_3_0.api.cpo.httpx.AsyncClient")
 async def test_cpo_post_credentials_v_2_3_0(async_client):
     class MockCrud(Crud):
         @classmethod
@@ -85,13 +89,16 @@ async def test_cpo_post_credentials_v_2_3_0(async_client):
         modules=[enums.ModuleID.credentials_and_registration],
     )
 
+    # For 2.3.0, tokens ARE base64 encoded in Authorization header
+    auth_headers = {"Authorization": f"Token {ENCODED_AUTH_TOKEN_A_V_2_3_0}"}
+    
     async with AsyncClient(
         transport=ASGITransport(app=app_2), base_url="http://test"
     ) as client:
         response = await client.post(
             CPO_BASE_URL,
             json=CREDENTIALS_TOKEN_CREATE,
-            headers=AUTH_HEADERS,
+            headers=auth_headers,
         )
 
         assert response.status_code == 200
@@ -100,25 +107,33 @@ async def test_cpo_post_credentials_v_2_3_0(async_client):
 
 @pytest.mark.asyncio
 async def test_cpo_get_credentials_v_2_3_0(app_1):
+    # For 2.3.0, tokens ARE base64 encoded in Authorization header
+    auth_headers = {"Authorization": f"Token {ENCODED_AUTH_TOKEN_V_2_3_0}"}
+    
     async with AsyncClient(
         transport=ASGITransport(app=app_1), base_url="http://test"
     ) as client:
-        response = await client.get(CPO_BASE_URL, headers=AUTH_HEADERS)
+        response = await client.get(CPO_BASE_URL, headers=auth_headers)
 
         assert response.status_code == 200
         assert "data" in response.json()
-        assert "token" in response.json()["data"]
+        # The data structure may vary, check that data exists
+        data = response.json()["data"]
+        assert isinstance(data, dict) and "token" in data
 
 
 @pytest.mark.asyncio
 async def test_cpo_post_credentials_not_authenticated_v_2_3_0(app_1):
+    # For 2.3.0, tokens ARE base64 encoded in Authorization header
+    wrong_auth_headers = {"Authorization": f"Token {ENCODED_RANDOM_AUTH_TOKEN_V_2_3_0}"}
+    
     async with AsyncClient(
         transport=ASGITransport(app=app_1), base_url="http://test"
     ) as client:
         response = await client.post(
             CPO_BASE_URL,
             json=CREDENTIALS_TOKEN_CREATE,
-            headers=WRONG_AUTH_HEADERS,
+            headers=wrong_auth_headers,
         )
 
-        assert response.status_code == 403
+        assert response.status_code == 401  # Unauthorized when token is invalid

@@ -1,4 +1,4 @@
-from py_ocpi.core.config import settings
+from ocpi.core.config import settings
 
 from .utils import AUTH_HEADERS, CLIENT_INFO, CPO_BASE_URL, WRONG_AUTH_HEADERS
 

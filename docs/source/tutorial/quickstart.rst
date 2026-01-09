@@ -118,8 +118,8 @@ db.py
 
     from motor import motor_asyncio
 
-    from py_ocpi.core.config import logger
-    from py_ocpi.core.enums import ModuleID
+    from ocpi.core.config import logger
+    from ocpi.core.enums import ModuleID
 
     db_url = f"mongodb+srv://mongo-username:mongo-password@mongo-host"
     client = motor_asyncio.AsyncIOMotorClient(db_url)
@@ -228,9 +228,9 @@ crud.py
 
     from typing import Any, Tuple
 
-    from py_ocpi.core.config import logger
-    from py_ocpi.core.crud import Crud
-    from py_ocpi.core.enums import ModuleID, RoleEnum, Action
+    from ocpi.core.config import logger
+    from ocpi.core.crud import Crud
+    from ocpi.core.enums import ModuleID, RoleEnum, Action
 
     from .db import DbInterface
 
@@ -283,7 +283,7 @@ auth.py
 
     from typing import List
 
-    from py_ocpi.core.authentication.authenticator import Authenticator
+    from ocpi.core.authentication.authenticator import Authenticator
 
 
     class ClientAuthenticator(Authenticator):
@@ -305,9 +305,9 @@ main.py
 
 .. code-block:: python
 
-    from py_ocpi import get_application
-    from py_ocpi.core.enums import RoleEnum, ModuleID
-    from py_ocpi.modules.versions.enums import VersionNumber
+    from ocpi import get_application
+    from ocpi.core.enums import RoleEnum, ModuleID
+    from ocpi.modules.versions.enums import VersionNumber
 
     from .auth import ClientAuthenticator
     from .crud import AppCrud

@@ -1,0 +1,17 @@
+{
+  "charging_profile": {
+    "start_date_time": "2024-01-01T10:00:00Z",
+    "charging_rate_unit": "A",
+    "charging_schedule": {
+      "start_schedule": "2024-01-01T10:00:00Z",
+      "charging_rate_unit": "A",
+      "charging_periods": [
+        {
+          "start_period": 0,
+          "limit": 16.0
+        }
+      ]
+    }
+  },
+  "response_url": "https://example.com/callback"
+}

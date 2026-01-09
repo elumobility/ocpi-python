@@ -1,0 +1,104 @@
+from fastapi import APIRouter, Depends, Request, Response
+
+from ocpi.core import status
+from ocpi.core.adapter import Adapter
+from ocpi.core.authentication.verifier import AuthorizationVerifier
+from ocpi.core.config import logger, settings
+from ocpi.core.crud import Crud
+from ocpi.core.data_types import CiString
+from ocpi.core.dependencies import get_adapter, get_crud
+from ocpi.core.enums import ModuleID, RoleEnum
+from ocpi.core.exceptions import NotFoundOCPIError
+from ocpi.core.schemas import OCPIResponse
+from ocpi.core.utils import get_auth_token
+from ocpi.modules.cdrs.v_2_3_0.schemas import Cdr
+from ocpi.modules.versions.enums import VersionNumber
+
+router = APIRouter(
+    prefix="/cdrs",
+    dependencies=[Depends(AuthorizationVerifier(VersionNumber.v_2_3_0))],
+)
+
+
+@router.get("/{cdr_id}", response_model=OCPIResponse)
+async def get_cdr(
+    request: Request,
+    cdr_id: CiString(36),  # type: ignore
+    crud: Crud = Depends(get_crud),
+    adapter: Adapter = Depends(get_adapter),
+):
+    """
+    Get CDR by ID.
+
+    Retrieves a Charge Detail Record (CDR) based on the specified ID.
+
+    **Path parameters:**
+        - cdr_id (str): The ID of the CDR to retrieve (36 characters).
+
+    **Returns:**
+        The OCPIResponse containing the CDR data.
+
+    **Raises:**
+        NotFoundOCPIError: If the CDR is not found.
+    """
+    logger.info(f"Received request to get cdr with id - `{cdr_id}`.")
+    auth_token = get_auth_token(request)
+
+    data = await crud.get(
+        ModuleID.cdrs,
+        RoleEnum.emsp,
+        cdr_id,
+        auth_token=auth_token,
+        version=VersionNumber.v_2_3_0,
+    )
+    if data:
+        return OCPIResponse(
+            data=[adapter.cdr_adapter(data, VersionNumber.v_2_3_0).model_dump()],
+            **status.OCPI_1000_GENERIC_SUCESS_CODE,
+        )
+    logger.debug(f"CDR with id `{cdr_id}` was not found.")
+    raise NotFoundOCPIError
+
+
+@router.post("/", response_model=OCPIResponse)
+async def add_cdr(
+    request: Request,
+    response: Response,
+    cdr: Cdr,
+    crud: Crud = Depends(get_crud),
+    adapter: Adapter = Depends(get_adapter),
+):
+    """
+    Add CDR.
+
+    Creates a new Charge Detail Record (CDR) based on the specified parameters.
+
+    **Request body:**
+        cdr (Cdr): The CDR object.
+
+    **Returns:**
+        The OCPIResponse containing the created CDR data.
+    """
+    logger.info("Received request to create cdr.")
+    logger.debug(f"CDR data to create - {cdr.model_dump()}")
+    auth_token = get_auth_token(request)
+
+    data = await crud.create(
+        ModuleID.cdrs,
+        RoleEnum.emsp,
+        cdr.model_dump(),
+        auth_token=auth_token,
+        version=VersionNumber.v_2_3_0,
+    )
+
+    cdr_data = adapter.cdr_adapter(data, VersionNumber.v_2_3_0)
+    cdr_url = (
+        f"https://{settings.OCPI_HOST}/{settings.OCPI_PREFIX}/emsp"
+        f"/{VersionNumber.v_2_3_0}/{ModuleID.cdrs}/{cdr_data.id}"
+    )
+    response.headers.append("Location", cdr_url)
+
+    return OCPIResponse(
+        data=[cdr_data.model_dump()],
+        **status.OCPI_1000_GENERIC_SUCESS_CODE,
+    )

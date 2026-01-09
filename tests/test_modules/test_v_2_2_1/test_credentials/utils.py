@@ -1,6 +1,6 @@
 import functools
 
-from py_ocpi.core import enums
+from ocpi.core import enums
 from tests.test_modules.utils import (
     AUTH_TOKEN_A_V_2_2_1,
     ENCODED_AUTH_TOKEN,

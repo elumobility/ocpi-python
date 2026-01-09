@@ -9,12 +9,12 @@ import sys
 current_dir = os.path.abspath(
     os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 )
-project_dir = os.path.join(current_dir, "py_ocpi/")
+project_dir = os.path.join(current_dir, "ocpi/")
 # autoapi_dirs = [os.path.join(project_dir, 'modules/')]
 sys.path.insert(0, os.path.abspath(current_dir))
 sys.path.insert(0, os.path.abspath(project_dir))
 
-from py_ocpi import __version__  # noqa
+from ocpi import __version__  # noqa
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information

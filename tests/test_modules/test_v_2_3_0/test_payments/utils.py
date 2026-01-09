@@ -1,10 +1,11 @@
 from uuid import uuid4
 
-from py_ocpi.core import enums
-from py_ocpi.modules.payments.v_2_3_0.enums import CaptureStatusCode
+from ocpi.core import enums
+from ocpi.modules.payments.v_2_3_0.enums import CaptureStatusCode
 from tests.test_modules.utils import (
     ENCODED_AUTH_TOKEN_V_2_3_0,
     ENCODED_RANDOM_AUTH_TOKEN_V_2_3_0,
+    ClientAuthenticator,
 )
 
 CPO_BASE_URL = "/ocpi/cpo/2.3.0/payments/"
@@ -64,7 +65,15 @@ class Crud:
         *args,
         **kwargs,
     ):
-        return data
+        # For financial advice confirmations, return the confirmation data
+        if kwargs.get("object_type") == "financial_advice_confirmation":
+            updated = FINANCIAL_ADVICE_CONFIRMATIONS[0].copy()
+            updated.update(data)
+            return updated
+        # For terminals, merge with existing terminal data
+        updated = TERMINALS[0].copy()
+        updated.update(data)
+        return updated
 
     @classmethod
     async def create(

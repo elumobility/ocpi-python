@@ -2,7 +2,7 @@ from uuid import uuid4
 
 import pytest
 
-from py_ocpi.core.config import settings
+from ocpi.core.config import settings
 
 from .utils import AUTH_HEADERS, EMSP_BASE_URL, LOCATIONS, WRONG_AUTH_HEADERS
 

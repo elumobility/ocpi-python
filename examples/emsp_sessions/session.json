@@ -1,0 +1,13 @@
+{
+  "country_code": "ES",
+  "party_id": "ABC",
+  "id": "SESS001",
+  "start_date_time": "2024-01-01T10:00:00Z",
+  "location_id": "LOC001",
+  "evse_uid": "EVSE001",
+  "connector_id": "CONN001",
+  "kwh": 0.0,
+  "currency": "EUR",
+  "status": "ACTIVE",
+  "last_updated": "2024-01-01T10:00:00Z"
+}

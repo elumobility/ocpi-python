@@ -1,9 +1,9 @@
 from uuid import uuid4
 
-from py_ocpi.core import enums
-from py_ocpi.modules.cdrs.v_2_2_1.enums import AuthMethod, CdrDimensionType
-from py_ocpi.modules.cdrs.v_2_2_1.schemas import TokenType
-from py_ocpi.modules.locations.v_2_2_1.schemas import (
+from ocpi.core import enums
+from ocpi.modules.cdrs.v_2_2_1.enums import AuthMethod, CdrDimensionType
+from ocpi.modules.cdrs.v_2_2_1.schemas import TokenType
+from ocpi.modules.locations.v_2_2_1.schemas import (
     ConnectorFormat,
     ConnectorType,
     PowerType,
@@ -11,6 +11,7 @@ from py_ocpi.modules.locations.v_2_2_1.schemas import (
 from tests.test_modules.utils import (
     ENCODED_AUTH_TOKEN,
     ENCODED_RANDOM_AUTH_TOKEN,
+    ClientAuthenticator,
 )
 
 CPO_BASE_URL = "/ocpi/cpo/2.2.1/cdrs/"

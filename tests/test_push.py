@@ -3,10 +3,10 @@ from uuid import uuid4
 
 from fastapi.testclient import TestClient
 
-from py_ocpi import get_application
-from py_ocpi.core import enums, schemas
-from py_ocpi.modules.locations.v_2_2_1.schemas import Location
-from py_ocpi.modules.versions.enums import VersionNumber
+from ocpi import get_application
+from ocpi.core import enums, schemas
+from ocpi.modules.locations.v_2_2_1.schemas import Location
+from ocpi.modules.versions.enums import VersionNumber
 from tests.test_modules.mocks.async_client import (
     MockAsyncClientGeneratorVersionsAndEndpoints,
 )
@@ -191,7 +191,7 @@ LOCATIONS = [
 
 
 @patch(
-    "py_ocpi.core.push.httpx.AsyncClient",
+    "ocpi.core.push.httpx.AsyncClient",
     side_effect=MockAsyncClientGeneratorVersionsAndEndpoints,
 )
 def test_push(async_client):

@@ -1,0 +1,17 @@
+from pydantic import BaseModel
+
+from ocpi.core.data_types import CiString, DateTime
+from ocpi.core.enums import RoleEnum
+from ocpi.modules.hubclientinfo.v_2_3_0.enums import ConnectionStatus
+
+
+class ClientInfo(BaseModel):
+    """
+    https://github.com/ocpi/ocpi/blob/release-2.3.0-bugfixes/mod_hub_client_info.asciidoc#141-clientinfo-object
+    """
+
+    party_id: CiString(3)  # type: ignore
+    country_code: CiString(2)  # type: ignore
+    role: RoleEnum
+    status: ConnectionStatus
+    last_updated: DateTime

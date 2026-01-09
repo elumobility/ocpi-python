@@ -1,15 +1,16 @@
 from uuid import uuid4
 
-from py_ocpi.core import enums
-from py_ocpi.modules.tokens.v_2_1_1.enums import (
+from ocpi.core import enums
+from ocpi.modules.tokens.v_2_1_1.enums import (
     Allowed,
     TokenType,
     WhitelistType,
 )
-from py_ocpi.modules.tokens.v_2_1_1.schemas import AuthorizationInfo, Token
+from ocpi.modules.tokens.v_2_1_1.schemas import AuthorizationInfo, Token
 from tests.test_modules.utils import (
     AUTH_TOKEN,
     RANDOM_AUTH_TOKEN,
+    ClientAuthenticator,
 )
 
 CPO_BASE_URL = "/ocpi/cpo/2.1.1/tokens/"

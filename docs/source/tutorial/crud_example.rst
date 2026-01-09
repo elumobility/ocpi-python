@@ -16,8 +16,8 @@ as `*args` and `**kwargs`.
     from typing import Any, Tuple
     from uuid import uuid4
 
-    from py_ocpi.core.crud import Crud
-    from py_ocpi.core.enums import ModuleID, RoleEnum, Action
+    from ocpi.core.crud import Crud
+    from ocpi.core.enums import ModuleID, RoleEnum, Action
 
     from .db_interface import DbInterface
 
