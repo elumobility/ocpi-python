@@ -21,7 +21,7 @@ Open Charge Point Interface (OCPI) is an open protocol used for connections betw
 
 ## Features
 
-- **Full OCPI 2.3.0 support** - Including the new Payments module
+- **Full OCPI 2.3.0 support** - Including the new Payments and Bookings modules
 - **OCPI 2.2.1 and 2.1.1 compatibility** - Backward compatible with previous versions
 - **Modern stack** - Built with FastAPI 0.115+ and Pydantic v2
 - **Complete role support** - CPO, EMSP, and PTP (Payment Terminal Provider)
@@ -56,6 +56,7 @@ We provide complete, working examples to help you get started:
 - **[EMSP Sessions](../examples/emsp_sessions/)** - Session and token management for eMobility Service Providers
 - **[Full CPO](../examples/full_cpo/)** - Complete multi-module CPO application
 - **[Charging Profiles](../examples/charging_profiles/)** - Smart charging control example
+- **[Bookings](../examples/bookings/)** - EV charging reservations (OCPI 2.3.0)
 
 ## Supported Modules
 
@@ -71,6 +72,7 @@ We provide complete, working examples to help you get started:
 | Charging Profiles | ✅ | ✅ | ❌ |
 | Hub Client Info | ✅ | ✅ | ❌ |
 | Payments | ✅ | ❌ | ❌ |
+| Bookings | ✅ | ❌ | ❌ |
 
 ## Documentation
 

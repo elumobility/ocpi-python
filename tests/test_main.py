@@ -79,6 +79,7 @@ def test_get_application_with_http_push():
 
     assert app is not None
     # Verify push router is included
+    TestClient(app)
     # Push endpoints should be available
     # (exact path depends on settings, but router should be included)
 

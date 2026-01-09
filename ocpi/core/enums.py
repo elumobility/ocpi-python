@@ -43,6 +43,8 @@ class ModuleID(str, Enum):
     tokens = "tokens"
     # New in OCPI 2.3.0
     payments = "payments"
+    # New in OCPI 2.3.0 - Booking extension
+    bookings = "bookings"
 
 
 class Action(str, Enum):

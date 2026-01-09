@@ -87,6 +87,7 @@ nav:
     - CDR Generation: tutorials/cdrs.md
     - Commands: tutorials/commands.md
     - Charging Profiles: tutorials/charging_profiles.md
+    - Booking Reservations: tutorials/bookings.md
     - CRUD Operations: tutorials/crud.md
     - Database Interface: tutorials/db_interface.md
     - Push Notifications: tutorials/push.md

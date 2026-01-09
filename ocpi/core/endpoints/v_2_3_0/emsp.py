@@ -49,6 +49,12 @@ CHARGING_PROFILE = emsp_generator.generate_endpoint(
     InterfaceRole.sender,
 )
 
+# New in OCPI 2.3.0 - Booking extension
+BOOKINGS = emsp_generator.generate_endpoint(
+    ModuleID.bookings,
+    InterfaceRole.receiver,
+)
+
 
 ENDPOINTS_LIST = {
     ModuleID.credentials_and_registration: CREDENTIALS_AND_REGISTRATION,
@@ -60,4 +66,5 @@ ENDPOINTS_LIST = {
     ModuleID.commands: COMMANDS,
     ModuleID.hub_client_info: HUB_CLIENT_INFO,
     ModuleID.charging_profile: CHARGING_PROFILE,
+    ModuleID.bookings: BOOKINGS,
 }

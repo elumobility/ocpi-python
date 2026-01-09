@@ -26,6 +26,9 @@ OCPI_2003_UNKNOWN_LOCATION = {
     "status_code": 2003,
     "status_message": "Unknown Location",
 }
+# Alias for clarity - 2003 is used for any "resource not found" scenario
+# (sessions, bookings, CDRs, etc.) per OCPI convention
+OCPI_2003_UNKNOWN_RESOURCE = OCPI_2003_UNKNOWN_LOCATION
 OCPI_2004_UNKNOWN_TOKEN = {
     "status_code": 2004,
     "status_message": "Unknown Token",
