@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Discussions
+    url: https://github.com/elumobility/ocpi-python/discussions
+    about: Ask questions and discuss ideas
+  - name: 📚 Documentation
+    url: https://elumobility.github.io/ocpi-python/
+    about: Check the documentation for answers

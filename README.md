@@ -1,9 +1,11 @@
 # OCPI Python
 
+[![CI](https://github.com/elumobility/ocpi-python/actions/workflows/ci.yml/badge.svg)](https://github.com/elumobility/ocpi-python/actions/workflows/ci.yml)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![Pydantic v2](https://img.shields.io/badge/pydantic-v2-blue.svg)](https://docs.pydantic.dev/)
 [![FastAPI 0.115+](https://img.shields.io/badge/fastapi-0.115+-green.svg)](https://fastapi.tiangolo.com/)
 [![License: MIT OR EUPL-1.2](https://img.shields.io/badge/License-MIT%20OR%20EUPL--1.2-blue.svg)](LICENSE)
+[![Code style: ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
 A modern, production-ready Python implementation of the Open Charge Point Interface (OCPI) protocol built on FastAPI.
 
@@ -105,13 +107,27 @@ app = get_application(
 
 ## Documentation
 
-For detailed documentation and examples, see the [documentation](https://elumobility.github.io/ocpi-python/).
+📚 **[Full Documentation](https://elumobility.github.io/ocpi-python/)** - Complete API reference, tutorials, and examples
+
+- [Quick Start Guide](https://elumobility.github.io/ocpi-python/quickstart/)
+- [Tutorials](https://elumobility.github.io/ocpi-python/tutorials/)
+- [API Reference](https://elumobility.github.io/ocpi-python/api/)
+- [Examples](../examples/) - Production-ready code examples
 
 ---
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md) before submitting a Pull Request.
+
+We welcome:
+- 🐛 Bug reports
+- 💡 Feature requests
+- 📝 Documentation improvements
+- 🧪 Test coverage improvements
+- 🔧 Code refactoring
+
+See our [Issue Templates](.github/ISSUE_TEMPLATE/) for guidelines on reporting bugs or requesting features.
 
 ---
 

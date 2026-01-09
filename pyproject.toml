@@ -81,6 +81,8 @@ email = "dev@elu-energy.it"
 Homepage = "https://github.com/elumobility/ocpi-python"
 Repository = "https://github.com/elumobility/ocpi-python"
 Documentation = "https://elumobility.github.io/ocpi-python/"
+Issues = "https://github.com/elumobility/ocpi-python/issues"
+Changelog = "https://github.com/elumobility/ocpi-python/blob/main/CHANGELOG.md"
 
 [tool.hatch.version]
 path = "ocpi/__init__.py"
@@ -118,7 +120,29 @@ log_cli_date_format = "%Y-%m-%d %H:%M:%S"
 testpaths = "tests"
 addopts = [
     "--import-mode=importlib",
+    "--cov=ocpi",
+    "--cov-report=term-missing",
+    "--cov-report=xml",
 ]
 pythonpath = [
   "." ,"ocpi"
+]
+
+[tool.coverage.run]
+source = ["ocpi"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "*/__pycache__/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "@abstractmethod",
 ]
