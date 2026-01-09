@@ -6,7 +6,6 @@ The EMSP creates booking requests and receives booking updates from CPOs.
 from fastapi import APIRouter, Depends, Request, Response
 
 from ocpi.core import status
-from ocpi.core.status import OCPI_2003_UNKNOWN_RESOURCE
 from ocpi.core.adapter import Adapter
 from ocpi.core.authentication.verifier import AuthorizationVerifier
 from ocpi.core.config import logger
@@ -14,6 +13,7 @@ from ocpi.core.crud import Crud
 from ocpi.core.dependencies import get_adapter, get_crud, pagination_filters
 from ocpi.core.enums import ModuleID, RoleEnum
 from ocpi.core.schemas import OCPIResponse
+from ocpi.core.status import OCPI_2003_UNKNOWN_RESOURCE
 from ocpi.core.utils import get_list
 from ocpi.modules.bookings.v_2_3_0.schemas import (
     Booking,
