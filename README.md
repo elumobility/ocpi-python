@@ -112,7 +112,7 @@ app = get_application(
 - [Quick Start Guide](https://elumobility.github.io/ocpi-python/quickstart/)
 - [Tutorials](https://elumobility.github.io/ocpi-python/tutorials/)
 - [API Reference](https://elumobility.github.io/ocpi-python/api/)
-- [Examples](../examples/) - Production-ready code examples
+- [Examples](https://github.com/elumobility/ocpi-python/tree/main/examples) - Production-ready code examples
 
 ---
 
