@@ -2,7 +2,6 @@
 OCPI Server Configuration using Pydantic Settings v2.
 """
 
-
 from pydantic import AnyHttpUrl, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 

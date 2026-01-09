@@ -1,8 +1,7 @@
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from fastapi import Query
-
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ocpi.core.adapter import Adapter

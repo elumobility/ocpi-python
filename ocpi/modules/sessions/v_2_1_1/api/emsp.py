@@ -100,9 +100,7 @@ async def add_or_update_session(
     **Returns:**
         The OCPIResponse containing the added or updated session data.
     """
-    logger.info(
-        f"Received request to add or update session with id - `{session_id}`."
-    )
+    logger.info(f"Received request to add or update session with id - `{session_id}`.")
     logger.debug(f"Session data to update - {session.model_dump()}")
     auth_token = get_auth_token(request, VersionNumber.v_2_1_1)
 

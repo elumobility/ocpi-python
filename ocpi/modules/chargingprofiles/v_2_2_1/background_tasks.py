@@ -55,7 +55,7 @@ async def send_get_chargingprofile(
 
     if not active_charging_profile_result:
         logger.debug(
-            "Active charging profile result from Charge Point " "didn't arrive in time."
+            "Active charging profile result from Charge Point didn't arrive in time."
         )
         active_charging_profile_result = ChargingProfileResult(
             result=ChargingProfileResultType.rejected
@@ -67,9 +67,7 @@ async def send_get_chargingprofile(
 
     async with httpx.AsyncClient() as client:
         authorization_token = f"Token {encode_string_base64(client_auth_token)}"
-        logger.info(
-            f"Send request with active charging profile result: {response_url}"
-        )
+        logger.info(f"Send request with active charging profile result: {response_url}")
         res = await client.post(
             response_url,
             json=active_charging_profile_result.model_dump(),
@@ -119,9 +117,7 @@ async def send_update_chargingprofile(
         await sleep(2)
 
     if not charging_profile_result:
-        logger.debug(
-            "Charging profile result from Charge Point " "didn't arrive in time."
-        )
+        logger.debug("Charging profile result from Charge Point didn't arrive in time.")
         charging_profile_result = ChargingProfileResult(
             result=ChargingProfileResultType.rejected
         )
@@ -180,7 +176,7 @@ async def send_delete_chargingprofile(
         await sleep(2)
 
     if clear_profile_result:
-        logger.debug("Clear profile result from Charge Point " "didn't arrive in time.")
+        logger.debug("Clear profile result from Charge Point didn't arrive in time.")
         clear_profile_result = ChargingProfileResult(
             result=ChargingProfileResultType.rejected
         )

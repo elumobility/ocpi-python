@@ -11,10 +11,9 @@ from ocpi.core.dependencies import get_versions
 from ocpi.main import get_application
 from ocpi.modules.versions.enums import VersionNumber
 from ocpi.modules.versions.schemas import Version
-
 from tests.test_modules.utils import (
-    ENCODED_AUTH_TOKEN_V_2_3_0,
     ENCODED_AUTH_TOKEN_A_V_2_3_0,
+    ENCODED_AUTH_TOKEN_V_2_3_0,
     ENCODED_RANDOM_AUTH_TOKEN_V_2_3_0,
 )
 
@@ -91,7 +90,7 @@ async def test_cpo_post_credentials_v_2_3_0(async_client):
 
     # For 2.3.0, tokens ARE base64 encoded in Authorization header
     auth_headers = {"Authorization": f"Token {ENCODED_AUTH_TOKEN_A_V_2_3_0}"}
-    
+
     async with AsyncClient(
         transport=ASGITransport(app=app_2), base_url="http://test"
     ) as client:
@@ -109,7 +108,7 @@ async def test_cpo_post_credentials_v_2_3_0(async_client):
 async def test_cpo_get_credentials_v_2_3_0(app_1):
     # For 2.3.0, tokens ARE base64 encoded in Authorization header
     auth_headers = {"Authorization": f"Token {ENCODED_AUTH_TOKEN_V_2_3_0}"}
-    
+
     async with AsyncClient(
         transport=ASGITransport(app=app_1), base_url="http://test"
     ) as client:
@@ -126,7 +125,7 @@ async def test_cpo_get_credentials_v_2_3_0(app_1):
 async def test_cpo_post_credentials_not_authenticated_v_2_3_0(app_1):
     # For 2.3.0, tokens ARE base64 encoded in Authorization header
     wrong_auth_headers = {"Authorization": f"Token {ENCODED_RANDOM_AUTH_TOKEN_V_2_3_0}"}
-    
+
     async with AsyncClient(
         transport=ASGITransport(app=app_1), base_url="http://test"
     ) as client:

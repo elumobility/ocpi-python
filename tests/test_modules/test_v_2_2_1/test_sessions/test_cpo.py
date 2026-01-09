@@ -7,7 +7,7 @@ from .utils import (
 )
 
 GET_SESSION_URL = CPO_BASE_URL
-PUT_SESSION_URL = f'{CPO_BASE_URL}{SESSIONS[0]["id"]}/charging_preferences'
+PUT_SESSION_URL = f"{CPO_BASE_URL}{SESSIONS[0]['id']}/charging_preferences"
 
 
 def test_cpo_get_sessions_not_authenticated(client_cpo_v_2_2_1):

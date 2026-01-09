@@ -4,7 +4,6 @@ New in OCPI 2.3.0 - Payment terminal support for direct payment.
 https://github.com/ocpi/ocpi/blob/release-2.3.0-bugfixes/mod_payments.asciidoc
 """
 
-
 from pydantic import BaseModel
 
 from ocpi.core.data_types import (

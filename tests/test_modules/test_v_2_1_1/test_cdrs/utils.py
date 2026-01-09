@@ -6,7 +6,6 @@ from tests.test_modules.test_v_2_1_1.test_locations.utils import LOCATIONS
 from tests.test_modules.utils import (
     AUTH_TOKEN,
     RANDOM_AUTH_TOKEN,
-    ClientAuthenticator,
 )
 
 CPO_BASE_URL = "/ocpi/cpo/2.1.1/cdrs/"

@@ -1,4 +1,3 @@
-
 from pydantic import BaseModel
 
 from ocpi.core.data_types import URL, DateTime, Number

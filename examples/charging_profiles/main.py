@@ -3,12 +3,12 @@
 This example demonstrates charging profile management for smart charging.
 """
 
+from auth import SimpleAuthenticator
+from crud import SimpleCrud
+
 from ocpi import get_application
 from ocpi.core.enums import ModuleID, RoleEnum
 from ocpi.modules.versions.enums import VersionNumber
-
-from auth import SimpleAuthenticator
-from crud import SimpleCrud
 
 # Create the OCPI application with charging profiles
 app = get_application(

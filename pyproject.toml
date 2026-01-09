@@ -132,6 +132,7 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401"]
+"tests/test_examples/*.py" = ["E402"]  # Allow imports after sys.path modification
 
 [tool.mypy]
 python_version = "3.11"

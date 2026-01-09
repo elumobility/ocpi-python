@@ -72,24 +72,23 @@ class SimpleCrud(Crud):
         """Handle charging profile actions."""
         if module == ModuleID.charging_profile:
             session_id = kwargs.get("session_id")
-            duration = kwargs.get("duration")
-            
+
             if action == Action.send_get_chargingprofile:
                 # Return active charging profile
                 profile_key = f"{ModuleID.charging_profile.value}:{session_id}"
                 return storage.get(profile_key, {})
-            
+
             elif action == Action.send_delete_chargingprofile:
                 # Clear charging profile
                 profile_key = f"{ModuleID.charging_profile.value}:{session_id}"
                 storage.pop(profile_key, None)
                 return {"result": "ACCEPTED"}
-            
+
             elif action == Action.send_update_charging_profile:
                 # Update charging profile
                 if data and session_id:
                     profile_key = f"{ModuleID.charging_profile.value}:{session_id}"
                     storage[profile_key] = data
                     return {"result": "ACCEPTED"}
-        
+
         return {}

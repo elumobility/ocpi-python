@@ -1,10 +1,10 @@
 from .utils import AUTH_HEADERS, EMSP_BASE_URL, HUB_CLIENT_INFO, WRONG_AUTH_HEADERS
 
 GET_HUB_CLIENT_INFO_URL = (
-    f'{EMSP_BASE_URL}{HUB_CLIENT_INFO["country_code"]}/{HUB_CLIENT_INFO["party_id"]}'
+    f"{EMSP_BASE_URL}{HUB_CLIENT_INFO['country_code']}/{HUB_CLIENT_INFO['party_id']}"
 )
 PUT_HUB_CLIENT_INFO_URL = (
-    f'{EMSP_BASE_URL}{HUB_CLIENT_INFO["country_code"]}/{HUB_CLIENT_INFO["party_id"]}'
+    f"{EMSP_BASE_URL}{HUB_CLIENT_INFO['country_code']}/{HUB_CLIENT_INFO['party_id']}"
 )
 
 

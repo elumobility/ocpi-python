@@ -1,13 +1,11 @@
 """Simple authentication implementation for the basic CPO example."""
 
-from typing import List
-
 from ocpi.core.authentication.authenticator import Authenticator
 
 
 class SimpleAuthenticator(Authenticator):
     """Simple authenticator that validates tokens against a list.
-    
+
     In production, fetch these from your database or configuration service.
     """
 
@@ -18,11 +16,11 @@ class SimpleAuthenticator(Authenticator):
     }
 
     @classmethod
-    async def get_valid_token_c(cls) -> List[str]:
+    async def get_valid_token_c(cls) -> list[str]:
         """Return list of valid CPO tokens."""
         return cls.VALID_TOKENS["token_c"]
 
     @classmethod
-    async def get_valid_token_a(cls) -> List[str]:
+    async def get_valid_token_a(cls) -> list[str]:
         """Return list of valid EMSP tokens."""
         return cls.VALID_TOKENS["token_a"]

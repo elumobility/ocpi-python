@@ -10,7 +10,6 @@ from ocpi.modules.tokens.v_2_2_1.schemas import AuthorizationInfo, Token
 from tests.test_modules.utils import (
     ENCODED_AUTH_TOKEN,
     ENCODED_RANDOM_AUTH_TOKEN,
-    ClientAuthenticator,
 )
 
 CPO_BASE_URL = "/ocpi/cpo/2.2.1/tokens/"

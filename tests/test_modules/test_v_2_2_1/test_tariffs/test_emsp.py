@@ -3,7 +3,7 @@ from ocpi.core.config import settings
 from .utils import AUTH_HEADERS, EMSP_BASE_URL, TARIFFS, WRONG_AUTH_HEADERS
 
 TARIFF_URL = (
-    f"{EMSP_BASE_URL}{settings.COUNTRY_CODE}/{settings.PARTY_ID}/" f'{TARIFFS[0]["id"]}'
+    f"{EMSP_BASE_URL}{settings.COUNTRY_CODE}/{settings.PARTY_ID}/{TARIFFS[0]['id']}"
 )
 
 

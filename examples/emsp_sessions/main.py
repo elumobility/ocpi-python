@@ -3,12 +3,12 @@
 This example demonstrates an EMSP setup with session and token management.
 """
 
+from auth import SimpleAuthenticator
+from crud import SimpleCrud
+
 from ocpi import get_application
 from ocpi.core.enums import ModuleID, RoleEnum
 from ocpi.modules.versions.enums import VersionNumber
-
-from auth import SimpleAuthenticator
-from crud import SimpleCrud
 
 # Create the OCPI application
 app = get_application(

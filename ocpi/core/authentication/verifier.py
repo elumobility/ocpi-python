@@ -13,6 +13,7 @@ from ocpi.core.authentication.authenticator import Authenticator
 from ocpi.core.config import logger, settings
 from ocpi.core.dependencies import get_authenticator
 from ocpi.core.exceptions import AuthorizationOCPIError
+
 # Import moved to function level to avoid circular import
 from ocpi.modules.versions.enums import VersionNumber
 
@@ -62,6 +63,7 @@ class AuthorizationVerifier:
             if self.version.startswith("2.2") or self.version.startswith("2.3"):
                 try:
                     from ocpi.core.utils import decode_string_base64
+
                     token = decode_string_base64(token)
                 except UnicodeDecodeError:
                     logger.debug(
@@ -72,8 +74,7 @@ class AuthorizationVerifier:
             await authenticator.authenticate(token)
         except IndexError:
             logger.debug(
-                "Token `%s` cannot be split in parts. "
-                "Check if it starts with `Token `"
+                "Token `%s` cannot be split in parts. Check if it starts with `Token `"
             )
             raise AuthorizationOCPIError
 
@@ -110,8 +111,7 @@ class CredentialsAuthorizationVerifier:
             token = authorization.split()[1]
         except IndexError:
             logger.debug(
-                "Token `%s` cannot be split in parts. "
-                "Check if it starts with `Token `"
+                "Token `%s` cannot be split in parts. Check if it starts with `Token `"
             )
             raise AuthorizationOCPIError
 
@@ -120,6 +120,7 @@ class CredentialsAuthorizationVerifier:
             if self.version.startswith("2.2") or self.version.startswith("2.3"):
                 try:
                     from ocpi.core.utils import decode_string_base64
+
                     token = decode_string_base64(token)
                 except UnicodeDecodeError:
                     logger.debug(
@@ -131,6 +132,7 @@ class CredentialsAuthorizationVerifier:
             # For versions without explicit version (legacy), try to decode
             try:
                 from ocpi.core.utils import decode_string_base64
+
                 token = decode_string_base64(token)
             except UnicodeDecodeError:
                 pass
@@ -201,6 +203,7 @@ class HttpPushVerifier:
             if version.value.startswith("2.2") or version.value.startswith("2.3"):
                 try:
                     from ocpi.core.utils import decode_string_base64
+
                     token = decode_string_base64(token)
                 except UnicodeDecodeError:
                     logger.debug(
@@ -211,8 +214,7 @@ class HttpPushVerifier:
             await authenticator.authenticate(token)
         except IndexError:
             logger.debug(
-                "Token `%s` cannot be split in parts. "
-                "Check if it starts with `Token `"
+                "Token `%s` cannot be split in parts. Check if it starts with `Token `"
             )
             raise AuthorizationOCPIError
 
@@ -254,6 +256,7 @@ class WSPushVerifier:
             if version.value.startswith("2.2") or version.value.startswith("2.3"):
                 try:
                     from ocpi.core.utils import decode_string_base64
+
                     token = decode_string_base64(token)
                 except UnicodeDecodeError:
                     logger.debug(

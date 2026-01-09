@@ -7,7 +7,6 @@ from ocpi.modules.sessions.v_2_2_1.enums import ProfileType, SessionStatus
 from tests.test_modules.utils import (
     ENCODED_AUTH_TOKEN,
     ENCODED_RANDOM_AUTH_TOKEN,
-    ClientAuthenticator,
 )
 
 CPO_BASE_URL = "/ocpi/cpo/2.2.1/sessions/"

@@ -1,6 +1,6 @@
 from .utils import AUTH_HEADERS, CPO_BASE_URL, TERMINALS, WRONG_AUTH_HEADERS
 
-GET_TERMINAL_URL = f'{CPO_BASE_URL}terminals/{TERMINALS[0]["terminal_id"]}'
+GET_TERMINAL_URL = f"{CPO_BASE_URL}terminals/{TERMINALS[0]['terminal_id']}"
 
 
 def test_cpo_get_terminal_not_authenticated(client_cpo_v_2_3_0):

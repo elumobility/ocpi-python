@@ -1,6 +1,6 @@
 from .utils import AUTH_HEADERS, EMSP_BASE_URL, TARIFFS, WRONG_AUTH_HEADERS
 
-GET_TARIFF_URL = f'{EMSP_BASE_URL}{TARIFFS[0]["country_code"]}/{TARIFFS[0]["party_id"]}/{TARIFFS[0]["id"]}'
+GET_TARIFF_URL = f"{EMSP_BASE_URL}{TARIFFS[0]['country_code']}/{TARIFFS[0]['party_id']}/{TARIFFS[0]['id']}"
 
 
 def test_emsp_get_tariff_not_authenticated(client_emsp_v_2_3_0):

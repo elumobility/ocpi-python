@@ -1,9 +1,9 @@
 from .utils import AUTH_HEADERS, EMSP_BASE_URL, TOKENS, WRONG_AUTH_HEADERS
 
 GET_TOKEN_URL = EMSP_BASE_URL
-PUT_TOKEN_URL = f'{EMSP_BASE_URL}{TOKENS[0]["uid"]}'
-PATCH_TOKEN_URL = f'{EMSP_BASE_URL}{TOKENS[0]["uid"]}'
-AUTHORIZE_TOKEN_URL = f'{EMSP_BASE_URL}{TOKENS[0]["uid"]}/authorize'
+PUT_TOKEN_URL = f"{EMSP_BASE_URL}{TOKENS[0]['uid']}"
+PATCH_TOKEN_URL = f"{EMSP_BASE_URL}{TOKENS[0]['uid']}"
+AUTHORIZE_TOKEN_URL = f"{EMSP_BASE_URL}{TOKENS[0]['uid']}/authorize"
 
 
 def test_emsp_get_token_not_authenticated(client_emsp_v_2_3_0):

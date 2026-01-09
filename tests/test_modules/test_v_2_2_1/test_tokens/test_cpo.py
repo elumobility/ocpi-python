@@ -7,8 +7,8 @@ from .utils import (
 )
 
 TOKEN_URL = (
-    f'{CPO_BASE_URL}{TOKENS[0]["country_code"]}/{TOKENS[0]["party_id"]}/'
-    f'{TOKENS[0]["uid"]}'
+    f"{CPO_BASE_URL}{TOKENS[0]['country_code']}/{TOKENS[0]['party_id']}/"
+    f"{TOKENS[0]['uid']}"
 )
 
 

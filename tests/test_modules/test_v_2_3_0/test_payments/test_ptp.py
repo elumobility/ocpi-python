@@ -9,12 +9,10 @@ from .utils import (
 )
 
 GET_TERMINALS_URL = f"{PTP_BASE_URL}terminals"
-GET_TERMINAL_URL = f'{PTP_BASE_URL}terminals/{TERMINALS[0]["terminal_id"]}'
-POST_TERMINAL_URL = f'{PTP_BASE_URL}terminals/{TERMINALS[0]["terminal_id"]}'
-PATCH_TERMINAL_URL = f'{PTP_BASE_URL}terminals/{TERMINALS[0]["terminal_id"]}'
-FINANCIAL_ADVICE_URL = (
-    f'{PTP_BASE_URL}financial-advice-confirmations/{FINANCIAL_ADVICE_CONFIRMATIONS[0]["id"]}'
-)
+GET_TERMINAL_URL = f"{PTP_BASE_URL}terminals/{TERMINALS[0]['terminal_id']}"
+POST_TERMINAL_URL = f"{PTP_BASE_URL}terminals/{TERMINALS[0]['terminal_id']}"
+PATCH_TERMINAL_URL = f"{PTP_BASE_URL}terminals/{TERMINALS[0]['terminal_id']}"
+FINANCIAL_ADVICE_URL = f"{PTP_BASE_URL}financial-advice-confirmations/{FINANCIAL_ADVICE_CONFIRMATIONS[0]['id']}"
 
 
 def test_ptp_get_terminals_not_authenticated(client_ptp_v_2_3_0):

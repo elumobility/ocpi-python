@@ -1,4 +1,5 @@
 """Logging configuration."""
+
 import logging
 
 from ocpi.core.enums import EnvironmentType

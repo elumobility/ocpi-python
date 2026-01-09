@@ -8,7 +8,7 @@ from .utils import (
 )
 
 GET_TOKEN = EMSP_BASE_URL
-POST_TOKEN = f'{EMSP_BASE_URL}{TOKENS[0]["uid"]}/authorize'
+POST_TOKEN = f"{EMSP_BASE_URL}{TOKENS[0]['uid']}/authorize"
 
 
 def test_emsp_get_tokens_not_authenticated(client_emsp_v_2_1_1):

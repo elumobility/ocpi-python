@@ -8,12 +8,12 @@ This example demonstrates a full CPO setup with multiple modules:
 - Commands
 """
 
+from auth import SimpleAuthenticator
+from crud import SimpleCrud
+
 from ocpi import get_application
 from ocpi.core.enums import ModuleID, RoleEnum
 from ocpi.modules.versions.enums import VersionNumber
-
-from auth import SimpleAuthenticator
-from crud import SimpleCrud
 
 # Create the OCPI application with multiple modules
 app = get_application(

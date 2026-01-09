@@ -5,8 +5,7 @@ from ocpi.core.config import settings
 from .utils import AUTH_HEADERS, EMSP_BASE_URL, SESSIONS, WRONG_AUTH_HEADERS
 
 GET_SESSION = (
-    f"{EMSP_BASE_URL}{settings.COUNTRY_CODE}/{settings.PARTY_ID}/"
-    f'{SESSIONS[0]["id"]}'
+    f"{EMSP_BASE_URL}{settings.COUNTRY_CODE}/{settings.PARTY_ID}/{SESSIONS[0]['id']}"
 )
 
 

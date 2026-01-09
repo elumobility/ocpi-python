@@ -4,7 +4,6 @@ from ocpi.core import enums
 from tests.test_modules.utils import (
     AUTH_TOKEN,
     RANDOM_AUTH_TOKEN,
-    ClientAuthenticator,
 )
 
 CPO_BASE_URL = "/ocpi/cpo/2.1.1/tariffs/"
@@ -68,8 +67,7 @@ class Crud:
     @classmethod
     async def delete(
         cls, module: enums.ModuleID, role: enums.RoleEnum, id, *args, **kwargs
-    ):
-        ...
+    ): ...
 
     @classmethod
     async def list(

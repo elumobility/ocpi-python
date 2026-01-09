@@ -93,7 +93,7 @@ async def test_get_session(client, auth_headers):
         json=session_data,
         headers=auth_headers,
     )
-    
+
     # Only test get if create succeeded
     if create_response.status_code in [200, 201]:
         # Get session

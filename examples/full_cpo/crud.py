@@ -3,7 +3,7 @@
 from typing import Any
 
 from ocpi.core.crud import Crud
-from ocpi.core.enums import Action, ModuleID, RoleEnum
+from ocpi.core.enums import ModuleID, RoleEnum
 
 # Simple in-memory storage
 storage: dict[str, dict] = {}

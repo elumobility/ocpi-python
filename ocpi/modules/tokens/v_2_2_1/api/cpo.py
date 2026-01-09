@@ -182,9 +182,7 @@ async def partial_update_token(
     **Raises:**
         NotFoundOCPIError: If the token is not found.
     """
-    logger.info(
-        f"Received request to partially update token with id - `{token_uid}`."
-    )
+    logger.info(f"Received request to partially update token with id - `{token_uid}`.")
     logger.debug(f"Token data to update - {token.model_dump()}")
     auth_token = get_auth_token(request)
 

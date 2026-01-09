@@ -5,11 +5,9 @@ from tests.test_modules.utils import ClientAuthenticator
 
 
 def test_get_application():
-    class Crud:
-        ...
+    class Crud: ...
 
-    class Adapter:
-        ...
+    class Adapter: ...
 
     app = get_application(
         version_numbers=[VersionNumber.v_2_2_1],

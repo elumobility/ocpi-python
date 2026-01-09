@@ -9,7 +9,7 @@ from .utils import (
 )
 
 TOKEN_URL = (
-    f"{CPO_BASE_URL}{settings.COUNTRY_CODE}/{settings.PARTY_ID}/" f'{TOKENS[0]["uid"]}'
+    f"{CPO_BASE_URL}{settings.COUNTRY_CODE}/{settings.PARTY_ID}/{TOKENS[0]['uid']}"
 )
 
 

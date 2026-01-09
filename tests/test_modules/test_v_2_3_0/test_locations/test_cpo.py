@@ -3,14 +3,12 @@ import pytest
 from .utils import AUTH_HEADERS, CPO_BASE_URL, LOCATIONS, WRONG_AUTH_HEADERS
 
 GET_LOCATIONS_URL = CPO_BASE_URL
-GET_LOCATION_URL = f'{CPO_BASE_URL}{LOCATIONS[0]["id"]}'
-GET_EVSE_URL = (
-    f'{CPO_BASE_URL}{LOCATIONS[0]["id"]}' f'/{LOCATIONS[0]["evses"][0]["uid"]}'
-)
+GET_LOCATION_URL = f"{CPO_BASE_URL}{LOCATIONS[0]['id']}"
+GET_EVSE_URL = f"{CPO_BASE_URL}{LOCATIONS[0]['id']}/{LOCATIONS[0]['evses'][0]['uid']}"
 GET_CONNECTOR_URL = (
-    f'{CPO_BASE_URL}{LOCATIONS[0]["id"]}'
-    f'/{LOCATIONS[0]["evses"][0]["uid"]}'
-    f'/{LOCATIONS[0]["evses"][0]["connectors"][0]["id"]}'
+    f"{CPO_BASE_URL}{LOCATIONS[0]['id']}"
+    f"/{LOCATIONS[0]['evses'][0]['uid']}"
+    f"/{LOCATIONS[0]['evses'][0]['connectors'][0]['id']}"
 )
 
 

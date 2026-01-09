@@ -169,9 +169,7 @@ async def partial_update_tariff(
     **Raises:**
         NotFoundOCPIError: If the tariff is not found.
     """
-    logger.info(
-        f"Received request to partially update tariff with id - `{tariff_id}`."
-    )
+    logger.info(f"Received request to partially update tariff with id - `{tariff_id}`.")
     logger.debug(f"Tariff data to update - {tariff.model_dump()}")
     auth_token = get_auth_token(request, VersionNumber.v_2_1_1)
 

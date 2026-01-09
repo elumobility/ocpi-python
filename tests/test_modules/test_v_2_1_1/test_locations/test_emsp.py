@@ -7,8 +7,7 @@ from ocpi.core.config import settings
 from .utils import AUTH_HEADERS, EMSP_BASE_URL, LOCATIONS, WRONG_AUTH_HEADERS
 
 LOCATION_URL = (
-    f"{EMSP_BASE_URL}{settings.COUNTRY_CODE}/{settings.PARTY_ID}/"
-    f"{LOCATIONS[0]['id']}"
+    f"{EMSP_BASE_URL}{settings.COUNTRY_CODE}/{settings.PARTY_ID}/{LOCATIONS[0]['id']}"
 )
 EVSE_URL = (
     f"{EMSP_BASE_URL}{settings.COUNTRY_CODE}/{settings.PARTY_ID}/"
@@ -16,8 +15,8 @@ EVSE_URL = (
 )
 CONNECTOR_URL = (
     f"{EMSP_BASE_URL}{settings.COUNTRY_CODE}/{settings.PARTY_ID}/"
-    f'{LOCATIONS[0]["id"]}/{LOCATIONS[0]["evses"][0]["uid"]}/'
-    f'{LOCATIONS[0]["evses"][0]["connectors"][0]["id"]}'
+    f"{LOCATIONS[0]['id']}/{LOCATIONS[0]['evses'][0]['uid']}/"
+    f"{LOCATIONS[0]['evses'][0]['connectors'][0]['id']}"
 )
 
 
