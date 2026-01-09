@@ -72,7 +72,7 @@ async def get_location(
     )
     if data:
         return OCPIResponse(
-            data=[adapter.location_adapter(data).dict()],
+            data=[adapter.location_adapter(data, VersionNumber.v_2_3_0).model_dump()],
             **status.OCPI_1000_GENERIC_SUCESS_CODE,
         )
     logger.debug("Location with id `%s` was not found." % location_id)
@@ -127,11 +127,11 @@ async def get_evse(
         version=VersionNumber.v_2_3_0,
     )
     if data:
-        location = adapter.location_adapter(data)
+        location = adapter.location_adapter(data, VersionNumber.v_2_3_0)
         for evse in location.evses:
             if evse.uid == evse_uid:
                 return OCPIResponse(
-                    data=[evse.dict()],
+                    data=[evse.model_dump()],
                     **status.OCPI_1000_GENERIC_SUCESS_CODE,
                 )
         logger.debug("Evse with id `%s` was not found." % evse_uid)
@@ -192,13 +192,13 @@ async def get_connector(
         version=VersionNumber.v_2_3_0,
     )
     if data:
-        location = adapter.location_adapter(data)
+        location = adapter.location_adapter(data, VersionNumber.v_2_3_0)
         for evse in location.evses:
             if evse.uid == evse_uid:
                 for connector in evse.connectors:
                     if connector.id == connector_id:
                         return OCPIResponse(
-                            data=[connector.dict()],
+                            data=[connector.model_dump()],
                             **status.OCPI_1000_GENERIC_SUCESS_CODE,
                         )
                 logger.debug(
@@ -245,7 +245,7 @@ async def add_or_update_location(
         "Received request to add or update location with id - `%s`."
         % location_id
     )
-    logger.debug("Location data to update - %s" % location.dict())
+    logger.debug("Location data to update - %s" % location.model_dump())
     auth_token = get_auth_token(request)
 
     data = await crud.get(
@@ -262,7 +262,7 @@ async def add_or_update_location(
         data = await crud.update(
             ModuleID.locations,
             RoleEnum.emsp,
-            location.dict(),
+            location.model_dump(),
             location_id,
             auth_token=auth_token,
             country_code=country_code,
@@ -274,7 +274,7 @@ async def add_or_update_location(
         data = await crud.create(
             ModuleID.locations,
             RoleEnum.emsp,
-            location.dict(),
+            location.model_dump(),
             auth_token,
             country_code=country_code,
             party_id=party_id,
@@ -282,7 +282,7 @@ async def add_or_update_location(
         )
 
     return OCPIResponse(
-        data=[adapter.location_adapter(data).dict()],
+        data=[adapter.location_adapter(data).model_dump()],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
     )
 
@@ -325,7 +325,7 @@ async def add_or_update_evse(
         "Received request to add or update evse by id - `%s` "
         "(location id - `%s`)" % (location_id, evse_uid)
     )
-    logger.debug("Evse data to update - %s" % evse.dict())
+    logger.debug("Evse data to update - %s" % evse.model_dump())
     auth_token = get_auth_token(request)
 
     old_data = await crud.get(
@@ -338,7 +338,7 @@ async def add_or_update_evse(
         version=VersionNumber.v_2_3_0,
     )
     if old_data:
-        old_location = adapter.location_adapter(old_data)
+        old_location = adapter.location_adapter(old_data, VersionNumber.v_2_3_0)
         new_location = copy.deepcopy(old_location)
 
         for old_evse in old_location.evses:
@@ -352,7 +352,7 @@ async def add_or_update_evse(
         await crud.update(
             ModuleID.locations,
             RoleEnum.emsp,
-            new_location.dict(),
+            new_location.model_dump(),
             location_id,
             auth_token=auth_token,
             country_code=country_code,
@@ -361,7 +361,7 @@ async def add_or_update_evse(
         )
 
         return OCPIResponse(
-            data=[evse.dict()],
+            data=[evse.model_dump()],
             **status.OCPI_1000_GENERIC_SUCESS_CODE,
         )
     logger.debug("Location with id `%s` was not found." % location_id)
@@ -411,7 +411,7 @@ async def add_or_update_connector(
         "(location id - `%s`, evse id - `%s`)"
         % (connector_id, location_id, evse_uid)
     )
-    logger.debug("Connector data to update - %s" % connector.dict())
+    logger.debug("Connector data to update - %s" % connector.model_dump())
     auth_token = get_auth_token(request)
 
     old_data = await crud.get(
@@ -424,7 +424,7 @@ async def add_or_update_connector(
         version=VersionNumber.v_2_3_0,
     )
     if old_data:
-        old_location = adapter.location_adapter(old_data)
+        old_location = adapter.location_adapter(old_data, VersionNumber.v_2_3_0)
         new_location = copy.deepcopy(old_location)
 
         for old_evse in old_location.evses:
@@ -444,7 +444,7 @@ async def add_or_update_connector(
                 await crud.update(
                     ModuleID.locations,
                     RoleEnum.emsp,
-                    new_location.dict(),
+                    new_location.model_dump(),
                     location_id,
                     auth_token=auth_token,
                     country_code=country_code,
@@ -453,7 +453,7 @@ async def add_or_update_connector(
                 )
 
                 return OCPIResponse(
-                    data=[connector.dict()],
+                    data=[connector.model_dump()],
                     **status.OCPI_1000_GENERIC_SUCESS_CODE,
                 )
         logger.debug("Evse with id `%s` was not found." % evse_uid)
@@ -497,7 +497,7 @@ async def partial_update_location(
         "Received request to partially update location with id - `%s`."
         % location_id
     )
-    logger.debug("Location data to update - %s" % location.dict())
+    logger.debug("Location data to update - %s" % location.model_dump())
     auth_token = get_auth_token(request)
 
     old_data = await crud.get(
@@ -510,18 +510,18 @@ async def partial_update_location(
         version=VersionNumber.v_2_3_0,
     )
     if old_data:
-        old_location = adapter.location_adapter(old_data)
+        old_location = adapter.location_adapter(old_data, VersionNumber.v_2_3_0)
         new_location = copy.deepcopy(old_location)
 
         partially_update_attributes(
             new_location,
-            location.dict(exclude_defaults=True, exclude_unset=True),
+            location.model_dump(exclude_defaults=True, exclude_unset=True),
         )
 
         data = await crud.update(
             ModuleID.locations,
             RoleEnum.emsp,
-            new_location.dict(),
+            new_location.model_dump(),
             location_id,
             auth_token=auth_token,
             country_code=country_code,
@@ -530,7 +530,7 @@ async def partial_update_location(
         )
 
         return OCPIResponse(
-            data=[adapter.location_adapter(data).dict()],
+            data=[adapter.location_adapter(data, VersionNumber.v_2_3_0).model_dump()],
             **status.OCPI_1000_GENERIC_SUCESS_CODE,
         )
     logger.debug("Location with id `%s` was not found." % location_id)
@@ -578,7 +578,7 @@ async def partial_update_evse(
         "Received request to partially update evse by id - `%s` "
         "(location id - `%s`)" % (location_id, evse_uid)
     )
-    logger.debug("Evse data to update - %s" % evse.dict())
+    logger.debug("Evse data to update - %s" % evse.model_dump())
     auth_token = get_auth_token(request)
 
     old_data = await crud.get(
@@ -591,7 +591,7 @@ async def partial_update_evse(
         version=VersionNumber.v_2_3_0,
     )
     if old_data:
-        old_location = adapter.location_adapter(old_data)
+        old_location = adapter.location_adapter(old_data, VersionNumber.v_2_3_0)
         new_location = copy.deepcopy(old_location)
 
         for old_evse in old_location.evses:
@@ -600,14 +600,14 @@ async def partial_update_evse(
                 new_evse = copy.deepcopy(old_evse)
                 partially_update_attributes(
                     new_evse,
-                    evse.dict(exclude_defaults=True, exclude_unset=True),
+                    evse.model_dump(exclude_defaults=True, exclude_unset=True),
                 )
                 new_location.evses.append(new_evse)
 
                 await crud.update(
                     ModuleID.locations,
                     RoleEnum.emsp,
-                    new_location.dict(),
+                    new_location.model_dump(),
                     location_id,
                     auth_token=auth_token,
                     country_code=country_code,
@@ -615,7 +615,7 @@ async def partial_update_evse(
                     version=VersionNumber.v_2_3_0,
                 )
                 return OCPIResponse(
-                    data=[new_evse.dict()],
+                    data=[new_evse.model_dump()],
                     **status.OCPI_1000_GENERIC_SUCESS_CODE,
                 )
         logger.debug("Evse with id `%s` was not found." % evse_uid)
@@ -668,7 +668,7 @@ async def partial_update_connector(
         "(location id - `%s`, evse id - `%s`)"
         % (connector_id, location_id, evse_uid)
     )
-    logger.debug("Connector data to update - %s" % connector.dict())
+    logger.debug("Connector data to update - %s" % connector.model_dump())
     auth_token = get_auth_token(request)
 
     old_data = await crud.get(
@@ -681,7 +681,7 @@ async def partial_update_connector(
         version=VersionNumber.v_2_3_0,
     )
     if old_data:
-        old_location = adapter.location_adapter(old_data)
+        old_location = adapter.location_adapter(old_data, VersionNumber.v_2_3_0)
 
         for old_evse in old_location.evses:
             if old_evse.uid == evse_uid:
@@ -690,7 +690,7 @@ async def partial_update_connector(
                         new_connector = old_connector
                         partially_update_attributes(
                             new_connector,
-                            connector.dict(
+                            connector.model_dump(
                                 exclude_defaults=True, exclude_unset=True
                             ),
                         )
@@ -699,7 +699,7 @@ async def partial_update_connector(
                         await crud.update(
                             ModuleID.locations,
                             RoleEnum.emsp,
-                            new_location.dict(),
+                            new_location.model_dump(),
                             location_id,
                             auth_token=auth_token,
                             country_code=country_code,
@@ -708,7 +708,7 @@ async def partial_update_connector(
                         )
 
                         return OCPIResponse(
-                            data=[new_connector.dict()],
+                            data=[new_connector.model_dump()],
                             **status.OCPI_1000_GENERIC_SUCESS_CODE,
                         )
                 logger.debug(

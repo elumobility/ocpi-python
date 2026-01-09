@@ -66,6 +66,9 @@ def test_cpo_receive_command_start_session_v_2_2_1(client_cpo_v_2_2_1):
             "last_updated": "2022-01-02 00:00:00+00:00",
         },
         "location_id": str(uuid4()),
+        "evse_uid": None,
+        "connector_id": None,
+        "authorization_reference": None,
     }
 
     response = client_cpo_v_2_2_1.post(
@@ -115,6 +118,8 @@ def test_cpo_receive_command_reserve_now_v_2_2_1(client_cpo_v_2_2_1):
         ),
         "reservation_id": str(uuid4()),
         "location_id": str(uuid4()),
+        "evse_uid": None,
+        "authorization_reference": None,
     }
 
     response = client_cpo_v_2_2_1.post(
@@ -167,6 +172,8 @@ def test_cpo_receive_command_reserve_now_unknown_location_v_2_2_1():
         ),
         "reservation_id": str(uuid4()),
         "location_id": str(uuid4()),
+        "evse_uid": None,
+        "authorization_reference": None,
     }
 
     client = TestClient(app)

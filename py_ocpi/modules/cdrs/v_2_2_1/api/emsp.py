@@ -54,7 +54,7 @@ async def get_cdr(
     )
     if data:
         return OCPIResponse(
-            data=[adapter.cdr_adapter(data).dict()],
+            data=[adapter.cdr_adapter(data).model_dump()],
             **status.OCPI_1000_GENERIC_SUCESS_CODE,
         )
     logger.debug("CDR with id `%s` was not found." % cdr_id)
@@ -81,13 +81,13 @@ async def add_cdr(
         The OCPIResponse containing the created CDR data.
     """
     logger.info("Received request to create cdr.")
-    logger.debug("CDR data to create - %s" % cdr.dict())
+    logger.debug("CDR data to create - %s" % cdr.model_dump())
     auth_token = get_auth_token(request)
 
     data = await crud.create(
         ModuleID.cdrs,
         RoleEnum.emsp,
-        cdr.dict(),
+        cdr.model_dump(),
         auth_token=auth_token,
         version=VersionNumber.v_2_2_1,
     )
@@ -100,6 +100,6 @@ async def add_cdr(
     response.headers.append("Location", cdr_url)
 
     return OCPIResponse(
-        data=[cdr_data.dict()],
+        data=[cdr_data.model_dump()],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
     )

@@ -66,7 +66,7 @@ async def get_token(
     )
     if data:
         return OCPIResponse(
-            data=[adapter.token_adapter(data, VersionNumber.v_2_1_1).dict()],
+            data=[adapter.token_adapter(data, VersionNumber.v_2_1_1).model_dump()],
             **status.OCPI_1000_GENERIC_SUCESS_CODE,
         )
     logger.debug("Token with id `%s` was not found." % token_uid)
@@ -121,7 +121,7 @@ async def add_or_update_token(
         data = await crud.update(
             ModuleID.tokens,
             RoleEnum.cpo,
-            token.dict(),
+            token.model_dump(),
             token_uid,
             auth_token=auth_token,
             country_code=country_code,
@@ -133,14 +133,14 @@ async def add_or_update_token(
         data = await crud.create(
             ModuleID.tokens,
             RoleEnum.cpo,
-            token.dict(),
+            token.model_dump(),
             auth_token=auth_token,
             country_code=country_code,
             party_id=party_id,
             version=VersionNumber.v_2_1_1,
         )
     return OCPIResponse(
-        data=[adapter.token_adapter(data, VersionNumber.v_2_1_1).dict()],
+        data=[adapter.token_adapter(data, VersionNumber.v_2_1_1).model_dump()],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
     )
 
@@ -199,13 +199,13 @@ async def partial_update_token(
 
     new_token = deepcopy(old_token)
     partially_update_attributes(
-        new_token, token.dict(exclude_defaults=True, exclude_unset=True)
+        new_token, token.model_dump(exclude_defaults=True, exclude_unset=True)
     )
 
     data = await crud.update(
         ModuleID.tokens,
         RoleEnum.cpo,
-        new_token.dict(),
+        new_token.model_dump(),
         token_uid,
         auth_token=auth_token,
         country_code=country_code,
@@ -213,6 +213,6 @@ async def partial_update_token(
         version=VersionNumber.v_2_1_1,
     )
     return OCPIResponse(
-        data=[adapter.token_adapter(data, VersionNumber.v_2_1_1).dict()],
+        data=[adapter.token_adapter(data, VersionNumber.v_2_1_1).model_dump()],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
     )

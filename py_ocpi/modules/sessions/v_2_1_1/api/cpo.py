@@ -57,7 +57,7 @@ async def get_sessions(
     sessions = []
     for data in data_list:
         sessions.append(
-            adapter.session_adapter(data, VersionNumber.v_2_1_1).dict()
+            adapter.session_adapter(data, VersionNumber.v_2_1_1).model_dump()
         )
     logger.debug(f"Amount of sessions in response: {len(sessions)}")
     return OCPIResponse(

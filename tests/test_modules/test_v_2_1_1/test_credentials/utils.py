@@ -19,6 +19,8 @@ CREDENTIALS_TOKEN_GET = {
     "url": "url",
     "business_details": {
         "name": "name",
+        "website": None,
+        "logo": None,
     },
     "party_id": "JOM",
     "country_code": "MY",
@@ -29,6 +31,8 @@ CREDENTIALS_TOKEN_CREATE = {
     "url": "/ocpi/versions",
     "business_details": {
         "name": "name",
+        "website": None,
+        "logo": None,
     },
     "party_id": "JOM",
     "country_code": "MY",

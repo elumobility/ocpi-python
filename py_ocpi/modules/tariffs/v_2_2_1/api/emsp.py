@@ -61,7 +61,7 @@ async def get_tariff(
     )
     if data:
         return OCPIResponse(
-            data=[adapter.tariff_adapter(data, VersionNumber.v_2_2_1).dict()],
+            data=[adapter.tariff_adapter(data, VersionNumber.v_2_2_1).model_dump()],
             **status.OCPI_1000_GENERIC_SUCESS_CODE,
         )
     logger.debug("Tariff with id `%s` was not found." % tariff_id)
@@ -99,7 +99,7 @@ async def add_or_update_tariff(
     logger.info(
         "Received request to add or update tariff with id - `%s`." % tariff_id
     )
-    logger.debug("Tariff data to update - %s" % tariff.dict())
+    logger.debug("Tariff data to update - %s" % tariff.model_dump())
     auth_token = get_auth_token(request)
 
     data = await crud.get(
@@ -116,7 +116,7 @@ async def add_or_update_tariff(
         data = await crud.update(
             ModuleID.tariffs,
             RoleEnum.emsp,
-            tariff.dict(),
+            tariff.model_dump(),
             tariff_id,
             auth_token=auth_token,
             country_code=country_code,
@@ -128,7 +128,7 @@ async def add_or_update_tariff(
         data = await crud.create(
             ModuleID.tariffs,
             RoleEnum.emsp,
-            tariff.dict(),
+            tariff.model_dump(),
             auth_token=auth_token,
             country_code=country_code,
             party_id=party_id,
@@ -136,7 +136,7 @@ async def add_or_update_tariff(
         )
 
     return OCPIResponse(
-        data=[adapter.tariff_adapter(data).dict()],
+        data=[adapter.tariff_adapter(data).model_dump()],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
     )
 

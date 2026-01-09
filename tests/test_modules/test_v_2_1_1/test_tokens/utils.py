@@ -25,9 +25,11 @@ TOKENS = [
         "uid": str(uuid4()),
         "type": TokenType.rfid,
         "auth_id": str(uuid4()),
+        "visual_number": None,
         "issuer": "issuer",
         "valid": True,
         "whitelist": WhitelistType.always,
+        "language": None,
         "last_updated": "2022-01-02 00:00:00+00:00",
     }
 ]
@@ -70,9 +72,8 @@ class Crud:
         data: dict = None,
         **kwargs,
     ):
-        return AuthorizationInfo(
-            allowed=Allowed.allowed, token=Token(**TOKENS[0])
-        ).dict()
+        auth_info = AuthorizationInfo(allowed=Allowed.allowed, location=None, info=None)
+        return auth_info.model_dump()
 
     @classmethod
     async def list(

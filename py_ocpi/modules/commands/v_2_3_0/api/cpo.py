@@ -18,6 +18,7 @@ from py_ocpi.core.enums import ModuleID, RoleEnum, Action
 from py_ocpi.core.authentication.verifier import AuthorizationVerifier
 from py_ocpi.core.exceptions import NotFoundOCPIError
 from py_ocpi.core.schemas import OCPIResponse
+from py_ocpi.modules.versions.enums import VersionNumber
 from py_ocpi.core.adapter import Adapter
 from py_ocpi.core.crud import Crud
 from py_ocpi.core.config import logger
@@ -110,7 +111,7 @@ async def send_command_result(
         )
         res = await client.post(
             command_data.response_url,
-            json=command_result.dict(),
+            json=command_result.model_dump(),
             headers={"authorization": authorization_token},
         )
         logger.info(
@@ -176,7 +177,7 @@ async def receive_command(
             ModuleID.commands,
             RoleEnum.cpo,
             Action.send_command,
-            command_data.dict(),
+            command_data.model_dump(),
             command=command,
             auth_token=auth_token,
             version=VersionNumber.v_2_3_0,
@@ -193,7 +194,7 @@ async def receive_command(
                 )
             return OCPIResponse(
                 data=[
-                    adapter.command_response_adapter(command_response).dict()
+                    adapter.command_response_adapter(command_response, VersionNumber.v_2_3_0).model_dump()
                 ],
                 **status.OCPI_1000_GENERIC_SUCESS_CODE,
             )
@@ -202,7 +203,7 @@ async def receive_command(
             result=CommandResponseType.rejected, timeout=0
         )
         return OCPIResponse(
-            data=[command_response.dict()],
+            data=[command_response.model_dump()],
             **status.OCPI_3000_GENERIC_SERVER_ERROR,
         )
 
@@ -215,6 +216,6 @@ async def receive_command(
             result=CommandResponseType.rejected, timeout=0
         )
         return OCPIResponse(
-            data=[command_response.dict()],
+            data=[command_response.model_dump()],
             **status.OCPI_2003_UNKNOWN_LOCATION,
         )

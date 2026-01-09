@@ -101,7 +101,7 @@ async def get_chargingprofile(
                 data=[
                     adapter.charging_profile_response_adapter(
                         charging_profile_response
-                    ).dict()
+                    ).model_dump()
                 ],
                 **status.OCPI_1000_GENERIC_SUCESS_CODE,
             )
@@ -113,7 +113,7 @@ async def get_chargingprofile(
             result=ChargingProfileResponseType.rejected, timeout=0
         )
         return OCPIResponse(
-            data=[charging_profile_response.dict()],
+            data=[charging_profile_response.model_dump()],
             **status.OCPI_3000_GENERIC_SERVER_ERROR,
         )
 
@@ -122,7 +122,7 @@ async def get_chargingprofile(
         result=ChargingProfileResponseType.rejected, timeout=0
     )
     return OCPIResponse(
-        data=[charging_profile_response.dict()],
+        data=[charging_profile_response.model_dump()],
         **status.OCPI_2000_GENERIC_CLIENT_ERROR,
     )
 
@@ -157,7 +157,7 @@ async def add_or_update_chargingprofile(
         "Received request to get charging profile with session_id - `%s`."
         % session_id
     )
-    logger.debug("Set charging profile data - `%s`" % charging_profile.dict())
+    logger.debug("Set charging profile data - `%s`" % charging_profile.model_dump())
     auth_token = get_auth_token(request)
 
     session = await crud.get(
@@ -173,7 +173,7 @@ async def add_or_update_chargingprofile(
             ModuleID.charging_profile,
             RoleEnum.cpo,
             Action.send_update_charging_profile,
-            charging_profile.dict(),
+            charging_profile.model_dump(),
             session=session,
             response_url=charging_profile.response_url,
             auth_token=auth_token,
@@ -198,7 +198,7 @@ async def add_or_update_chargingprofile(
                 data=[
                     adapter.charging_profile_response_adapter(
                         charging_profile_response
-                    ).dict()
+                    ).model_dump()
                 ],
                 **status.OCPI_1000_GENERIC_SUCESS_CODE,
             )
@@ -210,7 +210,7 @@ async def add_or_update_chargingprofile(
             result=ChargingProfileResponseType.rejected, timeout=0
         )
         return OCPIResponse(
-            data=[charging_profile_response.dict()],
+            data=[charging_profile_response.model_dump()],
             **status.OCPI_3000_GENERIC_SERVER_ERROR,
         )
 
@@ -219,7 +219,7 @@ async def add_or_update_chargingprofile(
         result=ChargingProfileResponseType.rejected, timeout=0
     )
     return OCPIResponse(
-        data=[charging_profile_response.dict()],
+        data=[charging_profile_response.model_dump()],
         **status.OCPI_2000_GENERIC_CLIENT_ERROR,
     )
 
@@ -292,7 +292,7 @@ async def delete_chargingprofile(
                 data=[
                     adapter.charging_profile_response_adapter(
                         charging_profile_response
-                    ).dict()
+                    ).model_dump()
                 ],
                 **status.OCPI_1000_GENERIC_SUCESS_CODE,
             )
@@ -304,7 +304,7 @@ async def delete_chargingprofile(
             result=ChargingProfileResponseType.rejected, timeout=0
         )
         return OCPIResponse(
-            data=[charging_profile_response.dict()],
+            data=[charging_profile_response.model_dump()],
             **status.OCPI_3000_GENERIC_SERVER_ERROR,
         )
 
@@ -313,6 +313,6 @@ async def delete_chargingprofile(
         result=ChargingProfileResponseType.rejected, timeout=0
     )
     return OCPIResponse(
-        data=[charging_profile_response.dict()],
+        data=[charging_profile_response.model_dump()],
         **status.OCPI_2000_GENERIC_CLIENT_ERROR,
     )

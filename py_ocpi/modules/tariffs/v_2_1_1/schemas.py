@@ -62,10 +62,10 @@ class Tariff(BaseModel):
 
 
 class TariffPartialUpdate(BaseModel):
-    id: Optional[String(36)]  # type: ignore
-    currency: Optional[String(3)]  # type: ignore
-    tariff_alt_text: Optional[List[DisplayText]]
-    tariff_alt_url: Optional[URL]
-    elements: Optional[List[TariffElement]]
-    energy_mix: Optional[EnergyMix]
-    last_updated: Optional[DateTime]
+    id: Optional[String(36)] = None  # type: ignore
+    currency: Optional[String(3)] = None  # type: ignore
+    tariff_alt_text: Optional[List[DisplayText]] = None
+    tariff_alt_url: Optional[URL] = None
+    elements: Optional[List[TariffElement]] = None
+    energy_mix: Optional[EnergyMix] = None
+    last_updated: Optional[DateTime] = None

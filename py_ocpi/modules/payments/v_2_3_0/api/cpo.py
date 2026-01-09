@@ -59,7 +59,7 @@ async def get_terminal(
     )
     if data:
         return OCPIResponse(
-            data=[adapter.terminal_adapter(data).dict()],
+            data=[adapter.terminal_adapter(data, VersionNumber.v_2_3_0).model_dump()],
             **status.OCPI_1000_GENERIC_SUCESS_CODE,
         )
     logger.debug("Terminal with id `%s` was not found." % terminal_id)
@@ -92,13 +92,13 @@ async def put_terminal(
     data = await crud.update(
         ModuleID.payments,
         RoleEnum.cpo,
-        terminal.dict(),
+        terminal.model_dump(),
         terminal_id,
         auth_token=auth_token,
         version=VersionNumber.v_2_3_0,
     )
     return OCPIResponse(
-        data=[adapter.terminal_adapter(data).dict()],
+        data=[adapter.terminal_adapter(data, VersionNumber.v_2_3_0).model_dump()],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
     )
 
@@ -131,12 +131,12 @@ async def patch_terminal(
     data = await crud.update(
         ModuleID.payments,
         RoleEnum.cpo,
-        terminal.dict(exclude_unset=True),
+        terminal.model_dump(exclude_unset=True),
         terminal_id,
         auth_token=auth_token,
         version=VersionNumber.v_2_3_0,
     )
     return OCPIResponse(
-        data=[adapter.terminal_adapter(data).dict()],
+        data=[adapter.terminal_adapter(data, VersionNumber.v_2_3_0).model_dump()],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
     )

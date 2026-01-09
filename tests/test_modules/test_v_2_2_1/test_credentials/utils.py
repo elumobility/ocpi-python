@@ -22,6 +22,8 @@ CREDENTIALS_TOKEN_GET = {
             "role": enums.RoleEnum.emsp,
             "business_details": {
                 "name": "name",
+                "website": None,
+                "logo": None,
             },
             "party_id": "JOM",
             "country_code": "MY",
@@ -37,6 +39,8 @@ CREDENTIALS_TOKEN_CREATE = {
             "role": enums.RoleEnum.emsp,
             "business_details": {
                 "name": "name",
+                "website": None,
+                "logo": None,
             },
             "party_id": "JOM",
             "country_code": "MY",

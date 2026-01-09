@@ -179,6 +179,7 @@ LOCATIONS = [
             "energy_sources": [
                 {"source": "SOLAR", "percentage": 100},
             ],
+            "environ_impact": None,
             "supplier_name": "supplier_name",
             "energy_product_name": "energy_product_name",
         },

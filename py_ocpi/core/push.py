@@ -38,15 +38,15 @@ def request_data(
 ) -> dict:
     data = {}
     if module_id == ModuleID.locations:
-        data = adapter.location_adapter(object_data, version).dict()
+        data = adapter.location_adapter(object_data, version).model_dump()
     elif module_id == ModuleID.sessions:
-        data = adapter.session_adapter(object_data, version).dict()
+        data = adapter.session_adapter(object_data, version).model_dump()
     elif module_id == ModuleID.cdrs:
-        data = adapter.cdr_adapter(object_data, version).dict()
+        data = adapter.cdr_adapter(object_data, version).model_dump()
     elif module_id == ModuleID.tariffs:
-        data = adapter.tariff_adapter(object_data, version).dict()
+        data = adapter.tariff_adapter(object_data, version).model_dump()
     elif module_id == ModuleID.tokens:
-        data = adapter.token_adapter(object_data, version).dict()
+        data = adapter.token_adapter(object_data, version).model_dump()
     return data
 
 
@@ -162,7 +162,7 @@ async def push_object(
                 )
             )
     result = PushResponse(receiver_responses=receiver_responses)
-    logger.debug("Result of push operation - %s" % result.dict())
+    logger.debug("Result of push operation - %s" % result.model_dump())
     return result
 
 
@@ -186,7 +186,7 @@ async def http_push_to_client(
     adapter: Adapter = Depends(get_adapter),
 ):
     logger.info("Received push http request.")
-    logger.debug("Received push data - `%s`" % push.dict())
+    logger.debug("Received push data - `%s`" % push.model_dump())
     auth_token = get_auth_token(request, version)
 
     return await push_object(version, push, crud, adapter, auth_token)
@@ -215,5 +215,5 @@ async def websocket_push_to_client(
         push_response = await push_object(
             version, push, crud, adapter, auth_token
         )
-        logger.debug("Sending push response - `%s`" % push_response.dict())
-        await websocket.send_json(push_response.dict())
+        logger.debug("Sending push response - `%s`" % push_response.model_dump())
+        await websocket.send_json(push_response.model_dump())

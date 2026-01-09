@@ -43,13 +43,13 @@ async def receive_command_result(
             processing the command result.
     """
     logger.info("Received command result with uid - `%s`." % uid)
-    logger.debug("Command result data - %s" % command_result.dict())
+    logger.debug("Command result data - %s" % command_result.model_dump())
     auth_token = get_auth_token(request)
 
     await crud.update(
         ModuleID.commands,
         RoleEnum.emsp,
-        command_result.dict(),
+        command_result.model_dump(),
         uid,
         auth_token=auth_token,
         version=VersionNumber.v_2_3_0,

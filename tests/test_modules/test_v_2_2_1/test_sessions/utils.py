@@ -32,14 +32,17 @@ SESSIONS = [
             "contract_id": str(uuid4()),
         },
         "auth_method": AuthMethod.auth_request,
+        "authorization_reference": None,
         "location_id": str(uuid4()),
         "evse_uid": str(uuid4()),
         "connector_id": str(uuid4()),
+        "meter_id": None,
         "currency": "MYR",
         "charging_periods": [
             {
                 "start_date_time": "2022-01-02 00:00:00+00:00",
                 "dimensions": [{"type": CdrDimensionType.power, "volume": 10}],
+                "tariff_id": None,
             }
         ],
         "total_cost": {"excl_vat": 10.0000, "incl_vat": 10.2500},

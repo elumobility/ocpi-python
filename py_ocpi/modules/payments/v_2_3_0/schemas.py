@@ -48,22 +48,22 @@ class Terminal(BaseModel):
 class TerminalPartialUpdate(BaseModel):
     """Partial update schema for Terminal object."""
 
-    terminal_id: Optional[CiString(max_length=36)]  # type: ignore
-    customer_reference: Optional[CiString(max_length=36)]  # type: ignore
-    party_id: Optional[CiString(max_length=3)]  # type: ignore
-    country_code: Optional[CiString(max_length=2)]  # type: ignore
-    address: Optional[CiString(max_length=45)]  # type: ignore
-    city: Optional[CiString(max_length=45)]  # type: ignore
-    postal_code: Optional[CiString(max_length=10)]  # type: ignore
-    state: Optional[CiString(max_length=20)]  # type: ignore
-    country: Optional[CiString(max_length=3)]  # type: ignore
-    coordinates: Optional[GeoLocation]
-    invoice_base_url: Optional[URL]
-    invoice_creator: Optional[InvoiceCreator]
-    reference: Optional[CiString(max_length=36)]  # type: ignore
-    location_ids: Optional[List[CiString(max_length=36)]]  # type: ignore
-    evse_uids: Optional[List[CiString(max_length=36)]]  # type: ignore
-    last_updated: Optional[DateTime]
+    terminal_id: Optional[CiString(max_length=36)] = None  # type: ignore
+    customer_reference: Optional[CiString(max_length=36)] = None  # type: ignore
+    party_id: Optional[CiString(max_length=3)] = None  # type: ignore
+    country_code: Optional[CiString(max_length=2)] = None  # type: ignore
+    address: Optional[CiString(max_length=45)] = None  # type: ignore
+    city: Optional[CiString(max_length=45)] = None  # type: ignore
+    postal_code: Optional[CiString(max_length=10)] = None  # type: ignore
+    state: Optional[CiString(max_length=20)] = None  # type: ignore
+    country: Optional[CiString(max_length=3)] = None  # type: ignore
+    coordinates: Optional[GeoLocation] = None
+    invoice_base_url: Optional[URL] = None
+    invoice_creator: Optional[InvoiceCreator] = None
+    reference: Optional[CiString(max_length=36)] = None  # type: ignore
+    location_ids: Optional[List[CiString(max_length=36)]] = None  # type: ignore
+    evse_uids: Optional[List[CiString(max_length=36)]] = None  # type: ignore
+    last_updated: Optional[DateTime] = None
 
 
 class TerminalActivate(BaseModel):

@@ -66,7 +66,7 @@ async def get_tariff(
     )
     if data:
         return OCPIResponse(
-            data=[adapter.tariff_adapter(data, VersionNumber.v_2_1_1).dict()],
+            data=[adapter.tariff_adapter(data, VersionNumber.v_2_1_1).model_dump()],
             **status.OCPI_1000_GENERIC_SUCESS_CODE,
         )
     logger.debug("Tariff with id `%s` was not found." % tariff_id)
@@ -104,7 +104,7 @@ async def add_or_update_tariff(
     logger.info(
         "Received request to add or update tariff with id - `%s`." % tariff_id
     )
-    logger.debug("Tariff data to update - %s" % tariff.dict())
+    logger.debug("Tariff data to update - %s" % tariff.model_dump())
     auth_token = get_auth_token(request, VersionNumber.v_2_1_1)
 
     data = await crud.get(
@@ -121,7 +121,7 @@ async def add_or_update_tariff(
         data = await crud.update(
             ModuleID.tariffs,
             RoleEnum.emsp,
-            tariff.dict(),
+            tariff.model_dump(),
             tariff_id,
             auth_token=auth_token,
             country_code=country_code,
@@ -133,7 +133,7 @@ async def add_or_update_tariff(
         data = await crud.create(
             ModuleID.tariffs,
             RoleEnum.emsp,
-            tariff.dict(),
+            tariff.model_dump(),
             auth_token=auth_token,
             country_code=country_code,
             party_id=party_id,
@@ -141,7 +141,7 @@ async def add_or_update_tariff(
         )
 
     return OCPIResponse(
-        data=[adapter.tariff_adapter(data, VersionNumber.v_2_1_1).dict()],
+        data=[adapter.tariff_adapter(data, VersionNumber.v_2_1_1).model_dump()],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
     )
 
@@ -181,7 +181,7 @@ async def partial_update_tariff(
         "Received request to partially update tariff with id - `%s`."
         % tariff_id
     )
-    logger.debug("Tariff data to update - %s" % tariff.dict())
+    logger.debug("Tariff data to update - %s" % tariff.model_dump())
     auth_token = get_auth_token(request, VersionNumber.v_2_1_1)
 
     old_data = await crud.get(
@@ -198,13 +198,13 @@ async def partial_update_tariff(
         new_tariff = copy.deepcopy(old_tariff)
 
         partially_update_attributes(
-            new_tariff, tariff.dict(exclude_defaults=True, exclude_unset=True)
+            new_tariff, tariff.model_dump(exclude_defaults=True, exclude_unset=True)
         )
 
         data = await crud.update(
             ModuleID.tariffs,
             RoleEnum.emsp,
-            new_tariff.dict(),
+            new_tariff.model_dump(),
             tariff_id,
             auth_token=auth_token,
             country_code=country_code,
@@ -213,7 +213,7 @@ async def partial_update_tariff(
         )
 
         return OCPIResponse(
-            data=[adapter.tariff_adapter(data, VersionNumber.v_2_1_1).dict()],
+            data=[adapter.tariff_adapter(data, VersionNumber.v_2_1_1).model_dump()],
             **status.OCPI_1000_GENERIC_SUCESS_CODE,
         )
     logger.debug("Tariff with id `%s` was not found." % tariff_id)

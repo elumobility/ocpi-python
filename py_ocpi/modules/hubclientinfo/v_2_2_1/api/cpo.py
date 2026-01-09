@@ -61,7 +61,7 @@ async def get_hubclientinfo(
     )
     if data:
         return OCPIResponse(
-            data=[adapter.hubclientinfo_adapter(data).dict()],
+            data=[adapter.hubclientinfo_adapter(data).model_dump()],
             **status.OCPI_1000_GENERIC_SUCESS_CODE,
         )
     logger.info("Hub client info was not found.")
@@ -100,7 +100,7 @@ async def add_or_update_clienthubinfo(
         "with country code - `%s` and party id - `%s`."
         % (country_code, party_id)
     )
-    logger.debug("Client hub info data to update - %s" % client_hub_info.dict())
+    logger.debug("Client hub info data to update - %s" % client_hub_info.model_dump())
     auth_token = get_auth_token(request)
 
     data = await crud.get(
@@ -117,7 +117,7 @@ async def add_or_update_clienthubinfo(
         data = await crud.update(
             ModuleID.hub_client_info,
             RoleEnum.cpo,
-            client_hub_info.dict(),
+            client_hub_info.model_dump(),
             None,
             auth_token=auth_token,
             country_code=country_code,
@@ -129,7 +129,7 @@ async def add_or_update_clienthubinfo(
         data = await crud.create(
             ModuleID.hub_client_info,
             RoleEnum.cpo,
-            client_hub_info.dict(),
+            client_hub_info.model_dump(),
             None,
             country_code=country_code,
             party_id=party_id,
@@ -137,6 +137,6 @@ async def add_or_update_clienthubinfo(
         )
 
     return OCPIResponse(
-        data=[adapter.hubclientinfo_adapter(data).dict()],
+        data=[adapter.hubclientinfo_adapter(data).model_dump()],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
     )

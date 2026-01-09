@@ -77,16 +77,16 @@ class Connector(BaseModel):
 
 
 class ConnectorPartialUpdate(BaseModel):
-    id: Optional[CiString(max_length=36)]  # type: ignore
-    standard: Optional[ConnectorType]
-    format: Optional[ConnectorFormat]
-    power_type: Optional[PowerType]
-    max_voltage: Optional[int]
-    max_amperage: Optional[int]
-    max_electric_power: Optional[Optional[int]]
-    tariff_ids: Optional[List[CiString(max_length=36)]]  # type: ignore
-    terms_and_conditions: Optional[URL]
-    last_updated: Optional[DateTime]
+    id: Optional[CiString(max_length=36)] = None  # type: ignore
+    standard: Optional[ConnectorType] = None
+    format: Optional[ConnectorFormat] = None
+    power_type: Optional[PowerType] = None
+    max_voltage: Optional[int] = None
+    max_amperage: Optional[int] = None
+    max_electric_power: Optional[Optional[int]] = None
+    tariff_ids: Optional[List[CiString(max_length=36)]] = None  # type: ignore
+    terms_and_conditions: Optional[URL] = None
+    last_updated: Optional[DateTime] = None
 
 
 class EVSEParking(BaseModel):
@@ -124,21 +124,21 @@ class EVSE(BaseModel):
 
 
 class EVSEPartialUpdate(BaseModel):
-    uid: Optional[CiString(max_length=36)]  # type: ignore
-    evse_id: Optional[CiString(max_length=48)]  # type: ignore
-    status: Optional[Status]
-    status_schedule: Optional[StatusSchedule]
-    capabilities: Optional[List[Capability]]
-    connectors: Optional[List[Connector]]
-    floor_level: Optional[String(max_length=4)]  # type: ignore
-    coordinates: Optional[GeoLocation]
-    physical_reference: Optional[String(max_length=16)]  # type: ignore
-    directions: Optional[List[DisplayText]]
-    parking_restrictions: Optional[List[ParkingRestriction]]
-    parking: Optional[List[EVSEParking]]
-    images: Optional[List[Image]]
-    accepted_service_providers: Optional[List[String(max_length=50)]]  # type: ignore
-    last_updated: Optional[DateTime]
+    uid: Optional[CiString(max_length=36)] = None  # type: ignore
+    evse_id: Optional[CiString(max_length=48)] = None  # type: ignore
+    status: Optional[Status] = None
+    status_schedule: Optional[StatusSchedule] = None
+    capabilities: Optional[List[Capability]] = None
+    connectors: Optional[List[Connector]] = None
+    floor_level: Optional[String(max_length=4)] = None  # type: ignore
+    coordinates: Optional[GeoLocation] = None
+    physical_reference: Optional[String(max_length=16)] = None  # type: ignore
+    directions: Optional[List[DisplayText]] = None
+    parking_restrictions: Optional[List[ParkingRestriction]] = None
+    parking: Optional[List[EVSEParking]] = None
+    images: Optional[List[Image]] = None
+    accepted_service_providers: Optional[List[String(max_length=50)]] = None  # type: ignore
+    last_updated: Optional[DateTime] = None
 
 
 class Parking(BaseModel):
@@ -148,53 +148,53 @@ class Parking(BaseModel):
     Added for EU AFIR compliance (NAP reporting requirements).
     """
 
-    id: CiString(max_length=36)  # type: ignore
-    physical_reference: Optional[String(max_length=12)]  # type: ignore
+    parking_id: CiString(max_length=36)  # type: ignore
+    physical_reference: Optional[String(max_length=12)] = None  # type: ignore
     vehicle_types: List[VehicleType]
-    max_vehicle_weight: Optional[Number]
-    max_vehicle_height: Optional[Number]
-    max_vehicle_length: Optional[Number]
-    max_vehicle_width: Optional[Number]
-    parking_space_length: Optional[Number]
-    parking_space_width: Optional[Number]
-    dangerous_goods_allowed: Optional[bool]
-    direction: Optional[ParkingDirection]
-    drive_through: Optional[bool]
+    max_vehicle_weight: Optional[Number] = None
+    max_vehicle_height: Optional[Number] = None
+    max_vehicle_length: Optional[Number] = None
+    max_vehicle_width: Optional[Number] = None
+    parking_space_length: Optional[Number] = None
+    parking_space_width: Optional[Number] = None
+    dangerous_goods_allowed: Optional[bool] = None
+    direction: Optional[ParkingDirection] = None
+    drive_through: Optional[bool] = None
     restricted_to_type: bool
     reservation_required: bool
-    time_limit: Optional[Number]
-    roofed: Optional[bool]
+    time_limit: Optional[Number] = None
+    roofed: Optional[bool] = None
     images: List[Image] = []
-    lighting: Optional[bool]
-    refrigeration_outlet: Optional[bool]
+    lighting: Optional[bool] = None
+    refrigeration_outlet: Optional[bool] = None
     standards: List[CiString(max_length=36)] = []  # type: ignore
-    apds_reference: Optional[CiString(max_length=255)]  # type: ignore
+    apds_reference: Optional[CiString(max_length=255)] = None  # type: ignore
 
 
 class ParkingPartialUpdate(BaseModel):
     """Partial update schema for Parking object."""
 
-    id: Optional[CiString(max_length=36)]  # type: ignore
-    physical_reference: Optional[String(max_length=12)]  # type: ignore
-    vehicle_types: Optional[List[VehicleType]]
-    max_vehicle_weight: Optional[Number]
-    max_vehicle_height: Optional[Number]
-    max_vehicle_length: Optional[Number]
-    max_vehicle_width: Optional[Number]
-    parking_space_length: Optional[Number]
-    parking_space_width: Optional[Number]
-    dangerous_goods_allowed: Optional[bool]
-    direction: Optional[ParkingDirection]
-    drive_through: Optional[bool]
-    restricted_to_type: Optional[bool]
-    reservation_required: Optional[bool]
-    time_limit: Optional[Number]
-    roofed: Optional[bool]
-    images: Optional[List[Image]]
-    lighting: Optional[bool]
-    refrigeration_outlet: Optional[bool]
-    standards: Optional[List[CiString(max_length=36)]]  # type: ignore
-    apds_reference: Optional[CiString(max_length=255)]  # type: ignore
+    id: Optional[CiString(max_length=36)] = None  # type: ignore
+    physical_reference: Optional[String(max_length=12)] = None  # type: ignore
+    vehicle_types: Optional[List[VehicleType]] = None
+    max_vehicle_weight: Optional[Number] = None
+    max_vehicle_height: Optional[Number] = None
+    max_vehicle_length: Optional[Number] = None
+    max_vehicle_width: Optional[Number] = None
+    parking_space_length: Optional[Number] = None
+    parking_space_width: Optional[Number] = None
+    dangerous_goods_allowed: Optional[bool] = None
+    direction: Optional[ParkingDirection] = None
+    drive_through: Optional[bool] = None
+    restricted_to_type: Optional[bool] = None
+    reservation_required: Optional[bool] = None
+    time_limit: Optional[Number] = None
+    roofed: Optional[bool] = None
+    images: Optional[List[Image]] = None
+    lighting: Optional[bool] = None
+    refrigeration_outlet: Optional[bool] = None
+    standards: Optional[List[CiString(max_length=36)]] = None  # type: ignore
+    apds_reference: Optional[CiString(max_length=255)] = None  # type: ignore
 
 
 class BusinessDetails(BaseModel):
@@ -245,31 +245,31 @@ class Location(BaseModel):
 
 
 class LocationPartialUpdate(BaseModel):
-    country_code: Optional[CiString(max_length=2)]  # type: ignore
-    party_id: Optional[CiString(max_length=3)]  # type: ignore
-    id: Optional[CiString(max_length=36)]  # type: ignore
-    publish: Optional[bool]
-    publish_allowed_to: Optional[List[PublishTokenType]]
-    name: Optional[String(max_length=255)]  # type: ignore
-    address: Optional[String(max_length=45)]  # type: ignore
-    city: Optional[String(max_length=45)]  # type: ignore
-    postal_code: Optional[String(max_length=10)]  # type: ignore
-    state: Optional[String(max_length=20)]  # type: ignore
-    country: Optional[String(max_length=3)]  # type: ignore
-    coordinates: Optional[GeoLocation]
-    related_locations: Optional[List[AdditionalGeoLocation]]
-    parking_type: Optional[ParkingType]
-    evses: Optional[List[EVSE]]
-    parking_places: Optional[List[Parking]]
-    directions: Optional[List[DisplayText]]
-    operator: Optional[BusinessDetails]
-    suboperator: Optional[BusinessDetails]
-    owner: Optional[BusinessDetails]
-    facilities: Optional[List[Facility]]
-    time_zone: Optional[String(max_length=255)]  # type: ignore
-    opening_times: Optional[Hours]
-    charging_when_closed: Optional[bool]
-    images: Optional[List[Image]]
-    energy_mix: Optional[EnergyMix]
-    help_phone: Optional[CiString(max_length=25)]  # type: ignore
-    last_updated: Optional[DateTime]
+    country_code: Optional[CiString(max_length=2)] = None  # type: ignore
+    party_id: Optional[CiString(max_length=3)] = None  # type: ignore
+    id: Optional[CiString(max_length=36)] = None  # type: ignore
+    publish: Optional[bool] = None
+    publish_allowed_to: Optional[List[PublishTokenType]] = None
+    name: Optional[String(max_length=255)] = None  # type: ignore
+    address: Optional[String(max_length=45)] = None  # type: ignore
+    city: Optional[String(max_length=45)] = None  # type: ignore
+    postal_code: Optional[String(max_length=10)] = None  # type: ignore
+    state: Optional[String(max_length=20)] = None  # type: ignore
+    country: Optional[String(max_length=3)] = None  # type: ignore
+    coordinates: Optional[GeoLocation] = None
+    related_locations: Optional[List[AdditionalGeoLocation]] = None
+    parking_type: Optional[ParkingType] = None
+    evses: Optional[List[EVSE]] = None
+    parking_places: Optional[List[Parking]] = None
+    directions: Optional[List[DisplayText]] = None
+    operator: Optional[BusinessDetails] = None
+    suboperator: Optional[BusinessDetails] = None
+    owner: Optional[BusinessDetails] = None
+    facilities: Optional[List[Facility]] = None
+    time_zone: Optional[String(max_length=255)] = None  # type: ignore
+    opening_times: Optional[Hours] = None
+    charging_when_closed: Optional[bool] = None
+    images: Optional[List[Image]] = None
+    energy_mix: Optional[EnergyMix] = None
+    help_phone: Optional[CiString(max_length=25)] = None  # type: ignore
+    last_updated: Optional[DateTime] = None

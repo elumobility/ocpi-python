@@ -103,7 +103,7 @@ async def send_command_result(
         )
         res = await client.post(
             command_data.response_url,
-            json=command_response.dict(),
+            json=command_response.model_dump(),
             headers={"authorization": authorization_token},
         )
         logger.info(
@@ -177,7 +177,7 @@ async def receive_command(
             ModuleID.commands,
             RoleEnum.cpo,
             Action.send_command,
-            command_data.dict(),
+            command_data.model_dump(),
             command=command,
             auth_token=auth_token,
             version=VersionNumber.v_2_1_1,
@@ -196,7 +196,7 @@ async def receive_command(
                 data=[
                     adapter.command_response_adapter(
                         command_response, VersionNumber.v_2_1_1
-                    ).dict()
+                    ).model_dump()
                 ],
                 **status.OCPI_1000_GENERIC_SUCESS_CODE,
             )
@@ -204,7 +204,7 @@ async def receive_command(
         logger.debug("Send command action returned without result.")
         command_response = CommandResponse(result=CommandResponseType.rejected)
         return OCPIResponse(
-            data=[command_response.dict()],
+            data=[command_response.model_dump()],
             **status.OCPI_3000_GENERIC_SERVER_ERROR,
         )
 
@@ -215,6 +215,6 @@ async def receive_command(
         )
         command_response = CommandResponse(result=CommandResponseType.rejected)
         return OCPIResponse(
-            data=[command_response.dict()],
+            data=[command_response.model_dump()],
             **status.OCPI_2003_UNKNOWN_LOCATION,
         )

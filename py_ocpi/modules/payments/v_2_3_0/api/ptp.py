@@ -72,7 +72,7 @@ async def get_terminals(
 
     terminals = []
     for data in data_list:
-        terminals.append(adapter.terminal_adapter(data).dict())
+        terminals.append(adapter.terminal_adapter(data, VersionNumber.v_2_3_0).model_dump())
     logger.debug(f"Amount of terminals in response: {len(terminals)}")
     return OCPIResponse(
         data=terminals,
@@ -108,7 +108,7 @@ async def get_terminal(
     )
     if data:
         return OCPIResponse(
-            data=[adapter.terminal_adapter(data).dict()],
+            data=[adapter.terminal_adapter(data, VersionNumber.v_2_3_0).model_dump()],
             **status.OCPI_1000_GENERIC_SUCESS_CODE,
         )
     logger.debug("Terminal with id `%s` was not found." % terminal_id)
@@ -137,13 +137,13 @@ async def activate_terminal(
     data = await crud.create(
         ModuleID.payments,
         RoleEnum.other,  # PTP role
-        terminal_activate.dict(),
+        terminal_activate.model_dump(),
         auth_token=auth_token,
         version=VersionNumber.v_2_3_0,
         operation="activate",
     )
     return OCPIResponse(
-        data=[adapter.terminal_adapter(data).dict()],
+        data=[adapter.terminal_adapter(data, VersionNumber.v_2_3_0).model_dump()],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
     )
 
@@ -177,7 +177,7 @@ async def deactivate_terminal(
         operation="deactivate",
     )
     return OCPIResponse(
-        data=[adapter.terminal_adapter(data).dict()],
+        data=[adapter.terminal_adapter(data, VersionNumber.v_2_3_0).model_dump()],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
     )
 
@@ -208,13 +208,13 @@ async def put_terminal(
     data = await crud.update(
         ModuleID.payments,
         RoleEnum.other,  # PTP role
-        terminal.dict(),
+        terminal.model_dump(),
         terminal_id,
         auth_token=auth_token,
         version=VersionNumber.v_2_3_0,
     )
     return OCPIResponse(
-        data=[adapter.terminal_adapter(data).dict()],
+        data=[adapter.terminal_adapter(data, VersionNumber.v_2_3_0).model_dump()],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
     )
 
@@ -259,7 +259,7 @@ async def get_financial_advice_confirmations(
     confirmations = []
     for data in data_list:
         confirmations.append(
-            adapter.financial_advice_confirmation_adapter(data).dict()
+            adapter.financial_advice_confirmation_adapter(data, VersionNumber.v_2_3_0).model_dump()
         )
     return OCPIResponse(
         data=confirmations,
@@ -302,7 +302,7 @@ async def get_financial_advice_confirmation(
     )
     if data:
         return OCPIResponse(
-            data=[adapter.financial_advice_confirmation_adapter(data).dict()],
+            data=[adapter.financial_advice_confirmation_adapter(data, VersionNumber.v_2_3_0).model_dump()],
             **status.OCPI_1000_GENERIC_SUCESS_CODE,
         )
     raise NotFoundOCPIError
@@ -340,13 +340,13 @@ async def put_financial_advice_confirmation(
     data = await crud.update(
         ModuleID.payments,
         RoleEnum.other,
-        confirmation.dict(),
+        confirmation.model_dump(),
         confirmation_id,
         auth_token=auth_token,
         version=VersionNumber.v_2_3_0,
         object_type="financial_advice_confirmation",
     )
     return OCPIResponse(
-        data=[adapter.financial_advice_confirmation_adapter(data).dict()],
+        data=[adapter.financial_advice_confirmation_adapter(data, VersionNumber.v_2_3_0).model_dump()],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
     )

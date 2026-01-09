@@ -58,7 +58,7 @@ class AuthorizationVerifier:
 
         try:
             token = authorization.split()[1]
-            if self.version.startswith("2.2"):
+            if self.version.startswith("2.2") or self.version.startswith("2.3"):
                 try:
                     token = decode_string_base64(token)
                 except UnicodeDecodeError:

@@ -17,6 +17,7 @@ TARIFFS = [
     {
         "id": str(uuid4()),
         "currency": "MYR",
+        "tariff_alt_url": None,
         "elements": [
             {
                 "price_components": [
@@ -25,9 +26,11 @@ TARIFFS = [
                         "price": 1.50,
                         "step_size": 2,
                     },
-                ]
+                ],
+                "restrictions": None,
             },
         ],
+        "energy_mix": None,
         "last_updated": "2022-01-02 00:00:00+00:00",
     },
 ]

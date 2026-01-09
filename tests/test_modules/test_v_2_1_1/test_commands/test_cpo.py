@@ -55,6 +55,7 @@ def test_cpo_receive_command_start_session_v_2_1_1(client_cpo_v_2_1_1):
         "response_url": "https://dummy.restapiexample.com/api/v1/create",
         "token": TOKENS[0],
         "location_id": str(uuid4()),
+        "evse_uid": None,
     }
 
     response = client_cpo_v_2_1_1.post(
@@ -94,6 +95,7 @@ def test_cpo_receive_command_reserve_now_v_2_1_1(client_cpo_v_2_1_1):
         ),
         "reservation_id": 0,
         "location_id": str(uuid4()),
+        "evse_uid": None,
     }
 
     response = client_cpo_v_2_1_1.post(
@@ -136,6 +138,7 @@ def test_cpo_receive_command_reserve_now_unknown_location_v_2_1_1():
         ),
         "reservation_id": 0,
         "location_id": str(uuid4()),
+        "evse_uid": None,
     }
 
     client = TestClient(app)

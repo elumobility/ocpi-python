@@ -57,7 +57,7 @@ async def get_tariffs(
     tariffs = []
     for data in data_list:
         tariffs.append(
-            adapter.tariff_adapter(data, VersionNumber.v_2_1_1).dict()
+            adapter.tariff_adapter(data, VersionNumber.v_2_1_1).model_dump()
         )
     logger.debug(f"Amount of tariffs in response: {len(tariffs)}")
     return OCPIResponse(

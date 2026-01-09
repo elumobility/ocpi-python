@@ -10,7 +10,7 @@ fake_endpoints_data = {
         endpoints=[
             ENDPOINTS[VersionNumber.v_2_2_1][RoleEnum.cpo][ModuleID.locations]
         ],
-    ).dict(),
+    ).model_dump(),
 }
 
 fake_versions_data = {"data": get_versions()}

@@ -58,7 +58,7 @@ async def get_credentials(
         version=VersionNumber.v_2_2_1,
     )
     return OCPIResponse(
-        data=adapter.credentials_adapter(data).dict(),
+        data=adapter.credentials_adapter(data).model_dump(),
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
     )
 
@@ -88,7 +88,7 @@ async def post_credentials(
                        or if the token is not valid (HTTP 401 Unauthorized).
     """
     logger.info("Received request to create credentials.")
-    logger.debug("POST credentials body: %s" % credentials.dict())
+    logger.debug("POST credentials body: %s" % credentials.model_dump())
 
     auth_token = get_auth_token(request)
 
@@ -167,13 +167,13 @@ async def post_credentials(
                 new_credentials = await crud.create(
                     ModuleID.credentials_and_registration,
                     RoleEnum.cpo,
-                    {"credentials": credentials.dict(), "endpoints": endpoints},
+                    {"credentials": credentials.model_dump(), "endpoints": endpoints},
                     auth_token=auth_token,
                     version=VersionNumber.v_2_2_1,
                 )
 
                 return OCPIResponse(
-                    data=adapter.credentials_adapter(new_credentials).dict(),
+                    data=adapter.credentials_adapter(new_credentials).model_dump(),
                     **status.OCPI_1000_GENERIC_SUCESS_CODE,
                 )
 
@@ -207,7 +207,7 @@ async def update_credentials(
             (HTTP 405 Method Not Allowed).
     """
     logger.info("Received request to update credentials.")
-    logger.debug("PUT credentials body: %s" % credentials.dict())
+    logger.debug("PUT credentials body: %s" % credentials.model_dump())
     auth_token = get_auth_token(request)
 
     # Check if the client is already registered
@@ -279,7 +279,7 @@ async def update_credentials(
                 new_credentials = await crud.update(
                     ModuleID.credentials_and_registration,
                     RoleEnum.cpo,
-                    {"credentials": credentials.dict(), "endpoints": endpoints},
+                    {"credentials": credentials.model_dump(), "endpoints": endpoints},
                     # TODO check credential_id
                     id="",
                     auth_token=auth_token,
@@ -287,7 +287,7 @@ async def update_credentials(
                 )
 
                 return OCPIResponse(
-                    data=adapter.credentials_adapter(new_credentials).dict(),
+                    data=adapter.credentials_adapter(new_credentials).model_dump(),
                     **status.OCPI_1000_GENERIC_SUCESS_CODE,
                 )
 

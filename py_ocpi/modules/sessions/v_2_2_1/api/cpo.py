@@ -58,7 +58,7 @@ async def get_sessions(
 
     sessions = []
     for data in data_list:
-        sessions.append(adapter.session_adapter(data).dict())
+        sessions.append(adapter.session_adapter(data).model_dump())
     logger.debug(f"Amount of sessions in response: {len(sessions)}")
     return OCPIResponse(
         data=sessions,
@@ -93,12 +93,12 @@ async def set_charging_preference(
     data = await crud.update(
         ModuleID.sessions,
         RoleEnum.cpo,
-        charging_preferences.dict(),
+        charging_preferences.model_dump(),
         session_id,
         auth_token=auth_token,
         version=VersionNumber.v_2_2_1,
     )
     return OCPIResponse(
-        data=[adapter.charging_preference_adapter(data).dict()],
+        data=[adapter.charging_preference_adapter(data).model_dump()],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
     )

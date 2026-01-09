@@ -32,7 +32,7 @@ SET_CHARGING_PROFILE = {
             "limit": 1,
         },
     },
-    "response_url": "abc",
+    "response_url": "https://example.com/response",
 }
 
 

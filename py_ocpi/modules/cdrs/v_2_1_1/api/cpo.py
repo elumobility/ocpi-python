@@ -57,7 +57,7 @@ async def get_cdrs(
 
     cdrs = []
     for data in data_list:
-        cdrs.append(adapter.cdr_adapter(data, VersionNumber.v_2_1_1).dict())
+        cdrs.append(adapter.cdr_adapter(data, VersionNumber.v_2_1_1).model_dump())
     logger.debug(f"Amount of cdrs in response: {len(cdrs)}")
     return OCPIResponse(
         data=cdrs,

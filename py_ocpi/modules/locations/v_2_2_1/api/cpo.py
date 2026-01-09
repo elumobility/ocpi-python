@@ -58,7 +58,7 @@ async def get_locations(
 
     locations = []
     for data in data_list:
-        locations.append(adapter.location_adapter(data).dict())
+        locations.append(adapter.location_adapter(data, VersionNumber.v_2_2_1).model_dump())
     logger.debug(f"Amount of locations in response: {len(locations)}")
     return OCPIResponse(
         data=locations,
@@ -99,7 +99,7 @@ async def get_location(
     )
     if data:
         return OCPIResponse(
-            data=[adapter.location_adapter(data).dict()],
+            data=[adapter.location_adapter(data, VersionNumber.v_2_2_1).model_dump()],
             **status.OCPI_1000_GENERIC_SUCESS_CODE,
         )
     logger.debug("Location with id `%s` was not found." % location_id)
@@ -146,11 +146,11 @@ async def get_evse(
         version=VersionNumber.v_2_2_1,
     )
     if data:
-        location = adapter.location_adapter(data)
+        location = adapter.location_adapter(data, VersionNumber.v_2_2_1)
         for evse in location.evses:
             if evse.uid == evse_uid:
                 return OCPIResponse(
-                    data=[evse.dict()],
+                    data=[evse.model_dump()],
                     **status.OCPI_1000_GENERIC_SUCESS_CODE,
                 )
         logger.debug("Evse with id `%s` was not found." % evse_uid)
@@ -205,13 +205,13 @@ async def get_connector(
         version=VersionNumber.v_2_2_1,
     )
     if data:
-        location = adapter.location_adapter(data)
+        location = adapter.location_adapter(data, VersionNumber.v_2_2_1)
         for evse in location.evses:
             if evse.uid == evse_uid:
                 for connector in evse.connectors:
                     if connector.id == connector_id:
                         return OCPIResponse(
-                            data=[connector.dict()],
+                            data=[connector.model_dump()],
                             **status.OCPI_1000_GENERIC_SUCESS_CODE,
                         )
                 logger.debug(

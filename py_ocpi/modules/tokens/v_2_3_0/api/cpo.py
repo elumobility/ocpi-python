@@ -69,7 +69,7 @@ async def get_token(
     )
     if data:
         return OCPIResponse(
-            data=[adapter.token_adapter(data).dict()],
+            data=[adapter.token_adapter(data).model_dump()],
             **status.OCPI_1000_GENERIC_SUCESS_CODE,
         )
     logger.debug("Token with id `%s` was not found." % token_uid)
@@ -111,7 +111,7 @@ async def add_or_update_token(
     logger.info(
         "Received request to add or update token with id - `%s`." % token_uid
     )
-    logger.debug("Token data to update - %s" % token.dict())
+    logger.debug("Token data to update - %s" % token.model_dump())
     auth_token = get_auth_token(request)
 
     data = await crud.get(
@@ -129,7 +129,7 @@ async def add_or_update_token(
         data = await crud.update(
             ModuleID.tokens,
             RoleEnum.cpo,
-            token.dict(),
+            token.model_dump(),
             token_uid,
             token_type=token_type,
             auth_token=auth_token,
@@ -142,7 +142,7 @@ async def add_or_update_token(
         data = await crud.create(
             ModuleID.tokens,
             RoleEnum.cpo,
-            token.dict(),
+            token.model_dump(),
             token_type=token_type,
             auth_token=auth_token,
             country_code=country_code,
@@ -150,7 +150,7 @@ async def add_or_update_token(
             version=VersionNumber.v_2_3_0,
         )
     return OCPIResponse(
-        data=[adapter.token_adapter(data).dict()],
+        data=[adapter.token_adapter(data).model_dump()],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
     )
 
@@ -193,7 +193,7 @@ async def partial_update_token(
     logger.info(
         "Received request to partially update token with id - `%s`." % token_uid
     )
-    logger.debug("Token data to update - %s" % token.dict())
+    logger.debug("Token data to update - %s" % token.model_dump())
     auth_token = get_auth_token(request)
 
     old_data = await crud.get(
@@ -214,13 +214,13 @@ async def partial_update_token(
 
     new_token = copy.deepcopy(old_token)
     partially_update_attributes(
-        new_token, token.dict(exclude_defaults=True, exclude_unset=True)
+        new_token, token.model_dump(exclude_defaults=True, exclude_unset=True)
     )
 
     data = await crud.update(
         ModuleID.tokens,
         RoleEnum.cpo,
-        new_token.dict(),
+        new_token.model_dump(),
         token_uid,
         token_type=token_type,
         auth_token=auth_token,
@@ -229,6 +229,6 @@ async def partial_update_token(
         version=VersionNumber.v_2_3_0,
     )
     return OCPIResponse(
-        data=[adapter.token_adapter(data).dict()],
+        data=[adapter.token_adapter(data).model_dump()],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
     )

@@ -31,7 +31,7 @@ def get_versions():
                 f"https://{settings.OCPI_HOST}/{settings.OCPI_PREFIX}/"
                 f"{VersionNumber.v_2_2_1.value}/details"
             ),
-        ).dict(),
+        ).model_dump(),
     ]
 
 

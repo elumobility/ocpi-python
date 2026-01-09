@@ -53,16 +53,33 @@ CDRS = [
             "connector_format": ConnectorFormat.cable,
             "connector_power_type": PowerType.dc,
         },
+        "session_id": None,
+        "authorization_reference": None,
+        "meter_id": None,
         "currency": "MYR",
+        "tariffs": [],
         "charging_periods": [
             {
                 "start_date_time": "2022-01-02 00:00:00+00:00",
                 "dimensions": [{"type": CdrDimensionType.power, "volume": 10}],
+                "tariff_id": None,
             }
         ],
+        "signed_data": None,
         "total_cost": {"excl_vat": 10.0000, "incl_vat": 10.2500},
+        "total_fixed_cost": None,
         "total_energy": 50,
+        "total_energy_cost": None,
         "total_time": 500,
+        "total_time_cost": None,
+        "total_parking_time": None,
+        "total_parking_cost": None,
+        "total_reservation_cost": None,
+        "remark": None,
+        "invoice_reference_id": None,
+        "credit": None,
+        "credit_reference_id": None,
+        "home_charging_compensation": None,
         "last_updated": "2022-01-02 00:00:00+00:00",
     }
 ]

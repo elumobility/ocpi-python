@@ -1,7 +1,6 @@
 from uuid import uuid4
 
 from py_ocpi.core import enums
-from py_ocpi.modules.cdrs.v_2_2_1.enums import AuthMethod
 from py_ocpi.modules.tokens.v_2_2_1.enums import (
     WhitelistType,
     TokenType,
@@ -27,10 +26,14 @@ TOKENS = [
         "uid": str(uuid4()),
         "type": TokenType.rfid,
         "contract_id": str(uuid4()),
+        "visual_number": None,
         "issuer": "issuer",
-        "auth_method": AuthMethod.auth_request,
+        "group_id": None,
         "valid": True,
         "whitelist": WhitelistType.always,
+        "language": None,
+        "default_profile_type": None,
+        "energy_contract": None,
         "last_updated": "2022-01-02 00:00:00+00:00",
     }
 ]
@@ -75,9 +78,15 @@ class Crud:
         data: dict = None,
         **kwargs,
     ):
-        return AuthorizationInfo(
-            allowed=AllowedType.allowed, token=Token(**TOKENS[0])
-        ).dict()
+        token = Token(**TOKENS[0])
+        auth_info = AuthorizationInfo(
+            allowed=AllowedType.allowed,
+            token=token,
+            location=None,
+            authorization_reference=None,
+            info=None,
+        )
+        return auth_info.model_dump()
 
     @classmethod
     async def list(

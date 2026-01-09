@@ -25,6 +25,7 @@ SESSIONS = [
         "auth_id": "100",
         "auth_method": AuthMethod.auth_request,
         "location": LOCATIONS[0],
+        "meter_id": None,
         "currency": "MYR",
         "charging_periods": [
             {
@@ -37,6 +38,7 @@ SESSIONS = [
                 ],
             }
         ],
+        "total_cost": None,
         "status": SessionStatus.active,
         "last_updated": "2022-01-02 00:00:00+00:00",
     }

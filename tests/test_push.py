@@ -182,6 +182,7 @@ LOCATIONS = [
             "energy_sources": [
                 {"source": "SOLAR", "percentage": 100},
             ],
+            "environ_impact": None,
             "supplier_name": "supplier_name",
             "energy_product_name": "energy_product_name",
         },
@@ -220,7 +221,7 @@ def test_push(async_client):
                 endpoints_url="http://example.com", auth_token="token"
             ),
         ],
-    ).dict()
+    ).model_dump()
     client.post(
         "/push/2.2.1",
         json=data,

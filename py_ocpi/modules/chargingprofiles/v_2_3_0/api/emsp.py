@@ -89,14 +89,14 @@ async def add_or_update_chargingprofile(
     )
     logger.debug(
         "Active chargingprofile result data - %s"
-        % active_charging_profile.dict()
+        % active_charging_profile.model_dump()
     )
     auth_token = get_auth_token(request)
 
     await crud.update(
         ModuleID.charging_profile,
         RoleEnum.emsp,
-        active_charging_profile.dict(),
+        active_charging_profile.model_dump(),
         0,
         session_id=session_id,
         auth_token=auth_token,

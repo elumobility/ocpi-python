@@ -79,7 +79,7 @@ async def send_get_chargingprofile(
         )
         res = await client.post(
             response_url,
-            json=active_charging_profile_result.dict(),
+            json=active_charging_profile_result.model_dump(),
             headers={"authorization": authorization_token},
         )
         logger.info(
@@ -148,7 +148,7 @@ async def send_update_chargingprofile(
         )
         res = await client.post(
             response_url,
-            json=charging_profile_result.dict(),
+            json=charging_profile_result.model_dump(),
             headers={"authorization": authorization_token},
         )
         logger.info(
@@ -210,7 +210,7 @@ async def send_delete_chargingprofile(
         logger.info("Send request with clear profile result: %s" % response_url)
         res = await client.post(
             response_url,
-            json=clear_profile_result.dict(),
+            json=clear_profile_result.model_dump(),
             headers={"authorization": authorization_token},
         )
         logger.info(

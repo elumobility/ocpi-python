@@ -36,15 +36,15 @@ class Token(BaseModel):
 
 
 class TokenPartialUpdate(BaseModel):
-    uid: Optional[String(36)]  # type: ignore
-    type: Optional[TokenType]
-    auth_id: Optional[String(36)]  # type: ignore
-    visual_number: Optional[String(64)]  # type: ignore
-    issuer: Optional[String(64)]  # type: ignore
-    valid: Optional[bool]
-    whitelist: Optional[WhitelistType]
-    language: Optional[String(2)]  # type: ignore
-    last_updated: Optional[DateTime]
+    uid: Optional[String(36)] = None  # type: ignore
+    type: Optional[TokenType] = None
+    auth_id: Optional[String(36)] = None  # type: ignore
+    visual_number: Optional[String(64)] = None  # type: ignore
+    issuer: Optional[String(64)] = None  # type: ignore
+    valid: Optional[bool] = None
+    whitelist: Optional[WhitelistType] = None
+    language: Optional[String(2)] = None  # type: ignore
+    last_updated: Optional[DateTime] = None
 
 
 class AuthorizationInfo(BaseModel):

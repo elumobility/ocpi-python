@@ -23,8 +23,8 @@ class ChargingProfile(BaseModel):
     https://github.com/ocpi/ocpi/blob/release-2.2.1-bugfixes/mod_charging_profiles.asciidoc#163-chargingprofile-class
     """
 
-    start_date_time: Optional[DateTime]
-    duration: Optional[int]
+    start_date_time: Optional[DateTime] = None
+    duration: Optional[int] = None
     charging_rate_unit: ChargingRateUnit
     min_charge_rate: Number
     charging_profile_period: ChargingProfilePeriod

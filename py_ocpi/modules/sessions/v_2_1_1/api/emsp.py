@@ -69,7 +69,7 @@ async def get_session(
     )
     if data:
         return OCPIResponse(
-            data=[adapter.session_adapter(data, VersionNumber.v_2_1_1).dict()],
+            data=[adapter.session_adapter(data, VersionNumber.v_2_1_1).model_dump()],
             **status.OCPI_1000_GENERIC_SUCESS_CODE,
         )
     logger.debug("Session with id `%s` was not found." % session_id)
@@ -107,7 +107,7 @@ async def add_or_update_session(
     logger.info(
         "Received request to add or update session with id - `%s`." % session_id
     )
-    logger.debug("Session data to update - %s" % session.dict())
+    logger.debug("Session data to update - %s" % session.model_dump())
     auth_token = get_auth_token(request, VersionNumber.v_2_1_1)
 
     data = await crud.get(
@@ -124,7 +124,7 @@ async def add_or_update_session(
         data = await crud.update(
             ModuleID.sessions,
             RoleEnum.emsp,
-            session.dict(),
+            session.model_dump(),
             session_id,
             auth_token=auth_token,
             country_code=country_code,
@@ -136,7 +136,7 @@ async def add_or_update_session(
         data = await crud.create(
             ModuleID.sessions,
             RoleEnum.emsp,
-            session.dict(),
+            session.model_dump(),
             auth_token=auth_token,
             country_code=country_code,
             party_id=party_id,
@@ -144,7 +144,7 @@ async def add_or_update_session(
         )
 
     return OCPIResponse(
-        data=[adapter.session_adapter(data, VersionNumber.v_2_1_1).dict()],
+        data=[adapter.session_adapter(data, VersionNumber.v_2_1_1).model_dump()],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
     )
 
@@ -184,7 +184,7 @@ async def partial_update_session(
         "Received request to partially update session with id - `%s`."
         % session_id
     )
-    logger.debug("Session data to update - %s" % session.dict())
+    logger.debug("Session data to update - %s" % session.model_dump())
     auth_token = get_auth_token(request, VersionNumber.v_2_1_1)
 
     old_data = await crud.get(
@@ -201,13 +201,13 @@ async def partial_update_session(
 
         new_session = deepcopy(old_session)
         partially_update_attributes(
-            new_session, session.dict(exclude_defaults=True, exclude_unset=True)
+            new_session, session.model_dump(exclude_defaults=True, exclude_unset=True)
         )
 
         data = await crud.update(
             ModuleID.sessions,
             RoleEnum.emsp,
-            new_session.dict(),
+            new_session.model_dump(),
             session_id,
             auth_token=auth_token,
             country_code=country_code,
@@ -216,7 +216,7 @@ async def partial_update_session(
         )
 
         return OCPIResponse(
-            data=[adapter.session_adapter(data, VersionNumber.v_2_1_1).dict()],
+            data=[adapter.session_adapter(data, VersionNumber.v_2_1_1).model_dump()],
             **status.OCPI_1000_GENERIC_SUCESS_CODE,
         )
     logger.debug("Session with id `%s` was not found." % session_id)

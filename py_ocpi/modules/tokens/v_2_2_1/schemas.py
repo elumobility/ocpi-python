@@ -38,32 +38,32 @@ class Token(BaseModel):
     uid: CiString(36)  # type: ignore
     type: TokenType
     contract_id: CiString(36)  # type: ignore
-    visual_number: Optional[String(64)]  # type: ignore
+    visual_number: Optional[String(64)] = None  # type: ignore
     issuer: String(64)  # type: ignore
-    group_id: Optional[CiString(36)]  # type: ignore
+    group_id: Optional[CiString(36)] = None  # type: ignore
     valid: bool
     whitelist: WhitelistType
-    language: Optional[String(2)]  # type: ignore
-    default_profile_type: Optional[ProfileType]
-    energy_contract: Optional[EnergyContract]
+    language: Optional[String(2)] = None  # type: ignore
+    default_profile_type: Optional[ProfileType] = None
+    energy_contract: Optional[EnergyContract] = None
     last_updated: DateTime
 
 
 class TokenPartialUpdate(BaseModel):
-    country_code: Optional[CiString(2)]  # type: ignore
-    party_id: Optional[CiString(3)]  # type: ignore
-    uid: Optional[CiString(36)]  # type: ignore
-    type: Optional[TokenType]
-    contract_id: Optional[CiString(36)]  # type: ignore
-    visual_number: Optional[String(64)]  # type: ignore
-    issuer: Optional[String(64)]  # type: ignore
-    group_id: Optional[CiString(36)]  # type: ignore
-    valid: Optional[bool]
-    whitelist: Optional[WhitelistType]
-    language: Optional[String(2)]  # type: ignore
-    default_profile_type: Optional[ProfileType]
-    energy_contract: Optional[EnergyContract]
-    last_updated: Optional[DateTime]
+    country_code: Optional[CiString(2)] = None  # type: ignore
+    party_id: Optional[CiString(3)] = None  # type: ignore
+    uid: Optional[CiString(36)] = None  # type: ignore
+    type: Optional[TokenType] = None
+    contract_id: Optional[CiString(36)] = None  # type: ignore
+    visual_number: Optional[String(64)] = None  # type: ignore
+    issuer: Optional[String(64)] = None  # type: ignore
+    group_id: Optional[CiString(36)] = None  # type: ignore
+    valid: Optional[bool] = None
+    whitelist: Optional[WhitelistType] = None
+    language: Optional[String(2)] = None  # type: ignore
+    default_profile_type: Optional[ProfileType] = None
+    energy_contract: Optional[EnergyContract] = None
+    last_updated: Optional[DateTime] = None
 
 
 class AuthorizationInfo(BaseModel):

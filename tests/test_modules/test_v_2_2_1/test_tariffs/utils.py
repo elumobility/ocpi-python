@@ -19,13 +19,20 @@ TARIFFS = [
         "id": str(uuid4()),
         "currency": "MYR",
         "type": "REGULAR",
+        "tariff_alt_url": None,
+        "min_price": None,
+        "max_price": None,
         "elements": [
             {
                 "price_components": [
-                    {"type": "ENERGY", "price": 1.50, "step_size": 2},
-                ]
+                    {"type": "ENERGY", "price": 1.50, "vat": None, "step_size": 2},
+                ],
+                "restrictions": None,
             },
         ],
+        "start_date_time": None,
+        "end_date_time": None,
+        "energy_mix": None,
         "last_updated": "2022-01-02 00:00:00+00:00",
     },
 ]

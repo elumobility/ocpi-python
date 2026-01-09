@@ -24,18 +24,22 @@ CDRS = [
         "auth_id": "DE8ACC12E46L89",
         "auth_method": AuthMethod.auth_request,
         "location": LOCATIONS[0],
+        "meter_id": None,
         "currency": "EUR",
         "tariffs": [
             {
                 "id": "12",
                 "currency": "EUR",
+                "tariff_alt_url": None,
                 "elements": [
                     {
                         "price_components": [
                             {"type": "TIME", "price": "2.00", "step_size": 300}
-                        ]
+                        ],
+                        "restrictions": None,
                     }
                 ],
+                "energy_mix": None,
                 "last_updated": "2022-01-02 00:00:00+00:00",
             }
         ],
@@ -50,6 +54,8 @@ CDRS = [
         "total_cost": 4.00,
         "total_energy": 15.342,
         "total_time": 1.973,
+        "total_parking_time": None,
+        "remark": None,
         "last_updated": "2022-01-02 00:00:00+00:00",
     }
 ]

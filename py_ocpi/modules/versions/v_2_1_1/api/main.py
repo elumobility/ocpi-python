@@ -48,6 +48,6 @@ async def get_version_details(
         data=VersionDetail(
             version=VersionNumber.v_2_1_1,
             endpoints=endpoints[VersionNumber.v_2_1_1],
-        ).dict(),
+        ).model_dump(),
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
     )

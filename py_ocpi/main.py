@@ -56,13 +56,16 @@ class ExceptionHandlerMiddleware(BaseHTTPMiddleware):
                 content={"detail": str(e)},
                 status_code=fastapistatus.HTTP_404_NOT_FOUND,
             )
-        except ValidationError:
+        except ValidationError as e:
             logger.warning("OCPI middleware ValidationError exception.")
+            logger.error(f"ValidationError details: {str(e)}")
+            import traceback
+            logger.error(f"ValidationError traceback: {traceback.format_exc()}")
             response = JSONResponse(
                 OCPIResponse(
                     data=[],
                     **status.OCPI_3000_GENERIC_SERVER_ERROR,
-                ).dict()
+                ).model_dump()
             )
         except Exception as e:
             logger.warning(f"Unknown exception: {str(e)}.")
@@ -70,7 +73,7 @@ class ExceptionHandlerMiddleware(BaseHTTPMiddleware):
                 OCPIResponse(
                     data=[],
                     **status.OCPI_3000_GENERIC_SERVER_ERROR,
-                ).dict()
+                ).model_dump()
             )
 
         logger.debug(f"Response status_code -> {response.status_code}.")
@@ -159,7 +162,7 @@ def get_application(
                     f"{settings.PROTOCOL}://{settings.OCPI_HOST}/"
                     f"{settings.OCPI_PREFIX}/{version.value}/details"
                 ),
-            ).dict(),
+                ).model_dump(),
         )
 
         version_endpoints[version] = []

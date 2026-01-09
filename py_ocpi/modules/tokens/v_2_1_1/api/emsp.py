@@ -60,7 +60,7 @@ async def get_tokens(
 
     tokens = []
     for data in data_list:
-        tokens.append(adapter.token_adapter(data, VersionNumber.v_2_1_1).dict())
+        tokens.append(adapter.token_adapter(data, VersionNumber.v_2_1_1).model_dump())
     logger.debug(f"Amount of tokens in response: {len(tokens)}")
     return OCPIResponse(
         data=tokens,
@@ -114,7 +114,7 @@ async def authorize_token(
     )
     if token:
         location_reference = (
-            location_reference.dict()
+            location_reference.model_dump()
             if location_reference
             else None  # type: ignore
         )
@@ -144,7 +144,7 @@ async def authorize_token(
             data=[
                 adapter.authorization_adapter(
                     authroization_result, VersionNumber.v_2_1_1
-                ).dict()
+                ).model_dump()
             ],
             **status.OCPI_1000_GENERIC_SUCESS_CODE,
         )
