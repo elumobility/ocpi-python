@@ -42,8 +42,8 @@ exclude = '''
 '''
 
 [project]
-name = "extrawest_ocpi"
-description = "Python implementation of Open Charge Point Interface (OCPI) protocol based on fastapi."
+name = "ocpi-python"
+description = "A modern Python implementation of the Open Charge Point Interface (OCPI) protocol with FastAPI. Supports OCPI 2.3.0, 2.2.1, and 2.1.1 with Pydantic v2 and production-ready features."
 requires-python = ">=3.10"
 readme = "README.md"
 license = {text = "MIT"}
@@ -56,17 +56,13 @@ dependencies = [
 ]
 
 [[project.authors]]
-name = "Oleksandr Bozbei"
-email = "oleksandr.bozbei@extrawest.com"
-
-[[project.maintainers]]
 name = "ELU Mobility"
 email = "dev@elu-energy.it"
 
 [project.urls]
-Homepage = "https://github.com/elumobility/extrawest_ocpi"
-Repository = "https://github.com/elumobility/extrawest_ocpi"
-Upstream = "https://github.com/extrawest/extrawest_ocpi"
+Homepage = "https://github.com/elumobility/ocpi-python"
+Repository = "https://github.com/elumobility/ocpi-python"
+Documentation = "https://github.com/elumobility/ocpi-python#readme"
 
 [tool.hatch.version]
 path = "py_ocpi/__init__.py"

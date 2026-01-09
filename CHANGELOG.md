@@ -1,9 +1,35 @@
 # Changelog
 
-All notable changes to this fork are documented in this file.
+All notable changes to this project are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Calendar Versioning](https://calver.org/) (YYYY.M.PATCH).
+
+## [2026.1.9] - 2026-01-09
+
+### Added
+
+- **OCPI 2.3.0 support** - Full implementation including:
+  - Payments module (CPO and PTP roles)
+  - Enhanced Locations module with Parking support
+  - Updated Sessions, CDRs, Tokens, Tariffs, and Commands modules
+  - New PTP (Payment Terminal Provider) role support
+- **Comprehensive test coverage** - Added 58+ new tests, reaching 83% coverage
+- **Test suites for v_2_3_0 modules** - Complete test coverage for all 2.3.0 modules
+
+### Changed
+
+- **Package rebranding** - Renamed from `extrawest_ocpi` to `ocpi-python`
+- **Repository migration** - Moved to `elumobility/ocpi-python`
+- **Improved adapter calls** - All adapter methods now explicitly pass version numbers
+- **Enhanced error handling** - Better validation error logging and debugging
+
+### Fixed
+
+- **Pydantic v2 compatibility** - Fixed all `Optional` fields to have explicit `= None` defaults
+- **Deprecation warnings** - Replaced all `.dict()` calls with `.model_dump()`
+- **Authentication** - Fixed token decoding for OCPI 2.3.0 (non-base64 tokens)
+- **Schema validation** - Fixed multiple schema issues in 2.3.0 modules
 
 ## [2026.1.8] - 2026-01-08
 
@@ -28,26 +54,17 @@ and this project adheres to [Calendar Versioning](https://calver.org/) (YYYY.M.P
 - Pydantic v1 compatibility code
 - `__get_validators__` and `__modify_schema__` methods (Pydantic v1 style)
 
-## [2025.7.16] - Upstream
+---
 
-Last upstream version before forking. See [upstream releases](https://github.com/extrawest/extrawest_ocpi/releases).
+## Version History
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 2026.1.9 | 2026-01-09 | OCPI 2.3.0 support, package rebranding, comprehensive tests |
+| 2026.1.8 | 2026-01-08 | Pydantic v2 migration, FastAPI 0.115+ support |
 
 ---
 
-## Upstream Sync Log
+## Credits
 
-| Date | Upstream Commit | Notes |
-|------|-----------------|-------|
-| 2025-07-17 | 5998848 | Initial fork from upstream main |
-
----
-
-## Comparison with Upstream
-
-This fork diverges from upstream in the following ways:
-
-1. **Pydantic v2 Only** - Upstream still supports Pydantic v1
-2. **Modern FastAPI** - Requires FastAPI 0.115+ (Pydantic v2 requirement)
-3. **pydantic-settings** - Added as explicit dependency
-
-To see the full diff: [Compare with upstream](https://github.com/extrawest/extrawest_ocpi/compare/main...elumobility:extrawest_ocpi:main)
+This project is based on the excellent work from [extrawest/extrawest_ocpi](https://github.com/extrawest/extrawest_ocpi), with significant enhancements and modernizations.
