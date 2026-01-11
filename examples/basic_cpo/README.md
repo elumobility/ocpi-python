@@ -20,13 +20,19 @@ uvicorn main:app --reload
 # Get available versions
 curl http://127.0.0.1:8000/ocpi/versions
 
-# Create a location
-curl -X PUT 'http://127.0.0.1:8000/ocpi/cpo/2.3.0/locations/DE/ABC/LOC001' \
-  -H 'Authorization: Token my-cpo-token-123' \
-  -H 'Content-Type: application/json' \
-  -d @location.json
+# Note: CPO locations are read-only via OCPI.
+# Locations are managed in your own system and exposed through OCPI.
+# The example includes a pre-populated location for demonstration.
 
 # Get all locations
+# Note: For OCPI 2.3.0, tokens must be base64-encoded
+# Encode the token: echo -n "my-cpo-token-123" | base64
 curl 'http://127.0.0.1:8000/ocpi/cpo/2.3.0/locations/' \
-  -H 'Authorization: Token my-cpo-token-123'
+  -H 'Authorization: Token bXktY3BvLXRva2VuLTEyMw=='
+
+# Get all sessions
+# Note: CPO only has a list endpoint, not individual session GET
+# To get a specific session, use the list endpoint and filter by ID
+curl 'http://127.0.0.1:8000/ocpi/cpo/2.3.0/sessions/' \
+  -H 'Authorization: Token bXktY3BvLXRva2VuLTEyMw=='
 ```

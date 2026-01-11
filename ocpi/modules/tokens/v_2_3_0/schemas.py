@@ -37,14 +37,14 @@ class Token(BaseModel):
     uid: CiString(36)  # type: ignore
     type: TokenType
     contract_id: CiString(36)  # type: ignore
-    visual_number: String(64) | None  # type: ignore
+    visual_number: String(64) | None = None  # type: ignore
     issuer: String(64)  # type: ignore
-    group_id: CiString(36) | None  # type: ignore
+    group_id: CiString(36) | None = None  # type: ignore
     valid: bool
     whitelist: WhitelistType
-    language: String(2) | None  # type: ignore
-    default_profile_type: ProfileType | None
-    energy_contract: EnergyContract | None
+    language: String(2) | None = None  # type: ignore
+    default_profile_type: ProfileType | None = None
+    energy_contract: EnergyContract | None = None
     last_updated: DateTime
 
 

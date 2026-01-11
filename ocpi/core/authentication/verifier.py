@@ -63,12 +63,13 @@ class AuthorizationVerifier:
             if self.version.startswith("2.2") or self.version.startswith("2.3"):
                 try:
                     from ocpi.core.utils import decode_string_base64
+                    import binascii
 
                     token = decode_string_base64(token)
-                except UnicodeDecodeError:
+                except (UnicodeDecodeError, binascii.Error, ValueError) as e:
                     logger.debug(
-                        f"Token `{token}` cannot be decoded. "
-                        "Check if the token is already encoded."
+                        f"Token `{token}` cannot be decoded as base64: {e}. "
+                        "For OCPI 2.2.x and 2.3.0, tokens must be base64-encoded in the Authorization header."
                     )
                     raise AuthorizationOCPIError
             await authenticator.authenticate(token)

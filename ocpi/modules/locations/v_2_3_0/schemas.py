@@ -215,30 +215,30 @@ class Location(BaseModel):
     id: CiString(max_length=36)  # type: ignore
     publish: bool
     publish_allowed_to: list[PublishTokenType] = []
-    name: String(max_length=255) | None  # type: ignore
+    name: String(max_length=255) | None = None  # type: ignore
     address: String(max_length=45)  # type: ignore
     city: String(max_length=45)  # type: ignore
-    postal_code: String(max_length=10) | None  # type: ignore
-    state: String(max_length=20) | None  # type: ignore
+    postal_code: String(max_length=10) | None = None  # type: ignore
+    state: String(max_length=20) | None = None  # type: ignore
     country: String(max_length=3)  # type: ignore
     coordinates: GeoLocation
     related_locations: list[AdditionalGeoLocation] = []
-    parking_type: ParkingType | None
+    parking_type: ParkingType | None = None
     evses: list[EVSE] = []
     # New in OCPI 2.3.0 - Parking places for NAP-EU compliance
     parking_places: list[Parking] = []
     directions: list[DisplayText] = []
-    operator: BusinessDetails | None
-    suboperator: BusinessDetails | None
-    owner: BusinessDetails | None
+    operator: BusinessDetails | None = None
+    suboperator: BusinessDetails | None = None
+    owner: BusinessDetails | None = None
     facilities: list[Facility] = []
     time_zone: String(max_length=255)  # type: ignore
-    opening_times: Hours | None
-    charging_when_closed: bool | None
+    opening_times: Hours | None = None
+    charging_when_closed: bool | None = None
     images: list[Image] = []
-    energy_mix: EnergyMix | None
+    energy_mix: EnergyMix | None = None
     # New in OCPI 2.3.0 - Help phone for the location
-    help_phone: CiString(max_length=25) | None  # type: ignore
+    help_phone: CiString(max_length=25) | None = None  # type: ignore
     last_updated: DateTime
 
 
