@@ -30,7 +30,7 @@ class Settings(BaseSettings):
     COMMAND_AWAIT_TIME: int = 5
     GET_ACTIVE_PROFILE_AWAIT_TIME: int = 5
     TRAILING_SLASH: bool = True
-    CI_STRING_LOWERCASE_PREFERENCE: bool = True
+    CI_STRING_LOWERCASE_PREFERENCE: bool = False
 
     @field_validator("BACKEND_CORS_ORIGINS", mode="before")
     @classmethod

@@ -71,9 +71,10 @@ class CiStringBase(str):
     def _validate(cls, v: str) -> "CiStringBase":
         if not v.isascii():
             raise ValueError("invalid cistring format")
-        if settings.CI_STRING_LOWERCASE_PREFERENCE:
-            return cls(v.lower())
-        return cls(v.upper())
+        # Preserve original case. CiString means case-insensitive *comparison*,
+        # not that the value should be mutated. Lowercasing/uppercasing destroys
+        # identifiers like OCPP charge point IDs (e.g. "K0032832A").
+        return cls(v)
 
 
 class URL(str):
