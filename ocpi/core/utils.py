@@ -31,7 +31,7 @@ def get_auth_token(
         return token
     try:
         return decode_string_base64(token)
-    except (UnicodeDecodeError, Exception):
+    except (UnicodeDecodeError, ValueError):
         # Fallback: if base64 decoding fails (e.g. raw token in dev),
         # return the raw token.
         return token

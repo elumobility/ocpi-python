@@ -65,7 +65,7 @@ class AuthorizationVerifier:
                     from ocpi.core.utils import decode_string_base64
 
                     token = decode_string_base64(token)
-                except (UnicodeDecodeError, Exception) as e:
+                except (UnicodeDecodeError, ValueError) as e:
                     # If base64 decoding fails (bad padding, invalid chars),
                     # try authenticating with the raw token as fallback.
                     logger.debug(
@@ -122,7 +122,7 @@ class CredentialsAuthorizationVerifier:
                     from ocpi.core.utils import decode_string_base64
 
                     token = decode_string_base64(token)
-                except (UnicodeDecodeError, Exception) as e:
+                except (UnicodeDecodeError, ValueError) as e:
                     logger.debug(
                         f"Token base64 decode failed ({e}), trying raw token."
                     )
@@ -132,7 +132,7 @@ class CredentialsAuthorizationVerifier:
                 from ocpi.core.utils import decode_string_base64
 
                 token = decode_string_base64(token)
-            except (UnicodeDecodeError, Exception):
+            except (UnicodeDecodeError, ValueError):
                 pass
         return await authenticator.authenticate_credentials(token)
 
@@ -203,7 +203,7 @@ class HttpPushVerifier:
                     from ocpi.core.utils import decode_string_base64
 
                     token = decode_string_base64(token)
-                except (UnicodeDecodeError, Exception) as e:
+                except (UnicodeDecodeError, ValueError) as e:
                     logger.debug(
                         f"Token base64 decode failed ({e}), trying raw token."
                     )
@@ -254,7 +254,7 @@ class WSPushVerifier:
                     from ocpi.core.utils import decode_string_base64
 
                     token = decode_string_base64(token)
-                except (UnicodeDecodeError, Exception) as e:
+                except (UnicodeDecodeError, ValueError) as e:
                     logger.debug(
                         f"Token base64 decode failed ({e}), trying raw token."
                     )
