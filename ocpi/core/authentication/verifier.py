@@ -68,9 +68,7 @@ class AuthorizationVerifier:
                 except (UnicodeDecodeError, ValueError) as e:
                     # If base64 decoding fails (bad padding, invalid chars),
                     # try authenticating with the raw token as fallback.
-                    logger.debug(
-                        f"Token base64 decode failed ({e}), trying raw token."
-                    )
+                    logger.debug(f"Token base64 decode failed ({e}), trying raw token.")
             await authenticator.authenticate(token)
         except IndexError:
             logger.debug(
@@ -123,9 +121,7 @@ class CredentialsAuthorizationVerifier:
 
                     token = decode_string_base64(token)
                 except (UnicodeDecodeError, ValueError) as e:
-                    logger.debug(
-                        f"Token base64 decode failed ({e}), trying raw token."
-                    )
+                    logger.debug(f"Token base64 decode failed ({e}), trying raw token.")
         else:
             # For versions without explicit version (legacy), try to decode
             try:
@@ -204,9 +200,7 @@ class HttpPushVerifier:
 
                     token = decode_string_base64(token)
                 except (UnicodeDecodeError, ValueError) as e:
-                    logger.debug(
-                        f"Token base64 decode failed ({e}), trying raw token."
-                    )
+                    logger.debug(f"Token base64 decode failed ({e}), trying raw token.")
             await authenticator.authenticate(token)
         except IndexError:
             logger.debug(
@@ -255,9 +249,7 @@ class WSPushVerifier:
 
                     token = decode_string_base64(token)
                 except (UnicodeDecodeError, ValueError) as e:
-                    logger.debug(
-                        f"Token base64 decode failed ({e}), trying raw token."
-                    )
+                    logger.debug(f"Token base64 decode failed ({e}), trying raw token.")
             await authenticator.authenticate(token)
         except AuthorizationOCPIError:
             raise WebSocketException(code=status.WS_1008_POLICY_VIOLATION)
