@@ -62,8 +62,13 @@ def test_cistring_base_valid():
     """Test CiStringBase with valid ASCII string."""
     result = CiStringBase("TEST")
     assert isinstance(result, CiStringBase)
-    # Should be uppercase or lowercase based on settings
-    assert result in ["TEST", "test"]
+    assert result == "TEST"
+
+
+def test_cistring_base_preserves_case():
+    """Test CiStringBase preserves original case (OCPP charge point IDs, etc.)."""
+    result = CiStringBase("K0032832A")
+    assert result == "K0032832A"
 
 
 def test_cistring_factory():

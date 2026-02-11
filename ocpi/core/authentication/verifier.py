@@ -65,12 +65,10 @@ class AuthorizationVerifier:
                     from ocpi.core.utils import decode_string_base64
 
                     token = decode_string_base64(token)
-                except UnicodeDecodeError:
-                    logger.debug(
-                        f"Token `{token}` cannot be decoded. "
-                        "Check if the token is already encoded."
-                    )
-                    raise AuthorizationOCPIError
+                except (UnicodeDecodeError, ValueError) as e:
+                    # If base64 decoding fails (bad padding, invalid chars),
+                    # try authenticating with the raw token as fallback.
+                    logger.debug(f"Token base64 decode failed ({e}), trying raw token.")
             await authenticator.authenticate(token)
         except IndexError:
             logger.debug(
@@ -122,19 +120,15 @@ class CredentialsAuthorizationVerifier:
                     from ocpi.core.utils import decode_string_base64
 
                     token = decode_string_base64(token)
-                except UnicodeDecodeError:
-                    logger.debug(
-                        f"Token `{token}` cannot be decoded. "
-                        "Check if the token is already encoded."
-                    )
-                    raise AuthorizationOCPIError
+                except (UnicodeDecodeError, ValueError) as e:
+                    logger.debug(f"Token base64 decode failed ({e}), trying raw token.")
         else:
             # For versions without explicit version (legacy), try to decode
             try:
                 from ocpi.core.utils import decode_string_base64
 
                 token = decode_string_base64(token)
-            except UnicodeDecodeError:
+            except (UnicodeDecodeError, ValueError):
                 pass
         return await authenticator.authenticate_credentials(token)
 
@@ -205,12 +199,8 @@ class HttpPushVerifier:
                     from ocpi.core.utils import decode_string_base64
 
                     token = decode_string_base64(token)
-                except UnicodeDecodeError:
-                    logger.debug(
-                        f"Token `{token}` cannot be decoded. "
-                        "Check if the token is already encoded."
-                    )
-                    raise AuthorizationOCPIError
+                except (UnicodeDecodeError, ValueError) as e:
+                    logger.debug(f"Token base64 decode failed ({e}), trying raw token.")
             await authenticator.authenticate(token)
         except IndexError:
             logger.debug(
@@ -258,12 +248,8 @@ class WSPushVerifier:
                     from ocpi.core.utils import decode_string_base64
 
                     token = decode_string_base64(token)
-                except UnicodeDecodeError:
-                    logger.debug(
-                        f"Token `{token}` cannot be decoded. "
-                        "Check if the token is already encoded."
-                    )
-                    raise AuthorizationOCPIError
+                except (UnicodeDecodeError, ValueError) as e:
+                    logger.debug(f"Token base64 decode failed ({e}), trying raw token.")
             await authenticator.authenticate(token)
         except AuthorizationOCPIError:
             raise WebSocketException(code=status.WS_1008_POLICY_VIOLATION)

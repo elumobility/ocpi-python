@@ -58,6 +58,20 @@ def test_get_auth_token_v2_2_1_base64():
     assert token == original_token
 
 
+def test_get_auth_token_v2_2_1_plain_text_fallback():
+    """Test get_auth_token with OCPI 2.2.1 falls back to raw token when base64 decode fails."""
+    from unittest.mock import MagicMock
+
+    # Plain-text token (not base64) - e.g. dev token
+    raw_token = "plain-dev-token"
+
+    request = MagicMock(spec=Request)
+    request.headers = {"authorization": f"Token {raw_token}"}
+
+    token = get_auth_token(request, VersionNumber.v_2_2_1)
+    assert token == raw_token
+
+
 def test_get_auth_token_null():
     """Test get_auth_token with Null token returns None."""
     from unittest.mock import MagicMock
