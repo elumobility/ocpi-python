@@ -97,6 +97,7 @@ class Cdr(BaseModel):
     end_date_time: DateTime
     session_id: CiString(36) | None  # type: ignore
     cdr_token: CdrToken
+    auth_id: CiString(36)  # type: ignore
     auth_method: AuthMethod
     authorization_reference: CiString(36) | None  # type: ignore
     cdr_location: CdrLocation

@@ -18,6 +18,7 @@ class Session(BaseModel):
     end_date_time: DateTime | None
     kwh: Number
     cdr_token: CdrToken
+    auth_id: CiString(36)  # type: ignore
     auth_method: AuthMethod
     authorization_reference: CiString(36) | None  # type: ignore
     location_id: CiString(36)  # type: ignore
@@ -43,6 +44,7 @@ class SessionPartialUpdate(BaseModel):
     end_date_time: DateTime | None = None
     kwh: Number | None = None
     cdr_token: CdrToken | None = None
+    auth_id: CiString(36) | None = None  # type: ignore
     auth_method: AuthMethod | None = None
     authorization_reference: CiString(36) | None = None  # type: ignore
     location_id: CiString(36) | None = None  # type: ignore
