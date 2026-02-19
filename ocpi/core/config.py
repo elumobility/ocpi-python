@@ -19,6 +19,9 @@ class Settings(BaseSettings):
 
     ENVIRONMENT: str = "production"
     NO_AUTH: bool = False
+    # When False, versions and version details endpoints can be accessed without auth (discovery).
+    # Other endpoints still require auth. Set via VERSIONS_REQUIRE_AUTH env var.
+    VERSIONS_REQUIRE_AUTH: bool = True
     PROJECT_NAME: str = "OCPI"
     BACKEND_CORS_ORIGINS: list[AnyHttpUrl] = []
     OCPI_HOST: str = "www.example.com"
@@ -36,7 +39,7 @@ class Settings(BaseSettings):
     def assemble_cors_origins(cls, v: str | list[str]) -> list[str] | str:
         if isinstance(v, str) and not v.startswith("["):
             return [i.strip() for i in v.split(",")]
-        if isinstance(v, (list, str)):
+        if isinstance(v, list | str):
             return v
         raise ValueError(v)
 
