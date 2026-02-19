@@ -151,8 +151,12 @@ class VersionsAuthorizationVerifier(CredentialsAuthorizationVerifier):
         if settings.NO_AUTH and authorization == "":
             logger.debug("Authentication skipped due to NO_AUTH setting.")
             return ""
-        if not settings.VERSIONS_REQUIRE_AUTH and (not authorization or authorization.strip() == ""):
-            logger.debug("Versions/details accessed without auth (VERSIONS_REQUIRE_AUTH=false).")
+        if not settings.VERSIONS_REQUIRE_AUTH and (
+            not authorization or authorization.strip() == ""
+        ):
+            logger.debug(
+                "Versions/details accessed without auth (VERSIONS_REQUIRE_AUTH=false)."
+            )
             return ""
         if not authorization or authorization.strip() == "":
             return None
