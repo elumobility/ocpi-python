@@ -135,30 +135,27 @@ class CredentialsAuthorizationVerifier:
 
 class VersionsAuthorizationVerifier(CredentialsAuthorizationVerifier):
     """
-    A class responsible for verifying authorization tokens
-    based on the specified version number.
+    Verifies authorization for versions and version details endpoints.
+    When VERSIONS_REQUIRE_AUTH is False, allows unauthenticated access (discovery).
     """
 
     async def __call__(
         self,
-        authorization: str = auth_verifier,
+        authorization: str = Header(default="", alias="Authorization"),
         authenticator: Authenticator = Depends(get_authenticator),
     ) -> str | dict | None:
         """
-        Verifies the authorization token using the specified version
-        and an Authenticator for version endpoints.
-
-        :param authorization (str): The authorization header containing
-          the token.
-        :param authenticator (Authenticator): An Authenticator instance used
-          for authentication.
-
-        :raises AuthorizationOCPIError: If there is an issue with
-          the authorization token.
+        Verifies the authorization token for version endpoints.
+        If VERSIONS_REQUIRE_AUTH is False, allows requests without token.
         """
         if settings.NO_AUTH and authorization == "":
             logger.debug("Authentication skipped due to NO_AUTH setting.")
             return ""
+        if not settings.VERSIONS_REQUIRE_AUTH and (not authorization or authorization.strip() == ""):
+            logger.debug("Versions/details accessed without auth (VERSIONS_REQUIRE_AUTH=false).")
+            return ""
+        if not authorization or authorization.strip() == "":
+            return None
         return await super().__call__(authorization, authenticator)
 
 

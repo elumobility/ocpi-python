@@ -4,12 +4,14 @@ from ocpi.core import enums
 from ocpi.core.crud import Crud
 from ocpi.main import get_application
 from ocpi.modules.versions.enums import VersionNumber
+from tests.test_modules.test_v_2_3_0.test_versions.test_utils import (
+    AUTH_HEADERS,
+    WRONG_AUTH_HEADERS,
+)
 from tests.test_modules.utils import AUTH_TOKEN, ClientAuthenticator
 
-from .test_utils import AUTH_HEADERS, WRONG_AUTH_HEADERS
-
 VERSIONS_URL = "/ocpi/versions"
-VERSION_URL = "/ocpi/2.2.1/details"
+VERSION_URL = "/ocpi/2.3.0/details"
 
 
 def test_get_versions():
@@ -19,7 +21,7 @@ def test_get_versions():
             return AUTH_TOKEN
 
     app = get_application(
-        version_numbers=[VersionNumber.v_2_2_1],
+        version_numbers=[VersionNumber.v_2_3_0],
         roles=[enums.RoleEnum.cpo],
         crud=MockCrud,
         authenticator=ClientAuthenticator,
@@ -43,7 +45,7 @@ def test_get_versions_not_authenticated():
             return None
 
     app = get_application(
-        version_numbers=[VersionNumber.v_2_2_1],
+        version_numbers=[VersionNumber.v_2_3_0],
         roles=[enums.RoleEnum.cpo],
         crud=MockCrud,
         authenticator=ClientAuthenticator,
@@ -59,14 +61,14 @@ def test_get_versions_not_authenticated():
     assert response.status_code == 401
 
 
-def test_get_versions_v_2_2_1():
+def test_get_versions_v_2_3_0():
     class MockCrud(Crud):
         @classmethod
         async def do(cls, *args, **kwargs):
             return AUTH_TOKEN
 
     app = get_application(
-        version_numbers=[VersionNumber.v_2_2_1],
+        version_numbers=[VersionNumber.v_2_3_0],
         roles=[enums.RoleEnum.cpo],
         crud=MockCrud,
         authenticator=ClientAuthenticator,
@@ -83,14 +85,14 @@ def test_get_versions_v_2_2_1():
     assert len(response.json()["data"]) == 2
 
 
-def test_get_versions_v_2_2_1_not_authenticated():
+def test_get_versions_v_2_3_0_not_authenticated():
     class MockCrud(Crud):
         @classmethod
         async def do(cls, *args, **kwargs):
             return None
 
     app = get_application(
-        version_numbers=[VersionNumber.v_2_2_1],
+        version_numbers=[VersionNumber.v_2_3_0],
         roles=[enums.RoleEnum.cpo],
         crud=MockCrud,
         authenticator=ClientAuthenticator,
@@ -116,7 +118,7 @@ def test_get_versions_without_auth_when_optional(monkeypatch):
             return None
 
     app = get_application(
-        version_numbers=[VersionNumber.v_2_2_1],
+        version_numbers=[VersionNumber.v_2_3_0],
         roles=[enums.RoleEnum.cpo],
         crud=MockCrud,
         authenticator=ClientAuthenticator,
@@ -131,7 +133,7 @@ def test_get_versions_without_auth_when_optional(monkeypatch):
 
 
 def test_get_version_details_without_auth_when_optional(monkeypatch):
-    """When VERSIONS_REQUIRE_AUTH=False, /{version}/details works without Authorization header."""
+    """When VERSIONS_REQUIRE_AUTH=False, /2.3.0/details works without Authorization header."""
     monkeypatch.setattr("ocpi.core.config.settings.VERSIONS_REQUIRE_AUTH", False)
 
     class MockCrud(Crud):
@@ -140,7 +142,7 @@ def test_get_version_details_without_auth_when_optional(monkeypatch):
             return None
 
     app = get_application(
-        version_numbers=[VersionNumber.v_2_2_1],
+        version_numbers=[VersionNumber.v_2_3_0],
         roles=[enums.RoleEnum.cpo],
         crud=MockCrud,
         authenticator=ClientAuthenticator,
