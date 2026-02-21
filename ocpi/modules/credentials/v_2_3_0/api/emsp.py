@@ -265,8 +265,7 @@ async def update_credentials(
                     ModuleID.credentials_and_registration,
                     RoleEnum.emsp,
                     {"credentials": credentials.model_dump(), "endpoints": endpoints},
-                    # TODO check credential_id
-                    id="",
+                    id=auth_token,
                     auth_token=auth_token,
                     version=VersionNumber.v_2_3_0,
                 )

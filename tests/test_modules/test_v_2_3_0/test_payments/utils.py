@@ -8,6 +8,7 @@ from tests.test_modules.utils import (
 )
 
 CPO_BASE_URL = "/ocpi/cpo/2.3.0/payments/"
+EMSP_BASE_URL = "/ocpi/emsp/2.3.0/payments/"
 PTP_BASE_URL = "/ocpi/ptp/2.3.0/payments/"
 AUTH_HEADERS = {"Authorization": f"Token {ENCODED_AUTH_TOKEN_V_2_3_0}"}
 WRONG_AUTH_HEADERS = {"Authorization": f"Token {ENCODED_RANDOM_AUTH_TOKEN_V_2_3_0}"}
@@ -52,6 +53,8 @@ class Crud:
     async def get(
         cls, module: enums.ModuleID, role: enums.RoleEnum, id, *args, **kwargs
     ):
+        if kwargs.get("object_type") == "financial_advice_confirmation":
+            return FINANCIAL_ADVICE_CONFIRMATIONS[0]
         return TERMINALS[0]
 
     @classmethod
