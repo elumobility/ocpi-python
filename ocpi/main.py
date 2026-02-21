@@ -283,11 +283,11 @@ def get_application(
     def override_get_modules():
         return modules
 
-    _app.dependency_overrides[get_modules] = override_get_modules()
+    _app.dependency_overrides[get_modules] = override_get_modules
 
     def override_get_authenticator():
         return authenticator
 
-    _app.dependency_overrides[get_authenticator] = override_get_authenticator()
+    _app.dependency_overrides[get_authenticator] = override_get_authenticator
 
     return _app
