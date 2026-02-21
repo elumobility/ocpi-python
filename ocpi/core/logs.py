@@ -29,20 +29,30 @@ class CustomFormatter(logging.Formatter):
         return formatter.format(record)
 
 
+_ENV_ALIASES: dict[str, str] = {
+    "prod": EnvironmentType.production.value,
+    "production": EnvironmentType.production.value,
+    "dev": EnvironmentType.development.value,
+    "development": EnvironmentType.development.value,
+    "staging": EnvironmentType.development.value,
+    "test": EnvironmentType.testing.value,
+    "testing": EnvironmentType.testing.value,
+}
+
+
 class LoggingConfig:
     def __init__(self, environment: str, logger) -> None:
         self.environment = environment
         self.logger = logger
 
     def configure_logger(self):
-        if self.environment == EnvironmentType.production.value:
-            self.logger.setLevel(logging.INFO)
-        elif self.environment == EnvironmentType.development.value:
-            self.logger.setLevel(logging.DEBUG)
-        elif self.environment == EnvironmentType.testing.value:
-            self.logger.setLevel(logging.DEBUG)
-        else:
+        normalized = _ENV_ALIASES.get(self.environment.lower())
+        if normalized is None:
             raise ValueError("Invalid environment")
+        if normalized == EnvironmentType.production.value:
+            self.logger.setLevel(logging.INFO)
+        else:
+            self.logger.setLevel(logging.DEBUG)
 
 
 logger = logging.getLogger("OCPI-Logger")

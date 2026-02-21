@@ -105,6 +105,33 @@ def test_logging_config_invalid_environment():
         config.configure_logger()
 
 
+@pytest.mark.parametrize("alias", ["prod", "PROD", "Prod"])
+def test_logging_config_prod_alias(alias):
+    """Test that prod/PROD aliases map to production (INFO level)."""
+    test_logger = logging.getLogger(f"test_alias_{alias}")
+    config = LoggingConfig(alias, test_logger)
+    config.configure_logger()
+    assert test_logger.level == logging.INFO
+
+
+@pytest.mark.parametrize("alias", ["dev", "DEV", "staging", "STAGING"])
+def test_logging_config_dev_aliases(alias):
+    """Test that dev/staging aliases map to development (DEBUG level)."""
+    test_logger = logging.getLogger(f"test_alias_{alias}")
+    config = LoggingConfig(alias, test_logger)
+    config.configure_logger()
+    assert test_logger.level == logging.DEBUG
+
+
+@pytest.mark.parametrize("alias", ["test", "TEST"])
+def test_logging_config_test_alias(alias):
+    """Test that test alias maps to testing (DEBUG level)."""
+    test_logger = logging.getLogger(f"test_alias_{alias}")
+    config = LoggingConfig(alias, test_logger)
+    config.configure_logger()
+    assert test_logger.level == logging.DEBUG
+
+
 def test_logger_exists():
     """Test that logger is configured."""
     assert logger is not None
