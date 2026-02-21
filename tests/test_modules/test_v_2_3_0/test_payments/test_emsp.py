@@ -61,9 +61,7 @@ def test_emsp_get_financial_advice_confirmations_v_2_3_0(client_emsp_v_2_3_0):
 def test_emsp_get_financial_advice_confirmation_not_authenticated(
     client_emsp_v_2_3_0,
 ):
-    response = client_emsp_v_2_3_0.get(
-        GET_CONFIRMATION_URL, headers=WRONG_AUTH_HEADERS
-    )
+    response = client_emsp_v_2_3_0.get(GET_CONFIRMATION_URL, headers=WRONG_AUTH_HEADERS)
 
     assert response.status_code == 403
 
@@ -72,6 +70,4 @@ def test_emsp_get_financial_advice_confirmation_v_2_3_0(client_emsp_v_2_3_0):
     response = client_emsp_v_2_3_0.get(GET_CONFIRMATION_URL, headers=AUTH_HEADERS)
 
     assert response.status_code == 200
-    assert (
-        response.json()["data"][0]["id"] == FINANCIAL_ADVICE_CONFIRMATIONS[0]["id"]
-    )
+    assert response.json()["data"][0]["id"] == FINANCIAL_ADVICE_CONFIRMATIONS[0]["id"]
