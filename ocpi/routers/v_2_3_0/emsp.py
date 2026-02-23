@@ -22,6 +22,9 @@ from ocpi.modules.hubclientinfo.v_2_3_0.api import (
 from ocpi.modules.locations.v_2_3_0.api import (
     emsp_router as locations_emsp_2_3_0_router,
 )
+from ocpi.modules.payments.v_2_3_0.api import (
+    emsp_router as payments_emsp_2_3_0_router,
+)
 from ocpi.modules.sessions.v_2_3_0.api import (
     emsp_router as sessions_emsp_2_3_0_router,
 )
@@ -44,4 +47,5 @@ router = {
     ModuleID.charging_profile: chargingprofiles_emsp_2_3_0_router,
     # New in OCPI 2.3.0
     ModuleID.bookings: bookings_emsp_2_3_0_router,
+    ModuleID.payments: payments_emsp_2_3_0_router,
 }

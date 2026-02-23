@@ -1,4 +1,5 @@
 from typing import Any
+from uuid import uuid4
 
 from fastapi import FastAPI, Request
 from fastapi import status as fastapistatus
@@ -36,6 +37,24 @@ from ocpi.core.schemas import OCPIResponse
 from ocpi.modules.versions import router as versions_router
 from ocpi.modules.versions.enums import VersionNumber
 from ocpi.modules.versions.schemas import Version
+
+
+class HubRequestIdMiddleware(BaseHTTPMiddleware):
+    """Echo X-Request-ID and X-Correlation-ID headers per the OCPI spec.
+
+    Every request receives a unique X-Request-ID in the response.
+    If the client provides X-Correlation-ID it is echoed back unchanged.
+    """
+
+    async def dispatch(self, request: Request, call_next: RequestResponseEndpoint):
+        request_id = request.headers.get("X-Request-ID", str(uuid4()))
+        correlation_id = request.headers.get("X-Correlation-ID")
+
+        response = await call_next(request)
+        response.headers["X-Request-ID"] = request_id
+        if correlation_id:
+            response.headers["X-Correlation-ID"] = correlation_id
+        return response
 
 
 class ExceptionHandlerMiddleware(BaseHTTPMiddleware):
@@ -161,6 +180,7 @@ def get_application(
         allow_headers=["*"],
     )
     _app.add_middleware(ExceptionHandlerMiddleware)
+    _app.add_middleware(HubRequestIdMiddleware)
 
     _app.include_router(
         versions_router,
@@ -263,11 +283,11 @@ def get_application(
     def override_get_modules():
         return modules
 
-    _app.dependency_overrides[get_modules] = override_get_modules()
+    _app.dependency_overrides[get_modules] = override_get_modules
 
     def override_get_authenticator():
         return authenticator
 
-    _app.dependency_overrides[get_authenticator] = override_get_authenticator()
+    _app.dependency_overrides[get_authenticator] = override_get_authenticator
 
     return _app

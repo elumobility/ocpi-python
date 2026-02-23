@@ -297,3 +297,194 @@ def test_http_push_to_client():
         )
 
     assert response.status_code == 200
+
+
+def test_http_push_unauthenticated():
+    """Push endpoint returns 422 when Authorization header is missing entirely
+    (FastAPI rejects the request before auth logic runs)."""
+    app = get_application(
+        version_numbers=[VersionNumber.v_2_2_1],
+        roles=[enums.RoleEnum.cpo],
+        crud=AsyncMock(),
+        adapter=MagicMock(),
+        authenticator=ClientAuthenticator,
+        modules=[],
+        http_push=True,
+    )
+
+    client = TestClient(app)
+    push_data = schemas.Push(
+        module_id=enums.ModuleID.locations,
+        object_id="loc-1",
+        receivers=[
+            schemas.Receiver(endpoints_url="http://example.com", auth_token="token"),
+        ],
+    ).model_dump()
+
+    response = client.post("/push/2.2.1", json=push_data)
+    assert response.status_code == 422
+
+
+def test_http_push_wrong_token():
+    """Push endpoint returns 403 when wrong token is provided."""
+    from tests.test_modules.utils import ENCODED_RANDOM_AUTH_TOKEN
+
+    app = get_application(
+        version_numbers=[VersionNumber.v_2_2_1],
+        roles=[enums.RoleEnum.cpo],
+        crud=AsyncMock(),
+        adapter=MagicMock(),
+        authenticator=ClientAuthenticator,
+        modules=[],
+        http_push=True,
+    )
+
+    client = TestClient(app)
+    push_data = schemas.Push(
+        module_id=enums.ModuleID.locations,
+        object_id="loc-1",
+        receivers=[
+            schemas.Receiver(endpoints_url="http://example.com", auth_token="token"),
+        ],
+    ).model_dump()
+
+    response = client.post(
+        "/push/2.2.1",
+        json=push_data,
+        headers={"Authorization": f"Token {ENCODED_RANDOM_AUTH_TOKEN}"},
+    )
+    assert response.status_code == 403
+
+
+def test_push_cdr_module():
+    """Push with CDR module uses POST and base_url directly (no object_id appended)."""
+    crud = AsyncMock()
+    adapter = MagicMock()
+    crud.get.return_value = {"id": "cdr-1"}
+    adapter.cdr_adapter.return_value.model_dump.return_value = {"id": "cdr-1"}
+
+    app = get_application(
+        version_numbers=[VersionNumber.v_2_2_1],
+        roles=[enums.RoleEnum.cpo],
+        crud=crud,
+        adapter=adapter,
+        authenticator=ClientAuthenticator,
+        modules=[],
+        http_push=True,
+    )
+
+    client = TestClient(app)
+    push_data = schemas.Push(
+        module_id=enums.ModuleID.cdrs,
+        object_id="cdr-1",
+        receivers=[
+            schemas.Receiver(
+                endpoints_url="http://example.com/versions", auth_token="token"
+            ),
+        ],
+    ).model_dump()
+
+    with patch("ocpi.core.push.httpx.AsyncClient") as mock_client:
+        mock_endpoints_response = MagicMock()
+        mock_endpoints_response.status_code = 200
+        mock_endpoints_response.json.return_value = {
+            "data": {
+                "endpoints": [
+                    {
+                        "identifier": enums.ModuleID.cdrs,
+                        "role": "RECEIVER",
+                        "url": "http://example.com/cdrs/",
+                    }
+                ]
+            }
+        }
+
+        mock_push_response = MagicMock()
+        mock_push_response.status_code = 200
+        mock_push_response.headers = {"Location": "http://example.com/cdrs/cdr-1"}
+
+        mock_client.return_value.__aenter__.return_value.get = AsyncMock(
+            return_value=mock_endpoints_response
+        )
+        mock_client.return_value.__aenter__.return_value.send = AsyncMock(
+            return_value=mock_push_response
+        )
+        mock_client.return_value.__aenter__.return_value.build_request = MagicMock()
+
+        response = client.post(
+            "/push/2.2.1",
+            json=push_data,
+            headers={"Authorization": f"Token {ENCODED_AUTH_TOKEN}"},
+        )
+
+    assert response.status_code == 200
+    # For CDR, build_request should use POST
+    call_args = mock_client.return_value.__aenter__.return_value.build_request.call_args
+    assert call_args[0][0] == "POST"
+
+
+def test_push_token_module_uses_emsp_role():
+    """Push with tokens module fetches data using EMSP role."""
+    crud = AsyncMock()
+    adapter = MagicMock()
+    crud.get.return_value = {"uid": "tok-1"}
+    adapter.token_adapter.return_value.model_dump.return_value = {"uid": "tok-1"}
+
+    app = get_application(
+        version_numbers=[VersionNumber.v_2_2_1],
+        roles=[enums.RoleEnum.cpo],
+        crud=crud,
+        adapter=adapter,
+        authenticator=ClientAuthenticator,
+        modules=[],
+        http_push=True,
+    )
+
+    client = TestClient(app)
+    push_data = schemas.Push(
+        module_id=enums.ModuleID.tokens,
+        object_id="tok-1",
+        receivers=[
+            schemas.Receiver(
+                endpoints_url="http://example.com/versions", auth_token="token"
+            ),
+        ],
+    ).model_dump()
+
+    with patch("ocpi.core.push.httpx.AsyncClient") as mock_client:
+        mock_endpoints_response = MagicMock()
+        mock_endpoints_response.status_code = 200
+        mock_endpoints_response.json.return_value = {
+            "data": {
+                "endpoints": [
+                    {
+                        "identifier": enums.ModuleID.tokens,
+                        "role": "RECEIVER",
+                        "url": "http://example.com/tokens/",
+                    }
+                ]
+            }
+        }
+
+        mock_push_response = MagicMock()
+        mock_push_response.status_code = 200
+        mock_push_response.json.return_value = {"status_code": 1000}
+
+        mock_client.return_value.__aenter__.return_value.get = AsyncMock(
+            return_value=mock_endpoints_response
+        )
+        mock_client.return_value.__aenter__.return_value.send = AsyncMock(
+            return_value=mock_push_response
+        )
+        mock_client.return_value.__aenter__.return_value.build_request = MagicMock()
+
+        client.post(
+            "/push/2.2.1",
+            json=push_data,
+            headers={"Authorization": f"Token {ENCODED_AUTH_TOKEN}"},
+        )
+
+    # Tokens module should fetch with EMSP role
+    crud.get.assert_awaited_once()
+    call_kwargs = crud.get.call_args
+    assert call_kwargs[0][1] == enums.RoleEnum.emsp

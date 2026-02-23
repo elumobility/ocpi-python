@@ -171,6 +171,72 @@ def test_get_application_multiple_modules():
     assert response.status_code in [200, 401, 403]
 
 
+def test_hub_request_id_header_generated():
+    """X-Request-ID is added to response when not sent by client."""
+    app = get_application(
+        version_numbers=[VersionNumber.v_2_3_0],
+        roles=[enums.RoleEnum.cpo],
+        modules=[enums.ModuleID.locations],
+        crud=MockCrud,
+        authenticator=ClientAuthenticator,
+    )
+
+    client = TestClient(app)
+    response = client.get("/ocpi/cpo/2.3.0/locations/")
+    assert "x-request-id" in response.headers
+
+
+def test_hub_request_id_header_echoed():
+    """X-Request-ID sent by client is echoed back unchanged."""
+    app = get_application(
+        version_numbers=[VersionNumber.v_2_3_0],
+        roles=[enums.RoleEnum.cpo],
+        modules=[enums.ModuleID.locations],
+        crud=MockCrud,
+        authenticator=ClientAuthenticator,
+    )
+
+    client = TestClient(app)
+    request_id = "test-request-id-123"
+    response = client.get(
+        "/ocpi/cpo/2.3.0/locations/", headers={"X-Request-ID": request_id}
+    )
+    assert response.headers.get("x-request-id") == request_id
+
+
+def test_hub_correlation_id_echoed():
+    """X-Correlation-ID sent by client is echoed back unchanged."""
+    app = get_application(
+        version_numbers=[VersionNumber.v_2_3_0],
+        roles=[enums.RoleEnum.cpo],
+        modules=[enums.ModuleID.locations],
+        crud=MockCrud,
+        authenticator=ClientAuthenticator,
+    )
+
+    client = TestClient(app)
+    correlation_id = "corr-id-abc"
+    response = client.get(
+        "/ocpi/cpo/2.3.0/locations/", headers={"X-Correlation-ID": correlation_id}
+    )
+    assert response.headers.get("x-correlation-id") == correlation_id
+
+
+def test_hub_correlation_id_absent_when_not_sent():
+    """X-Correlation-ID is not added to response when not sent by client."""
+    app = get_application(
+        version_numbers=[VersionNumber.v_2_3_0],
+        roles=[enums.RoleEnum.cpo],
+        modules=[enums.ModuleID.locations],
+        crud=MockCrud,
+        authenticator=ClientAuthenticator,
+    )
+
+    client = TestClient(app)
+    response = client.get("/ocpi/cpo/2.3.0/locations/")
+    assert "x-correlation-id" not in response.headers
+
+
 def test_exception_handler_middleware():
     """Test exception handler middleware catches OCPI errors."""
     app = get_application(

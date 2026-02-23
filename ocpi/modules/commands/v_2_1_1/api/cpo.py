@@ -48,10 +48,8 @@ async def apply_pydantic_schema(command: str, data: dict):
         data = StartSession(**data)  # type: ignore
     elif command == CommandType.stop_session:
         data = StopSession(**data)  # type: ignore
-    elif command == CommandType.unlock_connector:
-        data = UnlockConnector(**data)  # type: ignore
     else:
-        raise NotImplementedError
+        data = UnlockConnector(**data)  # type: ignore
     return data
 
 
@@ -148,12 +146,6 @@ async def receive_command(
         return JSONResponse(
             status_code=fastapistatus.HTTP_422_UNPROCESSABLE_ENTITY,
             content={"detail": jsonable_encoder(exc.errors())},
-        )
-    except NotImplementedError:
-        logger.debug("NotImplementedError on applying pydantic schema to command")
-        return JSONResponse(
-            status_code=fastapistatus.HTTP_422_UNPROCESSABLE_ENTITY,
-            content={"detail": "Not implemented"},
         )
 
     try:
