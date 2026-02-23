@@ -12,6 +12,7 @@ from tests.test_modules.mocks.async_client import (
 )
 from tests.test_modules.utils import (
     ENCODED_AUTH_TOKEN,
+    ENCODED_AUTH_TOKEN_V_2_3_0,
     ClientAuthenticator,
 )
 
@@ -488,3 +489,87 @@ def test_push_token_module_uses_emsp_role():
     crud.get.assert_awaited_once()
     call_kwargs = crud.get.call_args
     assert call_kwargs[0][1] == enums.RoleEnum.emsp
+
+
+def test_push_v_2_3_0_uses_receiver_role_and_base64_token():
+    """Push for v2.3.0 matches endpoints by RECEIVER role and base64-encodes the token."""
+    crud = AsyncMock()
+    adapter = MagicMock()
+    crud.get.return_value = LOCATIONS[0]
+    adapter.location_adapter.return_value.model_dump.return_value = LOCATIONS[0]
+
+    app = get_application(
+        version_numbers=[VersionNumber.v_2_3_0],
+        roles=[enums.RoleEnum.cpo],
+        crud=crud,
+        adapter=adapter,
+        authenticator=ClientAuthenticator,
+        modules=[],
+        http_push=True,
+    )
+
+    client = TestClient(app)
+    push_data = schemas.Push(
+        module_id=enums.ModuleID.locations,
+        object_id="loc-1",
+        receivers=[
+            schemas.Receiver(
+                endpoints_url="http://example.com/versions", auth_token="token"
+            ),
+        ],
+    ).model_dump()
+
+    with patch("ocpi.core.push.httpx.AsyncClient") as mock_client:
+        mock_endpoints_response = MagicMock()
+        mock_endpoints_response.status_code = 200
+        mock_endpoints_response.json.return_value = {
+            "data": {
+                "endpoints": [
+                    # SENDER endpoint — should be ignored
+                    {
+                        "identifier": enums.ModuleID.locations,
+                        "role": "SENDER",
+                        "url": "http://example.com/sender/locations/",
+                    },
+                    # RECEIVER endpoint — should be picked up
+                    {
+                        "identifier": enums.ModuleID.locations,
+                        "role": "RECEIVER",
+                        "url": "http://example.com/locations/",
+                    },
+                ]
+            }
+        }
+
+        mock_push_response = MagicMock()
+        mock_push_response.status_code = 200
+        mock_push_response.json.return_value = {"status_code": 1000}
+
+        mock_client.return_value.__aenter__.return_value.get = AsyncMock(
+            return_value=mock_endpoints_response
+        )
+        mock_client.return_value.__aenter__.return_value.send = AsyncMock(
+            return_value=mock_push_response
+        )
+        build_request = MagicMock()
+        mock_client.return_value.__aenter__.return_value.build_request = build_request
+
+        response = client.post(
+            "/push/2.3.0",
+            json=push_data,
+            headers={"Authorization": f"Token {ENCODED_AUTH_TOKEN_V_2_3_0}"},
+        )
+
+    assert response.status_code == 200
+
+    # Token must be base64-encoded for 2.3.0
+    call_args = build_request.call_args
+    auth_header = call_args[1]["headers"]["Authorization"]
+    assert auth_header.startswith("Token ")
+    # The raw "token" string encoded in base64 is "dG9rZW4="
+    assert auth_header == "Token dG9rZW4="
+
+    # Must use the RECEIVER url, not the SENDER url
+    url_arg = call_args[0][1]
+    assert "sender" not in url_arg
+    assert "locations" in url_arg
