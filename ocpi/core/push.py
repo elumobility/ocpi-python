@@ -62,9 +62,7 @@ async def send_push_request(
     base_url = ""
     for endpoint in endpoints:
         if (
-            not (
-                version.value.startswith("2.0") or version.value.startswith("2.1")
-            )
+            not (version.value.startswith("2.0") or version.value.startswith("2.1"))
             and endpoint["identifier"] == module_id
             and endpoint["role"] == InterfaceRole.receiver
         ) or (version.value.startswith("2.1") and endpoint["identifier"] == module_id):
