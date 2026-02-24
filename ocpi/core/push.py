@@ -42,7 +42,8 @@ def _pick_version_details_url(
 def client_url(module_id: ModuleID, object_id: str, base_url: str) -> str:
     if module_id == ModuleID.cdrs:
         return base_url
-    return f"{base_url}{settings.COUNTRY_CODE}/{settings.PARTY_ID}/{object_id}"
+    base = base_url.rstrip("/")
+    return f"{base}/{settings.COUNTRY_CODE}/{settings.PARTY_ID}/{object_id}"
 
 
 def client_method(module_id: ModuleID) -> str:
