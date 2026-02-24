@@ -62,7 +62,7 @@ async def send_push_request(
     base_url = ""
     for endpoint in endpoints:
         if (
-            version.value.startswith("2.2")
+            not (version.value.startswith("2.0") or version.value.startswith("2.1"))
             and endpoint["identifier"] == module_id
             and endpoint["role"] == InterfaceRole.receiver
         ) or (version.value.startswith("2.1") and endpoint["identifier"] == module_id):
@@ -92,7 +92,7 @@ async def push_object(
         # get client endpoints
         if version.value.startswith("2.1") or version.value.startswith("2.0"):
             token = receiver.auth_token
-        else:
+        else:  # 2.2.x and 2.3.x use base64-encoded tokens
             token = encode_string_base64(receiver.auth_token)
 
         client_auth_token = f"Token {token}"
