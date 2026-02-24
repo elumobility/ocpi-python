@@ -16,10 +16,34 @@ from ocpi.modules.versions.enums import VersionNumber
 from ocpi.modules.versions.v_2_2_1.enums import InterfaceRole
 
 
+_VERSION_PREFERENCE = ["2.3.0", "2.2.1", "2.1.1"]
+
+
+def _pick_version_details_url(
+    versions_list: list[dict], requested: VersionNumber
+) -> str | None:
+    """Pick the best version details URL from an OCPI /versions response.
+
+    Tries the requested version first, then falls back to the highest
+    mutually supported version.
+    """
+    by_version = {v["version"]: v["url"] for v in versions_list if "version" in v}
+
+    if requested.value in by_version:
+        return by_version[requested.value]
+
+    for v in _VERSION_PREFERENCE:
+        if v in by_version:
+            return by_version[v]
+
+    return None
+
+
 def client_url(module_id: ModuleID, object_id: str, base_url: str) -> str:
     if module_id == ModuleID.cdrs:
         return base_url
-    return f"{base_url}{settings.COUNTRY_CODE}/{settings.PARTY_ID}/{object_id}"
+    base = base_url.rstrip("/")
+    return f"{base}/{settings.COUNTRY_CODE}/{settings.PARTY_ID}/{object_id}"
 
 
 def client_method(module_id: ModuleID) -> str:
@@ -106,7 +130,33 @@ async def push_object(
                 headers={"authorization": client_auth_token},
             )
             logger.info(f"Response status_code - `{response.status_code}`")
-            endpoints = response.json()["data"]["endpoints"]
+            response_data = response.json()["data"]
+
+            # If response is a versions list, negotiate version and
+            # fetch the details URL for the best mutual version.
+            if isinstance(response_data, list):
+                details_url = _pick_version_details_url(
+                    response_data, version
+                )
+                if not details_url:
+                    raise ValueError(
+                        f"No mutual OCPI version found. "
+                        f"Requested {version.value}, receiver supports: "
+                        f"{[v.get('version') for v in response_data]}"
+                    )
+                logger.info(
+                    f"Resolved version details URL: {details_url}"
+                )
+                response = await client.get(
+                    details_url,
+                    headers={"authorization": client_auth_token},
+                )
+                logger.info(
+                    f"Version details response: {response.status_code}"
+                )
+                response_data = response.json()["data"]
+
+            endpoints = response_data["endpoints"]
             logger.debug(f"Endpoints response data - `{endpoints}`")
 
         # get object data
