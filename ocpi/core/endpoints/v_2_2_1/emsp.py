@@ -2,6 +2,10 @@ from ocpi.core.endpoints.v_2_2_1.utils import emsp_generator
 from ocpi.core.enums import ModuleID
 from ocpi.modules.versions.v_2_2_1.schemas import Endpoint, InterfaceRole
 
+# eMSP advertises credentials as RECEIVER only. Adding credentials SENDER would
+# allow the eMSP to push proactive credential updates to registered CPOs, but
+# this is not required for current integrations (Payter, etc.). Add
+# CREDENTIALS_SENDER here if an eMSP-initiated credential update flow is needed.
 CREDENTIALS_AND_REGISTRATION = emsp_generator.generate_endpoint(
     ModuleID.credentials_and_registration,
     InterfaceRole.receiver,

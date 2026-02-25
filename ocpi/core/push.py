@@ -16,6 +16,7 @@ from ocpi.modules.versions.enums import VersionNumber
 from ocpi.modules.versions.v_2_2_1.enums import InterfaceRole
 
 
+# Ordered from newest to oldest. Update this list when new OCPI versions are added.
 _VERSION_PREFERENCE = ["2.3.0", "2.2.1", "2.1.1"]
 
 
