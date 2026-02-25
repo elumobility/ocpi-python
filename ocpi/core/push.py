@@ -15,7 +15,6 @@ from ocpi.core.utils import encode_string_base64, get_auth_token
 from ocpi.modules.versions.enums import VersionNumber
 from ocpi.modules.versions.v_2_2_1.enums import InterfaceRole
 
-
 # Ordered from newest to oldest. Update this list when new OCPI versions are added.
 _VERSION_PREFERENCE = ["2.3.0", "2.2.1", "2.1.1"]
 
@@ -33,9 +32,7 @@ def _pick_version_details_url(
     Entries missing either the ``version`` or ``url`` key are silently skipped.
     """
     by_version = {
-        v["version"]: v["url"]
-        for v in versions_list
-        if "version" in v and "url" in v
+        v["version"]: v["url"] for v in versions_list if "version" in v and "url" in v
     }
 
     if requested.value in by_version:
@@ -145,25 +142,19 @@ async def push_object(
             # If response is a versions list, negotiate version and
             # fetch the details URL for the best mutual version.
             if isinstance(response_data, list):
-                details_url = _pick_version_details_url(
-                    response_data, version
-                )
+                details_url = _pick_version_details_url(response_data, version)
                 if not details_url:
                     raise ValueError(
                         f"No mutual OCPI version found. "
                         f"Requested {version.value}, receiver supports: "
                         f"{[v.get('version') for v in response_data]}"
                     )
-                logger.info(
-                    f"Resolved version details URL: {details_url}"
-                )
+                logger.info(f"Resolved version details URL: {details_url}")
                 response = await client.get(
                     details_url,
                     headers={"authorization": client_auth_token},
                 )
-                logger.info(
-                    f"Version details response: {response.status_code}"
-                )
+                logger.info(f"Version details response: {response.status_code}")
                 response.raise_for_status()
                 response_data = response.json()["data"]
 
