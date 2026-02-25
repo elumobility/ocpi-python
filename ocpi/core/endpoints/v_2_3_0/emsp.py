@@ -2,8 +2,12 @@
 
 from ocpi.core.endpoints.v_2_3_0.utils import emsp_generator
 from ocpi.core.enums import ModuleID
-from ocpi.modules.versions.v_2_3_0.schemas import InterfaceRole
+from ocpi.modules.versions.v_2_3_0.schemas import Endpoint, InterfaceRole
 
+# eMSP advertises credentials as RECEIVER only. Adding credentials SENDER would
+# allow the eMSP to push proactive credential updates to registered CPOs, but
+# this is not required for current integrations (Payter, etc.). Add
+# CREDENTIALS_SENDER here if an eMSP-initiated credential update flow is needed.
 CREDENTIALS_AND_REGISTRATION = emsp_generator.generate_endpoint(
     ModuleID.credentials_and_registration,
     InterfaceRole.receiver,
@@ -56,15 +60,15 @@ BOOKINGS = emsp_generator.generate_endpoint(
 )
 
 
-ENDPOINTS_LIST = {
-    ModuleID.credentials_and_registration: CREDENTIALS_AND_REGISTRATION,
-    ModuleID.locations: LOCATIONS,
-    ModuleID.sessions: SESSIONS,
-    ModuleID.cdrs: CDRS,
-    ModuleID.tariffs: TARIFFS,
-    ModuleID.tokens: TOKENS,
-    ModuleID.commands: COMMANDS,
-    ModuleID.hub_client_info: HUB_CLIENT_INFO,
-    ModuleID.charging_profile: CHARGING_PROFILE,
-    ModuleID.bookings: BOOKINGS,
-}
+ENDPOINTS_LIST: list[Endpoint] = [
+    CREDENTIALS_AND_REGISTRATION,
+    LOCATIONS,
+    SESSIONS,
+    CDRS,
+    TARIFFS,
+    TOKENS,
+    COMMANDS,
+    HUB_CLIENT_INFO,
+    CHARGING_PROFILE,
+    BOOKINGS,
+]
