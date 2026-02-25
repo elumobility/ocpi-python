@@ -4,10 +4,14 @@ from ocpi.core.enums import ModuleID, RoleEnum
 from ocpi.modules.versions.enums import VersionNumber
 from ocpi.modules.versions.v_2_2_1.schemas import VersionDetail
 
+_locations_endpoint = next(
+    e for e in ENDPOINTS[VersionNumber.v_2_2_1][RoleEnum.cpo] if e.identifier == ModuleID.locations
+)
+
 fake_endpoints_data = {
     "data": VersionDetail(
         version=VersionNumber.v_2_2_1,
-        endpoints=[ENDPOINTS[VersionNumber.v_2_2_1][RoleEnum.cpo][ModuleID.locations]],
+        endpoints=[_locations_endpoint],
     ).model_dump(),
 }
 

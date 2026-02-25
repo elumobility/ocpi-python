@@ -1,5 +1,9 @@
 from ocpi.core.endpoints.v_2_1_1.utils import cpo_generator
 from ocpi.core.enums import ModuleID
+from ocpi.modules.versions.v_2_1_1.schemas import Endpoint
+
+# OCPI 2.1.1 Endpoint schema has no InterfaceRole field; credentials SENDER
+# role is implicit and not separately advertised (InterfaceRole is 2.2.1+).
 
 CREDENTIALS_AND_REGISTRATION = cpo_generator.generate_endpoint(
     ModuleID.credentials_and_registration,
@@ -15,11 +19,14 @@ SESSIONS = cpo_generator.generate_endpoint(ModuleID.sessions)
 
 TOKENS = cpo_generator.generate_endpoint(ModuleID.tokens)
 
-ENDPOINTS_LIST = {
-    ModuleID.credentials_and_registration: CREDENTIALS_AND_REGISTRATION,
-    ModuleID.locations: LOCATIONS,
-    ModuleID.cdrs: CDRS,
-    ModuleID.tariffs: TARIFFS,
-    ModuleID.sessions: SESSIONS,
-    ModuleID.tokens: TOKENS,
-}
+COMMANDS = cpo_generator.generate_endpoint(ModuleID.commands)
+
+ENDPOINTS_LIST: list[Endpoint] = [
+    CREDENTIALS_AND_REGISTRATION,
+    LOCATIONS,
+    CDRS,
+    TARIFFS,
+    SESSIONS,
+    TOKENS,
+    COMMANDS,
+]

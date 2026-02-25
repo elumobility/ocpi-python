@@ -83,6 +83,31 @@ def test_get_versions_v_2_1_1():
     assert len(response.json()["data"]) == 2
 
 
+def test_version_details_includes_commands_for_cpo():
+    """CPO version details must advertise the commands endpoint (regression: Payter discovery)."""
+
+    class MockCrud(Crud):
+        @classmethod
+        async def do(cls, *args, **kwargs):
+            return AUTH_TOKEN
+
+    app = get_application(
+        version_numbers=[VersionNumber.v_2_1_1],
+        roles=[enums.RoleEnum.cpo],
+        crud=MockCrud,
+        authenticator=ClientAuthenticator,
+        modules=[enums.ModuleID.commands],
+    )
+    client = TestClient(app)
+
+    response = client.get(VERSION_URL, headers=AUTH_HEADERS)
+
+    assert response.status_code == 200
+    endpoints = response.json()["data"]["endpoints"]
+    commands_entries = [e for e in endpoints if e["identifier"] == "commands"]
+    assert len(commands_entries) == 1
+
+
 def test_get_versions_v_2_1_1_not_authenticated():
     class MockCrud(Crud):
         @classmethod
