@@ -1,3 +1,7 @@
+from unittest.mock import MagicMock
+
+import httpx
+
 from ocpi.core.dependencies import get_versions
 from ocpi.core.endpoints import ENDPOINTS
 from ocpi.core.enums import ModuleID, RoleEnum
@@ -5,8 +9,10 @@ from ocpi.modules.versions.enums import VersionNumber
 from ocpi.modules.versions.v_2_2_1.schemas import VersionDetail
 
 _locations_endpoint = next(
-    e for e in ENDPOINTS[VersionNumber.v_2_2_1][RoleEnum.cpo] if e.identifier == ModuleID.locations
+    (e for e in ENDPOINTS[VersionNumber.v_2_2_1][RoleEnum.cpo] if e.identifier == ModuleID.locations),
+    None,
 )
+assert _locations_endpoint is not None, "locations endpoint missing from CPO 2.2.1 ENDPOINTS_LIST"
 
 fake_endpoints_data = {
     "data": VersionDetail(
@@ -25,6 +31,14 @@ class MockResponse:
 
     def json(self):
         return self.json_data
+
+    def raise_for_status(self):
+        if self.status_code >= 400:
+            raise httpx.HTTPStatusError(
+                f"HTTP {self.status_code}",
+                request=MagicMock(),
+                response=self,  # type: ignore[arg-type]
+            )
 
 
 # Connector mocks

@@ -25,9 +25,17 @@ def _pick_version_details_url(
     """Pick the best version details URL from an OCPI /versions response.
 
     Tries the requested version first, then falls back to the highest
-    mutually supported version.
+    mutually supported version from _VERSION_PREFERENCE. The fallback may
+    select a version newer than ``requested`` when the receiver does not
+    support the requested version but does support a higher one.
+
+    Entries missing either the ``version`` or ``url`` key are silently skipped.
     """
-    by_version = {v["version"]: v["url"] for v in versions_list if "version" in v}
+    by_version = {
+        v["version"]: v["url"]
+        for v in versions_list
+        if "version" in v and "url" in v
+    }
 
     if requested.value in by_version:
         return by_version[requested.value]
@@ -130,6 +138,7 @@ async def push_object(
                 headers={"authorization": client_auth_token},
             )
             logger.info(f"Response status_code - `{response.status_code}`")
+            response.raise_for_status()
             response_data = response.json()["data"]
 
             # If response is a versions list, negotiate version and
@@ -154,6 +163,7 @@ async def push_object(
                 logger.info(
                     f"Version details response: {response.status_code}"
                 )
+                response.raise_for_status()
                 response_data = response.json()["data"]
 
             endpoints = response_data["endpoints"]
