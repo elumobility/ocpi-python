@@ -2,7 +2,7 @@
 
 from ocpi.core.endpoints.v_2_3_0.utils import emsp_generator
 from ocpi.core.enums import ModuleID
-from ocpi.modules.versions.v_2_3_0.schemas import InterfaceRole
+from ocpi.modules.versions.v_2_3_0.schemas import Endpoint, InterfaceRole
 
 CREDENTIALS_AND_REGISTRATION = emsp_generator.generate_endpoint(
     ModuleID.credentials_and_registration,
@@ -56,7 +56,7 @@ BOOKINGS = emsp_generator.generate_endpoint(
 )
 
 
-ENDPOINTS_LIST = [
+ENDPOINTS_LIST: list[Endpoint] = [
     CREDENTIALS_AND_REGISTRATION,
     LOCATIONS,
     SESSIONS,

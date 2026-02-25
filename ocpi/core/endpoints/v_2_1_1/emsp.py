@@ -1,5 +1,6 @@
 from ocpi.core.endpoints.v_2_1_1.utils import emsp_generator
 from ocpi.core.enums import ModuleID
+from ocpi.modules.versions.v_2_1_1.schemas import Endpoint
 
 CREDENTIALS_AND_REGISTRATION = emsp_generator.generate_endpoint(
     ModuleID.credentials_and_registration,
@@ -17,7 +18,7 @@ TOKENS = emsp_generator.generate_endpoint(ModuleID.tokens)
 
 COMMANDS = emsp_generator.generate_endpoint(ModuleID.commands)
 
-ENDPOINTS_LIST = [
+ENDPOINTS_LIST: list[Endpoint] = [
     CREDENTIALS_AND_REGISTRATION,
     LOCATIONS,
     CDRS,
