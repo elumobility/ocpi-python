@@ -610,7 +610,9 @@ async def test_push_object_version_negotiation_via_versions_list():
     mock_crud.get.return_value = {"id": "loc-123"}
 
     mock_adapter = MagicMock(spec=BaseAdapter)
-    mock_adapter.location_adapter.return_value.model_dump.return_value = {"id": "loc-123"}
+    mock_adapter.location_adapter.return_value.model_dump.return_value = {
+        "id": "loc-123"
+    }
 
     push = schemas.Push(
         module_id=enums.ModuleID.locations,

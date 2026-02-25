@@ -9,10 +9,16 @@ from ocpi.modules.versions.enums import VersionNumber
 from ocpi.modules.versions.v_2_2_1.schemas import VersionDetail
 
 _locations_endpoint = next(
-    (e for e in ENDPOINTS[VersionNumber.v_2_2_1][RoleEnum.cpo] if e.identifier == ModuleID.locations),
+    (
+        e
+        for e in ENDPOINTS[VersionNumber.v_2_2_1][RoleEnum.cpo]
+        if e.identifier == ModuleID.locations
+    ),
     None,
 )
-assert _locations_endpoint is not None, "locations endpoint missing from CPO 2.2.1 ENDPOINTS_LIST"
+assert _locations_endpoint is not None, (
+    "locations endpoint missing from CPO 2.2.1 ENDPOINTS_LIST"
+)
 
 fake_endpoints_data = {
     "data": VersionDetail(
