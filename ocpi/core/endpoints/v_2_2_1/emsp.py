@@ -47,14 +47,14 @@ CHARGING_PROFILE = emsp_generator.generate_endpoint(
     InterfaceRole.sender,
 )
 
-ENDPOINTS_LIST = {
-    ModuleID.credentials_and_registration: CREDENTIALS_AND_REGISTRATION,
-    ModuleID.locations: LOCATIONS,
-    ModuleID.sessions: SESSIONS,
-    ModuleID.cdrs: CDRS,
-    ModuleID.tariffs: TARIFFS,
-    ModuleID.commands: COMMANDS,
-    ModuleID.tokens: TOKENS,
-    ModuleID.hub_client_info: HUB_CLIENT_INFO,
-    ModuleID.charging_profile: CHARGING_PROFILE,
-}
+ENDPOINTS_LIST = [
+    CREDENTIALS_AND_REGISTRATION,
+    LOCATIONS,
+    SESSIONS,
+    CDRS,
+    TARIFFS,
+    COMMANDS,
+    TOKENS,
+    HUB_CLIENT_INFO,
+    CHARGING_PROFILE,
+]

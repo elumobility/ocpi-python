@@ -56,15 +56,15 @@ BOOKINGS = emsp_generator.generate_endpoint(
 )
 
 
-ENDPOINTS_LIST = {
-    ModuleID.credentials_and_registration: CREDENTIALS_AND_REGISTRATION,
-    ModuleID.locations: LOCATIONS,
-    ModuleID.sessions: SESSIONS,
-    ModuleID.cdrs: CDRS,
-    ModuleID.tariffs: TARIFFS,
-    ModuleID.tokens: TOKENS,
-    ModuleID.commands: COMMANDS,
-    ModuleID.hub_client_info: HUB_CLIENT_INFO,
-    ModuleID.charging_profile: CHARGING_PROFILE,
-    ModuleID.bookings: BOOKINGS,
-}
+ENDPOINTS_LIST = [
+    CREDENTIALS_AND_REGISTRATION,
+    LOCATIONS,
+    SESSIONS,
+    CDRS,
+    TARIFFS,
+    TOKENS,
+    COMMANDS,
+    HUB_CLIENT_INFO,
+    CHARGING_PROFILE,
+    BOOKINGS,
+]

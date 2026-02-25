@@ -7,6 +7,11 @@ CREDENTIALS_AND_REGISTRATION = cpo_generator.generate_endpoint(
     InterfaceRole.receiver,
 )
 
+CREDENTIALS_SENDER = cpo_generator.generate_endpoint(
+    ModuleID.credentials_and_registration,
+    InterfaceRole.sender,
+)
+
 LOCATIONS = cpo_generator.generate_endpoint(
     ModuleID.locations,
     InterfaceRole.sender,
@@ -32,6 +37,11 @@ TOKENS = cpo_generator.generate_endpoint(
     InterfaceRole.receiver,
 )
 
+COMMANDS = cpo_generator.generate_endpoint(
+    ModuleID.commands,
+    InterfaceRole.receiver,
+)
+
 HUB_CLIENT_INFO = cpo_generator.generate_endpoint(
     ModuleID.hub_client_info,
     InterfaceRole.receiver,
@@ -43,13 +53,15 @@ CHARGING_PROFILE = cpo_generator.generate_endpoint(
 )
 
 
-ENDPOINTS_LIST = {
-    ModuleID.credentials_and_registration: CREDENTIALS_AND_REGISTRATION,
-    ModuleID.locations: LOCATIONS,
-    ModuleID.sessions: SESSIONS,
-    ModuleID.cdrs: CDRS,
-    ModuleID.tariffs: TARIFFS,
-    ModuleID.tokens: TOKENS,
-    ModuleID.hub_client_info: HUB_CLIENT_INFO,
-    ModuleID.charging_profile: CHARGING_PROFILE,
-}
+ENDPOINTS_LIST = [
+    CREDENTIALS_AND_REGISTRATION,
+    CREDENTIALS_SENDER,
+    LOCATIONS,
+    SESSIONS,
+    CDRS,
+    TARIFFS,
+    TOKENS,
+    COMMANDS,
+    HUB_CLIENT_INFO,
+    CHARGING_PROFILE,
+]

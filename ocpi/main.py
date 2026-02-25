@@ -225,6 +225,7 @@ def get_application(
         version_endpoints[version] = []
 
         if RoleEnum.cpo in roles:
+            cpo_modules_with_router: set[ModuleID] = set()
             for module in modules:
                 cpo_router = mapped_version["cpo_router"].get(module)  # type: ignore[attr-defined]
                 if cpo_router:
@@ -233,11 +234,13 @@ def get_application(
                         prefix=f"/{settings.OCPI_PREFIX}/cpo/{version.value}",
                         tags=[f"CPO {version.value}"],
                     )
-                    endpoint = ENDPOINTS[version][RoleEnum.cpo].get(module)  # type: ignore[index]
-                    if endpoint:
-                        version_endpoints[version].append(endpoint)
+                    cpo_modules_with_router.add(module)
+            for endpoint in ENDPOINTS[version][RoleEnum.cpo]:  # type: ignore[index]
+                if endpoint.identifier in cpo_modules_with_router:
+                    version_endpoints[version].append(endpoint)
 
         if RoleEnum.emsp in roles:
+            emsp_modules_with_router: set[ModuleID] = set()
             for module in modules:
                 emsp_router = mapped_version["emsp_router"].get(module)  # type: ignore[attr-defined]
                 if emsp_router:
@@ -246,9 +249,10 @@ def get_application(
                         prefix=f"/{settings.OCPI_PREFIX}/emsp/{version.value}",
                         tags=[f"EMSP {version.value}"],
                     )
-                    endpoint = ENDPOINTS[version][RoleEnum.emsp].get(module)  # type: ignore[index]
-                    if endpoint:
-                        version_endpoints[version].append(endpoint)
+                    emsp_modules_with_router.add(module)
+            for endpoint in ENDPOINTS[version][RoleEnum.emsp]:  # type: ignore[index]
+                if endpoint.identifier in emsp_modules_with_router:
+                    version_endpoints[version].append(endpoint)
 
         if RoleEnum.ptp in roles:
             for module in modules:

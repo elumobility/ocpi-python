@@ -17,12 +17,12 @@ TOKENS = emsp_generator.generate_endpoint(ModuleID.tokens)
 
 COMMANDS = emsp_generator.generate_endpoint(ModuleID.commands)
 
-ENDPOINTS_LIST = {
-    ModuleID.credentials_and_registration: CREDENTIALS_AND_REGISTRATION,
-    ModuleID.locations: LOCATIONS,
-    ModuleID.cdrs: CDRS,
-    ModuleID.tariffs: TARIFFS,
-    ModuleID.sessions: SESSIONS,
-    ModuleID.tokens: TOKENS,
-    ModuleID.commands: COMMANDS,
-}
+ENDPOINTS_LIST = [
+    CREDENTIALS_AND_REGISTRATION,
+    LOCATIONS,
+    CDRS,
+    TARIFFS,
+    SESSIONS,
+    TOKENS,
+    COMMANDS,
+]
