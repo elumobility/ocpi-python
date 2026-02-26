@@ -46,8 +46,8 @@ class ReserveNow(BaseModel):
     expiry_date: DateTime
     reservation_id: CiString(36)  # type: ignore
     location_id: CiString(36)  # type: ignore
-    evse_uid: CiString(36) | None  # type: ignore
-    authorization_reference: CiString(36) | None  # type: ignore
+    evse_uid: CiString(36) | None = None  # type: ignore
+    authorization_reference: CiString(36) | None = None  # type: ignore
 
 
 class StartSession(BaseModel):
@@ -58,9 +58,9 @@ class StartSession(BaseModel):
     response_url: URL
     token: Token
     location_id: CiString(36)  # type: ignore
-    evse_uid: CiString(36) | None  # type: ignore
-    connector_id: CiString(36) | None  # type: ignore
-    authorization_reference: CiString(36) | None  # type: ignore
+    evse_uid: CiString(36) | None = None  # type: ignore
+    connector_id: CiString(36) | None = None  # type: ignore
+    authorization_reference: CiString(36) | None = None  # type: ignore
 
 
 class StopSession(BaseModel):
