@@ -131,10 +131,9 @@ async def push_object(
             logger.info(
                 f"Send request to get version details: {receiver.endpoints_url}"
             )
-            response = await client.get(
-                receiver.endpoints_url,
-                headers={"authorization": client_auth_token},
-            )
+            # OCPI spec: versions/details are public discovery endpoints,
+            # do not send auth headers for them.
+            response = await client.get(receiver.endpoints_url)
             logger.info(f"Response status_code - `{response.status_code}`")
             response.raise_for_status()
             response_data = response.json()["data"]
@@ -150,10 +149,7 @@ async def push_object(
                         f"{[v.get('version') for v in response_data]}"
                     )
                 logger.info(f"Resolved version details URL: {details_url}")
-                response = await client.get(
-                    details_url,
-                    headers={"authorization": client_auth_token},
-                )
+                response = await client.get(details_url)
                 logger.info(f"Version details response: {response.status_code}")
                 response.raise_for_status()
                 response_data = response.json()["data"]
