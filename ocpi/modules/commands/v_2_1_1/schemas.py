@@ -23,7 +23,7 @@ class ReserveNow(BaseModel):
     expiry_date: DateTime
     reservation_id: int
     location_id: String(36)  # type: ignore
-    evse_uid: String(39) | None  # type: ignore
+    evse_uid: String(39) | None = None  # type: ignore
 
 
 class StartSession(BaseModel):
@@ -34,7 +34,7 @@ class StartSession(BaseModel):
     response_url: URL
     token: Token
     location_id: String(39)  # type: ignore
-    evse_uid: String(39) | None  # type: ignore
+    evse_uid: String(39) | None = None  # type: ignore
 
 
 class StopSession(BaseModel):
