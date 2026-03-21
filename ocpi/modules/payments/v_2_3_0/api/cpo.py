@@ -43,7 +43,7 @@ router = APIRouter(
 # ---------------------------------------------------------------------------
 
 
-@router.get("/terminals", response_model=OCPIResponse)
+@router.get("/terminals/", response_model=OCPIResponse)
 async def get_terminals(
     request: Request,
     response: Response,
@@ -212,7 +212,7 @@ async def patch_terminal(
 # ---------------------------------------------------------------------------
 
 
-@router.post("/financial-advice-confirmations", response_model=OCPIResponse, status_code=201)
+@router.post("/financial-advice-confirmations/", response_model=OCPIResponse, status_code=201)
 async def post_financial_advice_confirmation(
     request: Request,
     confirmation: FinancialAdviceConfirmation,
@@ -254,7 +254,7 @@ async def post_financial_advice_confirmation(
     )
 
 
-@router.get("/financial-advice-confirmations", response_model=OCPIResponse)
+@router.get("/financial-advice-confirmations/", response_model=OCPIResponse)
 async def get_financial_advice_confirmations(
     request: Request,
     response: Response,
