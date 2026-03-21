@@ -200,7 +200,6 @@ def get_application(
         docs_url=f"/{settings.OCPI_PREFIX}/docs",
         redoc_url=f"/{settings.OCPI_PREFIX}/redoc",
         openapi_url=f"/{settings.OCPI_PREFIX}/openapi.json",
-        redirect_slashes=False,
     )
 
     _app.add_middleware(
