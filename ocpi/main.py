@@ -60,19 +60,28 @@ class HubRequestIdMiddleware(BaseHTTPMiddleware):
 _HEALTH_PATHS = {"/health", "/healthz", "/ready", "/readiness", "/liveness"}
 
 
-class TrailingSlashMiddleware(BaseHTTPMiddleware):
+class TrailingSlashMiddleware:
     """Strip trailing slashes before routing.
 
-    Avoids 307 redirects for clients (e.g. Quarkus REST Client) that do not
-    re-send the Authorization header when following a redirect.
+    Pure ASGI middleware (not BaseHTTPMiddleware) so the modified scope is
+    guaranteed to reach the router. Avoids 307 redirects for clients such as
+    Quarkus REST Client that do not re-send the Authorization header when
+    following a redirect.
     """
 
-    async def dispatch(self, request: Request, call_next: RequestResponseEndpoint):
-        if request.url.path != "/" and request.url.path.endswith("/"):
-            scope = dict(request.scope)
-            scope["path"] = request.url.path.rstrip("/")
-            request = Request(scope, request.receive, request._send)
-        return await call_next(request)
+    def __init__(self, app: Any) -> None:
+        self.app = app
+
+    async def __call__(self, scope: Any, receive: Any, send: Any) -> None:
+        if scope.get("type") == "http":
+            path: str = scope.get("path", "")
+            if path != "/" and path.endswith("/"):
+                scope = dict(scope)
+                scope["path"] = path.rstrip("/")
+                raw_path: bytes = scope.get("raw_path", b"")
+                if raw_path.endswith(b"/"):
+                    scope["raw_path"] = raw_path.rstrip(b"/")
+        await self.app(scope, receive, send)
 
 
 class ExceptionHandlerMiddleware(BaseHTTPMiddleware):
