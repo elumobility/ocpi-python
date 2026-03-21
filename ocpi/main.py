@@ -60,6 +60,21 @@ class HubRequestIdMiddleware(BaseHTTPMiddleware):
 _HEALTH_PATHS = {"/health", "/healthz", "/ready", "/readiness", "/liveness"}
 
 
+class TrailingSlashMiddleware(BaseHTTPMiddleware):
+    """Strip trailing slashes before routing.
+
+    Avoids 307 redirects for clients (e.g. Quarkus REST Client) that do not
+    re-send the Authorization header when following a redirect.
+    """
+
+    async def dispatch(self, request: Request, call_next: RequestResponseEndpoint):
+        if request.url.path != "/" and request.url.path.endswith("/"):
+            scope = dict(request.scope)
+            scope["path"] = request.url.path.rstrip("/")
+            request = Request(scope, request.receive, request._send)
+        return await call_next(request)
+
+
 class ExceptionHandlerMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next: RequestResponseEndpoint):
         is_health = request.url.path in _HEALTH_PATHS
@@ -176,6 +191,7 @@ def get_application(
         docs_url=f"/{settings.OCPI_PREFIX}/docs",
         redoc_url=f"/{settings.OCPI_PREFIX}/redoc",
         openapi_url=f"/{settings.OCPI_PREFIX}/openapi.json",
+        redirect_slashes=False,
     )
 
     _app.add_middleware(
@@ -187,6 +203,7 @@ def get_application(
     )
     _app.add_middleware(ExceptionHandlerMiddleware)
     _app.add_middleware(HubRequestIdMiddleware)
+    _app.add_middleware(TrailingSlashMiddleware)
 
     _app.include_router(
         versions_router,
