@@ -103,15 +103,18 @@ async def send_command_result(
 
     async with httpx.AsyncClient() as client:
         authorization_token = f"Token {encode_string_base64(client_auth_token)}"
-        logger.info(f"Send request with command result: {command_data.response_url}")
+        payload = command_result.model_dump(mode="json")
+        logger.info(
+            f"CommandResult POST → {command_data.response_url} "
+            f"payload={payload}"
+        )
         res = await client.post(
             command_data.response_url,
-            json=command_result.model_dump(),
+            json=payload,
             headers={"authorization": authorization_token},
         )
         logger.info(
-            "POST command data after receiving result from Charge Point"
-            f" status_code: {res.status_code}"
+            f"CommandResult POST response: status={res.status_code} body={res.text}"
         )
 
 
@@ -191,11 +194,9 @@ async def receive_command(
                         adapter=adapter,
                     )
             return OCPIResponse(
-                data=[
-                    adapter.command_response_adapter(
-                        command_response, VersionNumber.v_2_3_0
-                    ).model_dump()
-                ],
+                data=adapter.command_response_adapter(
+                    command_response, VersionNumber.v_2_3_0
+                ).model_dump(),
                 **status.OCPI_1000_GENERIC_SUCESS_CODE,
             )
         logger.debug("Send command action returned without result.")
@@ -203,7 +204,7 @@ async def receive_command(
             result=CommandResponseType.rejected, timeout=0
         )
         return OCPIResponse(
-            data=[command_response.model_dump()],
+            data=command_response.model_dump(),
             **status.OCPI_3000_GENERIC_SERVER_ERROR,
         )
 
@@ -214,6 +215,6 @@ async def receive_command(
             result=CommandResponseType.rejected, timeout=0
         )
         return OCPIResponse(
-            data=[command_response.model_dump()],
+            data=command_response.model_dump(),
             **status.OCPI_2003_UNKNOWN_LOCATION,
         )

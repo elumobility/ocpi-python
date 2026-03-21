@@ -61,3 +61,4 @@ handler = logging.StreamHandler()
 handler.setFormatter(CustomFormatter())
 
 logger.addHandler(handler)
+logger.propagate = False

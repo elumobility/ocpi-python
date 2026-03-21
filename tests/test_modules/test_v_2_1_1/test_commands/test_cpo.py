@@ -63,8 +63,7 @@ def test_cpo_receive_command_start_session_v_2_1_1(client_cpo_v_2_1_1):
     )
 
     assert response.status_code == 200
-    assert len(response.json()["data"]) == 1
-    assert response.json()["data"][0]["result"] == COMMAND_RESPONSE["result"]
+    assert response.json()["data"]["result"] == COMMAND_RESPONSE["result"]
 
 
 def test_cpo_receive_command_stop_session_v_2_1_1(client_cpo_v_2_1_1):
@@ -80,8 +79,7 @@ def test_cpo_receive_command_stop_session_v_2_1_1(client_cpo_v_2_1_1):
     )
 
     assert response.status_code == 200
-    assert len(response.json()["data"]) == 1
-    assert response.json()["data"][0]["result"] == COMMAND_RESPONSE["result"]
+    assert response.json()["data"]["result"] == COMMAND_RESPONSE["result"]
 
 
 def test_cpo_receive_command_reserve_now_v_2_1_1(client_cpo_v_2_1_1):
@@ -101,8 +99,7 @@ def test_cpo_receive_command_reserve_now_v_2_1_1(client_cpo_v_2_1_1):
     )
 
     assert response.status_code == 200
-    assert len(response.json()["data"]) == 1
-    assert response.json()["data"][0]["result"] == COMMAND_RESPONSE["result"]
+    assert response.json()["data"]["result"] == COMMAND_RESPONSE["result"]
 
 
 def test_cpo_receive_command_reserve_now_unknown_location_v_2_1_1():
@@ -143,7 +140,7 @@ def test_cpo_receive_command_reserve_now_unknown_location_v_2_1_1():
     )
 
     assert response.status_code == 200
-    assert response.json()["data"][0]["result"] == CommandResponseType.rejected
+    assert response.json()["data"]["result"] == CommandResponseType.rejected
 
     # revert Crud changes
     Crud.get = _get

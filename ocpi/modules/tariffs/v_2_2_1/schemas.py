@@ -56,7 +56,7 @@ class TariffElement(BaseModel):
     """
 
     price_components: list[PriceComponent]
-    restrictions: TariffRestrictions | None
+    restrictions: TariffRestrictions | None = None
 
 
 class Tariff(BaseModel):

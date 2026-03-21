@@ -57,10 +57,15 @@ class HubRequestIdMiddleware(BaseHTTPMiddleware):
         return response
 
 
+_HEALTH_PATHS = {"/health", "/healthz", "/ready", "/readiness", "/liveness"}
+
+
 class ExceptionHandlerMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next: RequestResponseEndpoint):
-        logger.debug(f"{request.method}: {request.url}")
-        logger.debug(f"Request headers - {request.headers}")
+        is_health = request.url.path in _HEALTH_PATHS
+        if not is_health:
+            logger.debug(f"{request.method}: {request.url}")
+            logger.debug(f"Request headers - {request.headers}")
 
         try:
             response = await call_next(request)
@@ -97,7 +102,8 @@ class ExceptionHandlerMiddleware(BaseHTTPMiddleware):
                 ).model_dump()
             )
 
-        logger.debug(f"Response status_code -> {response.status_code}.")
+        if not is_health:
+            logger.debug(f"Response status_code -> {response.status_code}.")
         return response
 
 

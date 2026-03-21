@@ -212,6 +212,48 @@ async def patch_terminal(
 # ---------------------------------------------------------------------------
 
 
+@router.post("/financial-advice-confirmations", response_model=OCPIResponse, status_code=201)
+async def post_financial_advice_confirmation(
+    request: Request,
+    confirmation: FinancialAdviceConfirmation,
+    crud: Crud = Depends(get_crud),
+    adapter: Adapter = Depends(get_adapter),
+):
+    """
+    Create a financial advice confirmation.
+
+    Called by the PTP to push a new financial advice confirmation to the CPO
+    after a payment transaction is completed at a terminal.
+
+    **Request body:**
+        - confirmation (FinancialAdviceConfirmation): The confirmation object.
+
+    **Returns:**
+        The OCPIResponse containing the created confirmation details.
+    """
+    logger.info(
+        f"Received request to post financial advice confirmation - `{confirmation.id}`."
+    )
+    auth_token = get_auth_token(request)
+
+    data = await crud.create(
+        ModuleID.payments,
+        RoleEnum.cpo,
+        confirmation.model_dump(),
+        auth_token=auth_token,
+        version=VersionNumber.v_2_3_0,
+        object_type="financial_advice_confirmation",
+    )
+    return OCPIResponse(
+        data=[
+            adapter.financial_advice_confirmation_adapter(
+                data, VersionNumber.v_2_3_0
+            ).model_dump()
+        ],
+        **status.OCPI_1000_GENERIC_SUCESS_CODE,
+    )
+
+
 @router.get("/financial-advice-confirmations", response_model=OCPIResponse)
 async def get_financial_advice_confirmations(
     request: Request,

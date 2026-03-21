@@ -315,10 +315,12 @@ async def test_push_object_cdrs_module():
         }
     }
 
-    # Mock push request response with headers
+    # Mock push request response with JSON body
     mock_push_response = MagicMock()
     mock_push_response.status_code = 200
-    mock_push_response.headers = {"X-Request-ID": "req-123"}
+    mock_push_response.text = '{"data":null,"status_code":1000}'
+    mock_push_response.headers = {"location": "https://example.com/cdrs/cdr-123"}
+    mock_push_response.json.return_value = {"data": None, "status_code": 1000}
 
     with patch("ocpi.core.push.httpx.AsyncClient") as mock_client:
         mock_client.return_value.__aenter__.return_value.get = AsyncMock(
@@ -339,8 +341,7 @@ async def test_push_object_cdrs_module():
 
     assert len(result.receiver_responses) == 1
     assert result.receiver_responses[0].status_code == 200
-    # CDR response should contain headers, not JSON
-    assert result.receiver_responses[0].response == {"X-Request-ID": "req-123"}
+    assert result.receiver_responses[0].response == {"data": None, "status_code": 1000}
 
 
 @pytest.mark.asyncio

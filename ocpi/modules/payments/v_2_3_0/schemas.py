@@ -4,7 +4,7 @@ New in OCPI 2.3.0 - Payment terminal support for direct payment.
 https://github.com/ocpi/ocpi/blob/release-2.3.0-bugfixes/mod_payments.asciidoc
 """
 
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 
 from ocpi.core.data_types import (
     URL,
@@ -93,3 +93,10 @@ class FinancialAdviceConfirmation(BaseModel):
     capture_status_code: CaptureStatusCode
     capture_status_message: CiString(max_length=255) | None  # type: ignore
     last_updated: DateTime
+
+    @field_validator("total_costs", mode="before")
+    @classmethod
+    def default_excl_vat(cls, v: dict) -> dict:
+        if isinstance(v, dict) and "excl_vat" not in v:
+            v = {**v, "excl_vat": 0}
+        return v

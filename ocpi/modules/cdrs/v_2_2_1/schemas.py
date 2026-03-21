@@ -9,7 +9,7 @@ from ocpi.modules.locations.v_2_2_1.enums import (
 )
 from ocpi.modules.locations.v_2_2_1.schemas import GeoLocation
 from ocpi.modules.tariffs.v_2_2_1.schemas import Tariff
-from ocpi.modules.tokens.v_2_2_1.enums import TokenType
+from ocpi.modules.tokens.v_2_2_1.enums import TokenType, WhitelistType
 
 
 class SignedValue(BaseModel):
@@ -63,6 +63,7 @@ class CdrToken(BaseModel):
     uid: CiString(36)  # type: ignore
     type: TokenType
     contract_id: CiString(36)  # type: ignore
+    whitelist: WhitelistType | None = None
 
 
 class CdrLocation(BaseModel):

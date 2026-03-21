@@ -195,7 +195,11 @@ class Number(float):
 
 
 class Price(dict):
-    """OCPI Price type with excl_vat and optional incl_vat."""
+    """OCPI Price type.
+
+    OCPI 2.3.0 format: before_taxes (required) + taxes[] (optional).
+    Also accepts legacy excl_vat/incl_vat for backward compatibility.
+    """
 
     @classmethod
     def __get_pydantic_core_schema__(
@@ -213,18 +217,28 @@ class Price(dict):
         return {
             "type": "object",
             "properties": {
-                "excl_vat": {"type": "number"},
-                "incl_vat": {"type": "number"},
+                "before_taxes": {"type": "number"},
+                "taxes": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "name": {"type": "string"},
+                            "amount": {"type": "number"},
+                        },
+                        "required": ["name", "amount"],
+                    },
+                },
             },
-            "required": ["excl_vat"],
+            "required": ["before_taxes"],
         }
 
     @classmethod
     def _validate(cls, v: dict) -> "Price":
         if not isinstance(v, dict):
             raise TypeError("dictionary required")
-        if "excl_vat" not in v:
-            raise TypeError('property "excl_vat" required')
+        if "before_taxes" not in v and "excl_vat" not in v:
+            raise TypeError('property "before_taxes" required')
         return cls(v)
 
 

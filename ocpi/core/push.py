@@ -66,15 +66,15 @@ def request_data(
 ) -> dict:
     data = {}
     if module_id == ModuleID.locations:
-        data = adapter.location_adapter(object_data, version).model_dump()
+        data = adapter.location_adapter(object_data, version).model_dump(exclude_none=True)
     elif module_id == ModuleID.sessions:
-        data = adapter.session_adapter(object_data, version).model_dump()
+        data = adapter.session_adapter(object_data, version).model_dump(exclude_none=True)
     elif module_id == ModuleID.cdrs:
-        data = adapter.cdr_adapter(object_data, version).model_dump()
+        data = adapter.cdr_adapter(object_data, version).model_dump(exclude_none=True)
     elif module_id == ModuleID.tariffs:
-        data = adapter.tariff_adapter(object_data, version).model_dump()
+        data = adapter.tariff_adapter(object_data, version).model_dump(exclude_none=True)
     elif module_id == ModuleID.tokens:
-        data = adapter.token_adapter(object_data, version).model_dump()
+        data = adapter.token_adapter(object_data, version).model_dump(exclude_none=True)
     return data
 
 
@@ -88,6 +88,9 @@ async def send_push_request(
     version: VersionNumber,
 ):
     data = request_data(module_id, object_data, adapter, version)
+
+    if module_id == ModuleID.cdrs:
+        logger.info(f"CDR payload being sent to receiver: {data}")
 
     base_url = ""
     for endpoint in endpoints:
@@ -135,6 +138,12 @@ async def push_object(
             # do not send auth headers for them.
             response = await client.get(receiver.endpoints_url)
             logger.info(f"Response status_code - `{response.status_code}`")
+            if response.status_code == 401:
+                # Retry with auth in case the receiver requires it
+                response = await client.get(
+                    receiver.endpoints_url,
+                    headers={"authorization": client_auth_token},
+                )
             response.raise_for_status()
             response_data = response.json()["data"]
 
@@ -150,6 +159,12 @@ async def push_object(
                     )
                 logger.info(f"Resolved version details URL: {details_url}")
                 response = await client.get(details_url)
+                if response.status_code == 401:
+                    # Retry with auth in case the receiver requires it
+                    response = await client.get(
+                        details_url,
+                        headers={"authorization": client_auth_token},
+                    )
                 logger.info(f"Version details response: {response.status_code}")
                 response.raise_for_status()
                 response_data = response.json()["data"]
@@ -187,12 +202,16 @@ async def push_object(
             version,
         )
         if push.module_id == ModuleID.cdrs:
-            logger.debug("Add headers for CDR module into response.")
+            logger.info(
+                f"CDR push response: status={response.status_code} "
+                f"body={response.text} "
+                f"location={response.headers.get('location', 'N/A')}"
+            )
             receiver_responses.append(
                 ReceiverResponse(
                     endpoints_url=receiver.endpoints_url,
                     status_code=response.status_code,
-                    response=response.headers,
+                    response=response.json() if response.text else {},
                 )
             )
         else:

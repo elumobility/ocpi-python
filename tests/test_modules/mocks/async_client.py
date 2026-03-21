@@ -51,7 +51,7 @@ class MockResponse:
 
 
 class MockAsyncClientVersionsAndEndpoints:
-    async def get(url, headers):
+    async def get(url, headers=None):
         if url == "versions_url":
             return MockResponse(fake_versions_data, 200)
         else:

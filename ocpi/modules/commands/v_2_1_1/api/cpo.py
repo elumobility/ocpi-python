@@ -183,18 +183,16 @@ async def receive_command(
                         adapter=adapter,
                     )
             return OCPIResponse(
-                data=[
-                    adapter.command_response_adapter(
-                        command_response, VersionNumber.v_2_1_1
-                    ).model_dump()
-                ],
+                data=adapter.command_response_adapter(
+                    command_response, VersionNumber.v_2_1_1
+                ).model_dump(),
                 **status.OCPI_1000_GENERIC_SUCESS_CODE,
             )
 
         logger.debug("Send command action returned without result.")
         command_response = CommandResponse(result=CommandResponseType.rejected)
         return OCPIResponse(
-            data=[command_response.model_dump()],
+            data=command_response.model_dump(),
             **status.OCPI_3000_GENERIC_SERVER_ERROR,
         )
 
@@ -203,6 +201,6 @@ async def receive_command(
         logger.info(f"Location with id `{command_data.location_id}` was not found.")
         command_response = CommandResponse(result=CommandResponseType.rejected)
         return OCPIResponse(
-            data=[command_response.model_dump()],
+            data=command_response.model_dump(),
             **status.OCPI_2003_UNKNOWN_LOCATION,
         )

@@ -202,25 +202,33 @@ def test_number_from_int():
     assert result == 42.0
 
 
-def test_price_valid():
-    """Test Price with valid dict."""
+def test_price_valid_legacy():
+    """Test Price with legacy excl_vat format (backward compat)."""
     result = Price({"excl_vat": 10.0})
     assert isinstance(result, Price)
     assert result["excl_vat"] == 10.0
 
 
-def test_price_with_incl_vat():
-    """Test Price with incl_vat."""
+def test_price_legacy_with_incl_vat():
+    """Test legacy Price with excl_vat and incl_vat."""
     result = Price({"excl_vat": 10.0, "incl_vat": 12.0})
     assert result["excl_vat"] == 10.0
     assert result["incl_vat"] == 12.0
 
 
-def test_price_missing_excl_vat():
-    """Test Price without excl_vat raises TypeError."""
-    # Price raises TypeError directly, not wrapped by Pydantic
-    with pytest.raises(TypeError, match="excl_vat"):
-        Price._validate({"incl_vat": 12.0})
+def test_price_valid_ocpi_2_3_0():
+    """Test Price with OCPI 2.3.0 before_taxes/taxes format."""
+    result = Price({"before_taxes": 10.0, "taxes": [{"name": "VAT", "amount": 1.9}]})
+    assert isinstance(result, Price)
+    assert result["before_taxes"] == 10.0
+    assert result["taxes"][0]["name"] == "VAT"
+    assert result["taxes"][0]["amount"] == 1.9
+
+
+def test_price_missing_required_fields():
+    """Test Price without before_taxes or excl_vat raises TypeError."""
+    with pytest.raises(TypeError, match="before_taxes"):
+        Price._validate({"taxes": [{"name": "VAT", "amount": 1.9}]})
 
 
 def test_price_not_dict():
