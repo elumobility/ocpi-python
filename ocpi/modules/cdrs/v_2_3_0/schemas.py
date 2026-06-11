@@ -79,6 +79,7 @@ class CdrLocation(BaseModel):
     state: String(20) | None  # type: ignore
     country: String(3)  # type: ignore
     coordinates: GeoLocation
+    evse_uid: CiString(36)  # type: ignore
     evse_id: CiString(48)  # type: ignore
     connector_id: CiString(36)  # type: ignore
     connector_standard: ConnectorType
