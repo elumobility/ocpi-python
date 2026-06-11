@@ -24,6 +24,7 @@ class OCPIResponse(BaseModel):
 class Receiver(BaseModel):
     endpoints_url: URL
     auth_token: str
+    raw_token: bool = False
 
 
 class Push(BaseModel):

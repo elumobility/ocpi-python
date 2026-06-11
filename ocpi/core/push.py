@@ -123,7 +123,7 @@ async def push_object(
     receiver_responses = []
     for receiver in push.receivers:
         # get client endpoints
-        if version.value.startswith("2.1") or version.value.startswith("2.0"):
+        if receiver.raw_token or version.value.startswith("2.1") or version.value.startswith("2.0"):
             token = receiver.auth_token
         else:  # 2.2.x and 2.3.x use base64-encoded tokens
             token = encode_string_base64(receiver.auth_token)
