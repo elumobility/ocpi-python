@@ -1,8 +1,13 @@
 from ocpi.modules.versions import versions_v_2_2_1_router
-from ocpi.routers import v_2_2_1_cpo_router, v_2_2_1_emsp_router
+from ocpi.routers import (
+    v_2_2_1_cpo_router,
+    v_2_2_1_emsp_router,
+    v_2_2_1_scsp_router,
+)
 
 ROUTERS_DICT = {
     "version_router": versions_v_2_2_1_router,
     "cpo_router": v_2_2_1_cpo_router,
     "emsp_router": v_2_2_1_emsp_router,
+    "scsp_router": v_2_2_1_scsp_router,
 }

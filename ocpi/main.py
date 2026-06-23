@@ -271,6 +271,16 @@ def get_application(
                         tags=[f"PTP {version.value}"],
                     )
 
+        if RoleEnum.scsp in roles:
+            for module in modules:
+                scsp_router = mapped_version.get("scsp_router", {}).get(module)  # type: ignore[attr-defined]
+                if scsp_router:
+                    _app.include_router(
+                        scsp_router,  # type: ignore[arg-type]
+                        prefix=f"/{settings.OCPI_PREFIX}/scsp/{version.value}",
+                        tags=[f"SCSP {version.value}"],
+                    )
+
     def override_get_crud():
         return crud
 
