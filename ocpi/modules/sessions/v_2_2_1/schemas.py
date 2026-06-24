@@ -15,18 +15,18 @@ class Session(BaseModel):
     party_id: CiString(3)  # type: ignore
     id: CiString(36)  # type: ignore
     start_date_time: DateTime
-    end_date_time: DateTime | None
+    end_date_time: DateTime | None = None
     kwh: Number
     cdr_token: CdrToken
     auth_method: AuthMethod
-    authorization_reference: CiString(36) | None  # type: ignore
+    authorization_reference: CiString(36) | None = None  # type: ignore
     location_id: CiString(36)  # type: ignore
     evse_uid: CiString(36)  # type: ignore
     connector_id: CiString(36)  # type: ignore
-    meter_id: String(255) | None  # type: ignore
+    meter_id: String(255) | None = None  # type: ignore
     currency: String(3)  # type: ignore
     charging_periods: list[ChargingPeriod] = []
-    total_cost: Price | None
+    total_cost: Price | None = None
     status: SessionStatus
     last_updated: DateTime
 
