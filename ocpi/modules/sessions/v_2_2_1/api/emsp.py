@@ -135,7 +135,7 @@ async def add_or_update_session(
         )
 
     return OCPIResponse(
-        data=[adapter.session_adapter(data).model_dump()],
+        data=[adapter.session_adapter(data, VersionNumber.v_2_2_1).model_dump()],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
     )
 
@@ -185,7 +185,10 @@ async def partial_update_session(
         version=VersionNumber.v_2_2_1,
     )
     if old_data:
-        old_session = adapter.session_adapter(old_data)
+        # Adapt with this receiver's version (2.2.1); the default is the latest
+        # version, which would re-validate the stored session against a newer,
+        # stricter schema and 500 on fields optional in 2.2.1.
+        old_session = adapter.session_adapter(old_data, version=VersionNumber.v_2_2_1)
 
         new_session = copy.deepcopy(old_session)
         partially_update_attributes(
@@ -204,7 +207,7 @@ async def partial_update_session(
         )
 
         return OCPIResponse(
-            data=[adapter.session_adapter(data).model_dump()],
+            data=[adapter.session_adapter(data, VersionNumber.v_2_2_1).model_dump()],
             **status.OCPI_1000_GENERIC_SUCESS_CODE,
         )
     logger.debug(f"Session with id `{session_id}` was not found.")
