@@ -50,7 +50,9 @@ class ChargingPeriod(BaseModel):
 
     start_date_time: DateTime
     dimensions: list[CdrDimension]
-    tariff_id: CiString(36) | None  # type: ignore
+    # Optional per spec: allow it to be omitted entirely (not just null), so a CPO
+    # that doesn't send tariff_id doesn't trigger a 422.
+    tariff_id: CiString(36) | None = None  # type: ignore
 
 
 class CdrToken(BaseModel):
