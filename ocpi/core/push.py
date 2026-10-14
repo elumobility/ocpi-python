@@ -45,11 +45,26 @@ def _pick_version_details_url(
     return None
 
 
-def client_url(module_id: ModuleID, object_id: str, base_url: str) -> str:
+def client_url(
+    module_id: ModuleID,
+    object_id: str,
+    base_url: str,
+    object_data: dict | None = None,
+) -> str:
+    """Receiver URL for a pushed object.
+
+    The path segments name the party that owns the object, so they come from
+    the object itself: a CPO may publish under several parties, and a receiver
+    rejects a path party that differs from the body (elu-charge#1607). The
+    configured party is only the fallback for objects that carry none.
+    """
     if module_id == ModuleID.cdrs:
         return base_url
+    data = object_data or {}
+    country_code = data.get("country_code") or settings.COUNTRY_CODE
+    party_id = data.get("party_id") or settings.PARTY_ID
     base = base_url.rstrip("/")
-    return f"{base}/{settings.COUNTRY_CODE}/{settings.PARTY_ID}/{object_id}"
+    return f"{base}/{country_code}/{party_id}/{object_id}"
 
 
 def client_method(module_id: ModuleID) -> str:
@@ -105,7 +120,7 @@ async def send_push_request(
     async with httpx.AsyncClient() as client:
         request = client.build_request(
             client_method(module_id),
-            client_url(module_id, object_id, base_url),
+            client_url(module_id, object_id, base_url, object_data),
             headers={"Authorization": client_auth_token},
             json=data,
         )

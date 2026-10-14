@@ -805,3 +805,67 @@ async def test_push_object_raises_on_non_200_version_details_response():
                 crud=mock_crud,
                 adapter=mock_adapter,
             )
+
+
+# --- Path party comes from the pushed object (elu-charge#1607) ---------------
+# Prod 2026-10-14: a DE/RUE session was PUT to .../sessions/DE/ELU/<id> and Payter
+# answered 400 because the path party did not match the body.
+
+
+def test_client_url_uses_the_objects_party():
+    url = client_url(
+        enums.ModuleID.sessions,
+        "c02f3350",
+        "https://ocpi.mypayter.com/ocpi/ptp/2.3.0/sessions",
+        {"id": "c02f3350", "country_code": "DE", "party_id": "RUE"},
+    )
+
+    assert url == "https://ocpi.mypayter.com/ocpi/ptp/2.3.0/sessions/DE/RUE/c02f3350"
+
+
+def test_client_url_falls_back_to_settings_without_object_party():
+    with patch("ocpi.core.push.settings") as fake_settings:
+        fake_settings.COUNTRY_CODE = "DE"
+        fake_settings.PARTY_ID = "ELU"
+        url = client_url(
+            enums.ModuleID.sessions,
+            "s-1",
+            "https://example.com/sessions",
+            {"id": "s-1"},
+        )
+
+    assert url == "https://example.com/sessions/DE/ELU/s-1"
+
+
+@pytest.mark.asyncio
+async def test_send_push_request_puts_session_under_its_own_party():
+    adapter = MagicMock(spec=BaseAdapter)
+    session = {"id": "c02f3350", "country_code": "DE", "party_id": "RUE"}
+    adapter.session_adapter.return_value.model_dump.return_value = session
+    endpoints = [
+        {
+            "identifier": enums.ModuleID.sessions,
+            "role": InterfaceRole.receiver,
+            "url": "https://ocpi.mypayter.com/ocpi/ptp/2.3.0/sessions",
+        }
+    ]
+    sent = httpx.Response(200)
+
+    with patch("ocpi.core.push.httpx.AsyncClient") as client_cls:
+        client = client_cls.return_value.__aenter__.return_value
+        client.build_request = MagicMock()
+        client.send = AsyncMock(return_value=sent)
+
+        await send_push_request(
+            object_id="c02f3350",
+            object_data=session,
+            module_id=enums.ModuleID.sessions,
+            adapter=adapter,
+            client_auth_token="Token t",
+            endpoints=endpoints,
+            version=VersionNumber.v_2_2_1,
+        )
+
+    method, url = client.build_request.call_args.args[:2]
+    assert method == "PUT"
+    assert url == "https://ocpi.mypayter.com/ocpi/ptp/2.3.0/sessions/DE/RUE/c02f3350"
