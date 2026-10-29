@@ -32,6 +32,14 @@ async def send_get_chargingprofile(
         auth_token=auth_token,
         version=VersionNumber.v_2_3_0,
     )
+    if not client_auth_token:
+        # The CPO could not identify the calling party, so there is no token to
+        # call it back with; sending another party's token would leak it.
+        logger.warning(
+            "No client token for the caller; skipping the %s callback.",
+            "active charging profile result",
+        )
+        return
 
     active_charging_profile_result = None
     for _ in range(30 * settings.GET_ACTIVE_PROFILE_AWAIT_TIME):
@@ -95,6 +103,14 @@ async def send_update_chargingprofile(
         auth_token=auth_token,
         version=VersionNumber.v_2_3_0,
     )
+    if not client_auth_token:
+        # The CPO could not identify the calling party, so there is no token to
+        # call it back with; sending another party's token would leak it.
+        logger.warning(
+            "No client token for the caller; skipping the %s callback.",
+            "charging profile result",
+        )
+        return
 
     charging_profile_result = None
     for _ in range(30 * settings.GET_ACTIVE_PROFILE_AWAIT_TIME):
@@ -155,6 +171,14 @@ async def send_delete_chargingprofile(
         auth_token=auth_token,
         version=VersionNumber.v_2_3_0,
     )
+    if not client_auth_token:
+        # The CPO could not identify the calling party, so there is no token to
+        # call it back with; sending another party's token would leak it.
+        logger.warning(
+            "No client token for the caller; skipping the %s callback.",
+            "clear profile result",
+        )
+        return
 
     clear_profile_result = None
     for _ in range(30 * settings.GET_ACTIVE_PROFILE_AWAIT_TIME):

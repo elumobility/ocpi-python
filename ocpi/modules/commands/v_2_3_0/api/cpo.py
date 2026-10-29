@@ -75,6 +75,14 @@ async def send_command_result(
         auth_token=auth_token,
         version=VersionNumber.v_2_3_0,
     )
+    if not client_auth_token:
+        # The CPO could not identify the calling party, so there is no token to
+        # call it back with; sending another party's token would leak it.
+        logger.warning(
+            "No client token for the caller; skipping the %s callback.",
+            "command result",
+        )
+        return
 
     command_result = None
     for _ in range(30 * settings.COMMAND_AWAIT_TIME):
@@ -105,8 +113,7 @@ async def send_command_result(
         authorization_token = f"Token {encode_string_base64(client_auth_token)}"
         payload = command_result.model_dump(mode="json")
         logger.info(
-            f"CommandResult POST → {command_data.response_url} "
-            f"payload={payload}"
+            f"CommandResult POST → {command_data.response_url} payload={payload}"
         )
         res = await client.post(
             command_data.response_url,
